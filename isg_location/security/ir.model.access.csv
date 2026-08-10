@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_assembly_point_readonly,isg.assembly.point readonly,model_isg_assembly_point,isg_security.group_isg_readonly,1,0,0,0
+access_assembly_point_expert,isg.assembly.point expert,model_isg_assembly_point,isg_security.group_isg_expert,1,1,1,0
+access_assembly_point_manager,isg.assembly.point manager,model_isg_assembly_point,isg_security.group_isg_manager,1,1,1,1
+access_assembly_point_system,isg.assembly.point system,model_isg_assembly_point,base.group_system,1,1,1,1

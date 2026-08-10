@@ -1,0 +1,16 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_isg_training_type_readonly,isg.training.type.readonly,model_isg_training_type,isg_security.group_isg_readonly,1,0,0,0
+access_isg_training_type_expert,isg.training.type.expert,model_isg_training_type,isg_security.group_isg_expert,1,1,1,0
+access_isg_training_type_manager,isg.training.type.manager,model_isg_training_type,isg_security.group_isg_manager,1,1,1,1
+access_isg_training_plan_readonly,isg.training.plan.readonly,model_isg_training_plan,isg_security.group_isg_readonly,1,0,0,0
+access_isg_training_plan_expert,isg.training.plan.expert,model_isg_training_plan,isg_security.group_isg_expert,1,1,1,0
+access_isg_training_plan_manager,isg.training.plan.manager,model_isg_training_plan,isg_security.group_isg_manager,1,1,1,1
+access_isg_training_plan_line_readonly,isg.training.plan.line.readonly,model_isg_training_plan_line,isg_security.group_isg_readonly,1,0,0,0
+access_isg_training_plan_line_expert,isg.training.plan.line.expert,model_isg_training_plan_line,isg_security.group_isg_expert,1,1,1,0
+access_isg_training_plan_line_manager,isg.training.plan.line.manager,model_isg_training_plan_line,isg_security.group_isg_manager,1,1,1,1
+access_isg_training_record_readonly,isg.training.record.readonly,model_isg_training_record,isg_security.group_isg_readonly,1,0,0,0
+access_isg_training_record_expert,isg.training.record.expert,model_isg_training_record,isg_security.group_isg_expert,1,1,1,0
+access_isg_training_record_manager,isg.training.record.manager,model_isg_training_record,isg_security.group_isg_manager,1,1,1,1
+access_isg_training_attendee_readonly,isg.training.attendee.readonly,model_isg_training_attendee,isg_security.group_isg_readonly,1,0,0,0
+access_isg_training_attendee_expert,isg.training.attendee.expert,model_isg_training_attendee,isg_security.group_isg_expert,1,1,1,0
+access_isg_training_attendee_manager,isg.training.attendee.manager,model_isg_training_attendee,isg_security.group_isg_manager,1,1,1,1

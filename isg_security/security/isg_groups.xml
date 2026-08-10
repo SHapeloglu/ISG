@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- KATEGORİ -->
+    <record id="module_isg_category" model="ir.module.category">
+        <field name="name">İSG Platform</field>
+        <field name="description">İş Sağlığı ve Güvenliği Platform Rolleri</field>
+        <field name="sequence">20</field>
+    </record>
+
+    <!-- GRUP 1: Salt Okuma -->
+    <record id="group_isg_readonly" model="res.groups">
+        <field name="name">Salt Okuma</field>
+        <field name="category_id" ref="module_isg_category"/>
+        <field name="comment">İSG kayıtlarını yalnızca görüntüleyebilir, değiştiremez.</field>
+    </record>
+
+    <!-- GRUP 2: İSG Uzmanı -->
+    <record id="group_isg_expert" model="res.groups">
+        <field name="name">İSG Uzmanı</field>
+        <field name="category_id" ref="module_isg_category"/>
+        <field name="implied_ids" eval="[(4, ref('group_isg_readonly'))]"/>
+        <field name="comment">Risk değerlendirmesi, denetim, olay, eğitim, KKD, DÖF işlemlerini yapabilir. Sağlık verilerini göremez.</field>
+    </record>
+
+    <!-- GRUP 3: İşyeri Hekimi -->
+    <record id="group_isg_physician" model="res.groups">
+        <field name="name">İşyeri Hekimi</field>
+        <field name="category_id" ref="module_isg_category"/>
+        <field name="implied_ids" eval="[(4, ref('group_isg_readonly'))]"/>
+        <field name="comment">Sağlık gözetimi verilerine (muayene, tetkik, tanı, ilaç, kısıt) erişebilir. KVKK md.6 kapsamında özel kategori.</field>
+    </record>
+
+    <!-- GRUP 4: İSG Yöneticisi -->
+    <record id="group_isg_manager" model="res.groups">
+        <field name="name">İSG Yöneticisi</field>
+        <field name="category_id" ref="module_isg_category"/>
+        <field name="implied_ids" eval="[(4, ref('group_isg_expert'))]"/>
+        <field name="comment">Tüm İSG modüllerini yönetebilir. Tanımlar, raporlar ve yapılandırma dahil. Sağlık verileri hariç.</field>
+    </record>
+
+    <!-- GRUP 5: İSG Süper Yönetici -->
+    <record id="group_isg_superadmin" model="res.groups">
+        <field name="name">İSG Süper Yönetici</field>
+        <field name="category_id" ref="module_isg_category"/>
+        <field name="implied_ids" eval="[(4, ref('group_isg_manager')), (4, ref('group_isg_physician'))]"/>
+        <field name="comment">Tüm İSG modüllerine tam erişim. Sağlık verileri dahil. Yalnızca sistem yöneticisi veya OSGB yetkilisi.</field>
+    </record>
+
+</odoo>

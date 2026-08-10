@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_isg_board_meeting_list" model="ir.ui.view">
+        <field name="name">isg.board.meeting.list</field>
+        <field name="model">isg.board.meeting</field>
+        <field name="arch" type="xml">
+            <list string="Toplantılar" decoration-muted="state == 'cancelled'" decoration-success="state == 'held'">
+                <field name="name"/>
+                <field name="workplace_id"/>
+                <field name="meeting_date"/>
+                <field name="meeting_type"/>
+                <field name="attendee_count"/>
+                <field name="decision_count"/>
+                <field name="quorum_met" widget="boolean_toggle"/>
+                <field name="state" widget="badge"
+                    decoration-warning="state == 'planned'"
+                    decoration-success="state == 'held'"
+                    decoration-danger="state == 'cancelled'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_isg_board_meeting_form" model="ir.ui.view">
+        <field name="name">isg.board.meeting.form</field>
+        <field name="model">isg.board.meeting</field>
+        <field name="arch" type="xml">
+            <form string="İSG Kurulu Toplantısı">
+                <header>
+                    <button name="action_held" string="Gerçekleşti"
+                        type="object" class="btn-primary"
+                        invisible="state != 'planned'"/>
+                    <button name="action_cancel" string="İptal Et"
+                        type="object" class="btn-danger"
+                        invisible="state != 'planned'"/>
+                    <field name="state" widget="statusbar"
+                        statusbar_visible="planned,held"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="workplace_id"/>
+                            <field name="meeting_date"/>
+                            <field name="meeting_type"/>
+                        </group>
+                        <group>
+                            <field name="quorum_met"/>
+                            <field name="next_meeting_date"/>
+                            <field name="isg_document_id"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Gündem">
+                            <field name="agenda" placeholder="Toplantı gündemini yazın..."/>
+                        </page>
+                        <page string="Katılanlar">
+                            <field name="attendee_ids" widget="many2many_tags"
+                                domain="[('workplace_id', '=', workplace_id), ('is_active', '=', True)]"/>
+                        </page>
+                        <page string="Kararlar">
+                            <field name="decision_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="name"/>
+                                    <field name="responsible_id"/>
+                                    <field name="due_date"/>
+                                    <field name="state" widget="badge"
+                                        decoration-success="state == 'done'"
+                                        decoration-danger="state == 'delayed'"
+                                        decoration-warning="state == 'open'"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Tutanak">
+                            <field name="minutes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_isg_board_meeting" model="ir.actions.act_window">
+        <field name="name">Toplantılar</field>
+        <field name="res_model">isg.board.meeting</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

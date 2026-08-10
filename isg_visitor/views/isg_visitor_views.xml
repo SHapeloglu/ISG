@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_isg_visitor_list" model="ir.ui.view">
+        <field name="name">isg.visitor.list</field>
+        <field name="model">isg.visitor</field>
+        <field name="arch" type="xml">
+            <list string="Ziyaretçiler"
+                decoration-success="state == 'exited'"
+                decoration-warning="state == 'inside'">
+                <field name="name"/>
+                <field name="workplace_id"/>
+                <field name="visitor_name"/>
+                <field name="visitor_company"/>
+                <field name="purpose"/>
+                <field name="host_employee_id"/>
+                <field name="entry_datetime"/>
+                <field name="exit_datetime"/>
+                <field name="duration_hours"/>
+                <field name="ppe_required" widget="boolean_toggle"/>
+                <field name="ppe_given" widget="boolean_toggle"/>
+                <field name="induction_done" widget="boolean_toggle"/>
+                <field name="state" widget="badge"
+                    decoration-warning="state == 'inside'"
+                    decoration-success="state == 'exited'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_isg_visitor_form" model="ir.ui.view">
+        <field name="name">isg.visitor.form</field>
+        <field name="model">isg.visitor</field>
+        <field name="arch" type="xml">
+            <form string="Ziyaretçi Kaydı">
+                <header>
+                    <button name="action_exit" string="Çıkış Yap"
+                        type="object" class="btn-primary"
+                        invisible="state != 'inside'"/>
+                    <field name="state" widget="statusbar"
+                        statusbar_visible="inside,exited"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group string="Ziyaretçi Bilgileri">
+                            <field name="visitor_name"/>
+                            <field name="visitor_company"/>
+                            <field name="visitor_tc"/>
+                            <field name="visitor_phone"/>
+                            <field name="purpose"/>
+                        </group>
+                        <group string="Ziyaret Bilgileri">
+                            <field name="workplace_id"/>
+                            <field name="site_id"/>
+                            <field name="host_employee_id"/>
+                            <field name="entry_datetime"/>
+                            <field name="exit_datetime"/>
+                            <field name="duration_hours"/>
+                        </group>
+                    </group>
+                    <group string="Güvenlik">
+                        <group>
+                            <field name="induction_done"/>
+                            <field name="ppe_required"/>
+                        </group>
+                        <group>
+                            <field name="ppe_given"
+                                invisible="not ppe_required"/>
+                            <field name="ppe_notes"
+                                invisible="not ppe_required"/>
+                        </group>
+                    </group>
+                    <field name="notes" placeholder="Notlar..."/>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_isg_visitor_search" model="ir.ui.view">
+        <field name="name">isg.visitor.search</field>
+        <field name="model">isg.visitor</field>
+        <field name="arch" type="xml">
+            <search string="Ziyaretçi Ara">
+                <field name="visitor_name"/>
+                <field name="visitor_company"/>
+                <field name="workplace_id"/>
+                <filter string="İçeride" name="inside"
+                    domain="[('state', '=', 'inside')]"/>
+                <filter string="KKD Gerekiyor" name="ppe_required"
+                    domain="[('ppe_required', '=', True), ('ppe_given', '=', False)]"/>
+                <group expand="0" string="Grupla">
+                    <filter string="İşyeri" name="group_workplace"
+                        context="{'group_by': 'workplace_id'}"/>
+                    <filter string="Amaç" name="group_purpose"
+                        context="{'group_by': 'purpose'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_isg_visitor_inside" model="ir.actions.act_window">
+        <field name="name">İçerideki Ziyaretçiler</field>
+        <field name="res_model">isg.visitor</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('state', '=', 'inside')]</field>
+    </record>
+
+    <record id="action_isg_visitor_all" model="ir.actions.act_window">
+        <field name="name">Tüm Ziyaretçiler</field>
+        <field name="res_model">isg.visitor</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- isg_core'daki site form view'ını genişlet -->
+    <record id="view_isg_site_form_location" model="ir.ui.view">
+        <field name="name">isg.site.form.location</field>
+        <field name="model">isg.site</field>
+        <field name="inherit_id" ref="isg_core.isg_site_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="inside">
+
+                <!-- GPS ve Kapasite -->
+                <group string="Konum ve Kapasite">
+                    <group>
+                        <field name="latitude"/>
+                        <field name="longitude"/>
+                    </group>
+                    <group>
+                        <field name="capacity"/>
+                        <field name="responsible_id"/>
+                    </group>
+                </group>
+
+                <!-- Tehlikeli Alan -->
+                <group string="Tehlikeli Alan Bilgileri">
+                    <group>
+                        <field name="is_hazardous"/>
+                        <field name="hazard_type"
+                               invisible="not is_hazardous"/>
+                    </group>
+                    <group>
+                        <field name="hazard_description"
+                               invisible="not is_hazardous"/>
+                    </group>
+                </group>
+
+                <!-- Toplanma Noktası -->
+                <group string="Toplanma Noktası">
+                    <field name="is_assembly_point"/>
+                </group>
+
+                <!-- Toplanma Noktaları Listesi -->
+                <notebook>
+                    <page string="Toplanma Noktaları">
+                        <field name="assembly_point_ids">
+                            <list editable="bottom">
+                                <field name="name"/>
+                                <field name="capacity"/>
+                                <field name="latitude"/>
+                                <field name="longitude"/>
+                                <field name="description"/>
+                            </list>
+                        </field>
+                    </page>
+                </notebook>
+
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

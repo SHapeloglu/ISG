@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- hr.employee form view'una İSG sekmesi ekle -->
+    <record id="view_hr_employee_isg_form" model="ir.ui.view">
+        <field name="name">hr.employee.isg.form</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <notebook position="inside">
+                <page string="İSG Bilgileri" name="isg_info">
+                    <group>
+                        <group string="İSG Ataması">
+                            <field name="isg_workplace_id"/>
+                            <field name="isg_site_id"/>
+                            <field name="isg_role"/>
+                            <field name="isg_shift"/>
+                            <field name="seg_id"/>
+                        </group>
+                        <group string="Tehlike ve Süre Bilgisi">
+                            <field name="danger_class"/>
+                            <field name="required_expert_minutes"/>
+                            <field name="required_physician_minutes"/>
+                        </group>
+                    </group>
+                    <group string="KKD Beden Ölçüleri">
+                        <group>
+                            <field name="ppe_shoe_size"/>
+                            <field name="ppe_clothing_size"/>
+                        </group>
+                        <group>
+                            <field name="ppe_glove_size"/>
+                        </group>
+                    </group>
+                    <group string="Notlar">
+                        <field name="isg_notes" nolabel="1"/>
+                    </group>
+                </page>
+            </notebook>
+        </field>
+    </record>
+
+    <!-- isg.seg form view -->
+    <record id="view_isg_seg_form" model="ir.ui.view">
+        <field name="name">isg.seg.form</field>
+        <field name="model">isg.seg</field>
+        <field name="arch" type="xml">
+            <form string="Benzer Maruziyet Grubu">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="SEG adı..."/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="workplace_id"/>
+                            <field name="hazard_type"/>
+                        </group>
+                        <group>
+                            <field name="employee_count"/>
+                        </group>
+                    </group>
+                    <group string="Açıklama">
+                        <field name="description" nolabel="1"/>
+                    </group>
+                    <notebook>
+                        <page string="Çalışanlar">
+                            <field name="employee_ids">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="job_title"/>
+                                    <field name="isg_shift"/>
+                                    <field name="danger_class"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- isg.seg list view -->
+    <record id="view_isg_seg_list" model="ir.ui.view">
+        <field name="name">isg.seg.list</field>
+        <field name="model">isg.seg</field>
+        <field name="arch" type="xml">
+            <list string="Benzer Maruziyet Grupları">
+                <field name="name"/>
+                <field name="workplace_id"/>
+                <field name="hazard_type"/>
+                <field name="employee_count"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_isg_seg" model="ir.actions.act_window">
+        <field name="name">Benzer Maruziyet Grupları (SEG)</field>
+        <field name="res_model">isg.seg</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                İlk SEG grubunu oluşturun
+            </p>
+        </field>
+    </record>
+
+    <!-- Menu -->
+    <menuitem id="menu_isg_seg"
+              name="SEG Grupları"
+              parent="isg_core.menu_isg_root"
+              action="action_isg_seg"
+              sequence="60"/>
+
+</odoo>

@@ -1,0 +1,25 @@
+{
+    'name': 'İSG İş Kazası ve Ramak Kala',
+    'version': '18.0.1.0.0',
+    'category': 'Human Resources/ISG',
+    'summary': '6331 md.14 kapsamında iş kazası kaydı, SGK bildirimi takibi ve ramak kala yönetimi',
+    'author': 'ISG Platform',
+    'depends': [
+        'isg_core',
+        'isg_security',
+        'isg_hr',
+        'isg_location',
+        'isg_document',
+        'isg_capa',
+    ],
+    'data': [
+        'security/isg_incident_security.xml',
+        'security/ir.model.access.csv',
+        'data/isg_incident_sequence.xml',
+        'views/isg_incident_views.xml',
+        'views/isg_incident_menus.xml',
+    ],
+    'installable': True,
+    'application': False,
+    'license': 'LGPL-3',
+}

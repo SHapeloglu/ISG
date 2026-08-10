@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Ana Eğitim Menüsü -->
+    <menuitem id="menu_isg_training"
+              name="Eğitim"
+              parent="isg_core.menu_isg_root"
+              sequence="30"/>
+
+    <!-- Alt Menüler -->
+    <menuitem id="menu_isg_training_record"
+              name="Eğitim Kayıtları"
+              parent="menu_isg_training"
+              action="action_isg_training_record"
+              sequence="10"/>
+
+    <menuitem id="menu_isg_training_plan"
+              name="Eğitim Planları"
+              parent="menu_isg_training"
+              action="action_isg_training_plan"
+              sequence="20"/>
+
+    <!-- Yapılandırma -->
+    <menuitem id="menu_isg_training_config"
+              name="Eğitim Yapılandırması"
+              parent="isg_core.menu_isg_root"
+              sequence="90"/>
+
+    <menuitem id="menu_isg_training_type"
+              name="Eğitim Türleri"
+              parent="menu_isg_training_config"
+              action="action_isg_training_type"
+              sequence="10"/>
+
+</odoo>

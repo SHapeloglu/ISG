@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- LIST VIEW -->
+    <record id="isg_workplace_view_list" model="ir.ui.view">
+        <field name="name">isg.workplace.view.list</field>
+        <field name="model">isg.workplace</field>
+        <field name="arch" type="xml">
+            <list string="İSG İşyerleri">
+                <field name="name"/>
+                <field name="company_id"/>
+                <field name="sgk_workplace_code"/>
+                <field name="nace_code"/>
+                <field name="danger_class" widget="badge"
+                    decoration-success="danger_class == 'low'"
+                    decoration-warning="danger_class == 'medium'"
+                    decoration-danger="danger_class == 'high'"/>
+                <field name="employee_count"/>
+                <field name="required_expert_minutes"/>
+                <field name="required_physician_minutes"/>
+                <field name="city"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- FORM VIEW -->
+    <record id="isg_workplace_view_form" model="ir.ui.view">
+        <field name="name">isg.workplace.view.form</field>
+        <field name="model">isg.workplace</field>
+        <field name="arch" type="xml">
+            <form string="İSG İşyeri">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_open_sites"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-map-marker">
+                            <field name="site_count" widget="statinfo" string="Site"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="İşyeri Adı"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Temel Bilgiler">
+                            <field name="company_id"/>
+                            <field name="sgk_workplace_code"/>
+                            <field name="nace_code"/>
+                            <field name="danger_class"/>
+                            <field name="employee_count"/>
+                            <field name="sector"/>
+                            <field name="is_public"/>
+                        </group>
+                        <group string="İletişim">
+                            <field name="address"/>
+                            <field name="city"/>
+                            <field name="district"/>
+                            <field name="phone"/>
+                            <field name="email"/>
+                        </group>
+                    </group>
+                    <group string="6331 s.K. md.6 — Aylık Zorunlu Çalışma Süreleri">
+                        <group>
+                            <field name="required_expert_minutes"/>
+                        </group>
+                        <group>
+                            <field name="required_physician_minutes"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Fiziksel Siteler">
+                            <field name="site_ids">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="site_type"/>
+                                    <field name="parent_id"/>
+                                    <field name="danger_class"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- SEARCH VIEW -->
+    <record id="isg_workplace_view_search" model="ir.ui.view">
+        <field name="name">isg.workplace.view.search</field>
+        <field name="model">isg.workplace</field>
+        <field name="arch" type="xml">
+            <search string="İşyeri Ara">
+                <field name="name"/>
+                <field name="sgk_workplace_code"/>
+                <field name="nace_code"/>
+                <field name="company_id"/>
+                <filter string="Az Tehlikeli" name="low"
+                    domain="[('danger_class','=','low')]"/>
+                <filter string="Tehlikeli" name="medium"
+                    domain="[('danger_class','=','medium')]"/>
+                <filter string="Çok Tehlikeli" name="high"
+                    domain="[('danger_class','=','high')]"/>
+                <separator/>
+                <filter string="Kamu" name="public"
+                    domain="[('is_public','=',True)]"/>
+                <group expand="0" string="Grupla">
+                    <filter string="Şirket" name="group_company"
+                        context="{'group_by':'company_id'}"/>
+                    <filter string="Tehlike Sınıfı" name="group_danger"
+                        context="{'group_by':'danger_class'}"/>
+                    <filter string="İl" name="group_city"
+                        context="{'group_by':'city'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- ACTION -->
+    <record id="action_isg_workplace" model="ir.actions.act_window">
+        <field name="name">İSG İşyerleri</field>
+        <field name="res_model">isg.workplace</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="isg_workplace_view_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                İlk İSG işyerini oluşturun
+            </p>
+        </field>
+    </record>
+
+</odoo>

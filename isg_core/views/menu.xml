@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ANA MENU -->
+    <menuitem id="menu_isg_root"
+        name="İSG"
+        sequence="10"
+        web_icon="isg_core,static/description/icon.png"/>
+
+    <!-- TANIMLAR ALT MENU -->
+    <menuitem id="menu_isg_config"
+        name="Tanımlar"
+        parent="menu_isg_root"
+        sequence="90"/>
+
+    <menuitem id="menu_isg_workplace"
+        name="İSG İşyerleri"
+        parent="menu_isg_config"
+        action="action_isg_workplace"
+        sequence="10"/>
+
+    <menuitem id="menu_isg_site"
+        name="Fiziksel Siteler"
+        parent="menu_isg_config"
+        action="action_isg_site"
+        sequence="20"/>
+
+</odoo>

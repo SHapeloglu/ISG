@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <record id="training_type_onboarding" model="isg.training.type">
+        <field name="name">İşe Başlama Eğitimi</field>
+        <field name="code">ISBAS</field>
+        <field name="sequence">1</field>
+        <field name="training_category">onboarding</field>
+        <field name="delivery_method">face_to_face</field>
+        <field name="min_duration_hours">2.0</field>
+        <field name="period_low">0</field>
+        <field name="period_medium">0</field>
+        <field name="period_high">0</field>
+        <field name="target_all">True</field>
+        <field name="target_new_employee">True</field>
+        <field name="description">2 Nisan 2026 Yönetmeliği md.5: İşe başlamadan önce yüz yüze, minimum 2 saat zorunlu.</field>
+    </record>
+
+    <record id="training_type_periodic_general" model="isg.training.type">
+        <field name="name">Periyodik İSG Eğitimi</field>
+        <field name="code">PERIYOD</field>
+        <field name="sequence">2</field>
+        <field name="training_category">periodic</field>
+        <field name="delivery_method">face_to_face</field>
+        <field name="min_duration_hours">1.0</field>
+        <field name="period_low">36</field>
+        <field name="period_medium">24</field>
+        <field name="period_high">12</field>
+        <field name="target_all">True</field>
+        <field name="description">Tehlike sınıfına göre: Az tehlikeli 3 yıl, Tehlikeli 2 yıl, Çok tehlikeli 1 yılda bir.</field>
+    </record>
+
+    <record id="training_type_return" model="isg.training.type">
+        <field name="name">Dönüş Eğitimi</field>
+        <field name="code">DONUS</field>
+        <field name="sequence">3</field>
+        <field name="training_category">return</field>
+        <field name="delivery_method">face_to_face</field>
+        <field name="min_duration_hours">1.0</field>
+        <field name="period_low">0</field>
+        <field name="period_medium">0</field>
+        <field name="period_high">0</field>
+        <field name="target_all">False</field>
+        <field name="description">Kaza, meslek hastalığı veya uzun süreli hastalık sonrası işe dönüşte zorunlu.</field>
+    </record>
+
+    <record id="training_type_emergency" model="isg.training.type">
+        <field name="name">Acil Durum Eğitimi</field>
+        <field name="code">ACIL</field>
+        <field name="sequence">4</field>
+        <field name="training_category">emergency</field>
+        <field name="delivery_method">face_to_face</field>
+        <field name="min_duration_hours">1.0</field>
+        <field name="period_low">36</field>
+        <field name="period_medium">24</field>
+        <field name="period_high">12</field>
+        <field name="target_all">True</field>
+        <field name="description">Yangın, tahliye, ilk yardım senaryoları. Tatbikat dahil.</field>
+    </record>
+
+    <record id="training_type_special_pregnant" model="isg.training.type">
+        <field name="name">Gebe Çalışan Eğitimi</field>
+        <field name="code">GEBE</field>
+        <field name="sequence">5</field>
+        <field name="training_category">special_group</field>
+        <field name="delivery_method">face_to_face</field>
+        <field name="min_duration_hours">1.0</field>
+        <field name="period_low">0</field>
+        <field name="period_medium">0</field>
+        <field name="period_high">0</field>
+        <field name="target_all">False</field>
+        <field name="target_pregnant">True</field>
+        <field name="description">Gebe çalışanlar için özel risk bilgilendirme eğitimi.</field>
+    </record>
+
+    <record id="training_type_special_young" model="isg.training.type">
+        <field name="name">Genç Çalışan Eğitimi</field>
+        <field name="code">GENC</field>
+        <field name="sequence">6</field>
+        <field name="training_category">special_group</field>
+        <field name="delivery_method">face_to_face</field>
+        <field name="min_duration_hours">2.0</field>
+        <field name="period_low">0</field>
+        <field name="period_medium">0</field>
+        <field name="period_high">0</field>
+        <field name="target_all">False</field>
+        <field name="target_young">True</field>
+        <field name="description">18 yaş altı çalışanlar için özel eğitim.</field>
+    </record>
+
+</odoo>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Ana İSG menüsü altında Risk Değerlendirmesi -->
+    <menuitem id="menu_isg_risk_root"
+        name="Risk Değerlendirmesi"
+        parent="isg_core.menu_isg_root"
+        sequence="30"/>
+
+    <menuitem id="menu_isg_risk_assessment"
+        name="Risk Değerlendirmeleri"
+        parent="menu_isg_risk_root"
+        action="action_isg_risk_assessment"
+        sequence="10"/>
+
+    <menuitem id="menu_isg_risk_line"
+        name="Tüm Tehlike / Risk Kayıtları"
+        parent="menu_isg_risk_root"
+        action="action_isg_risk_line"
+        sequence="20"/>
+</odoo>

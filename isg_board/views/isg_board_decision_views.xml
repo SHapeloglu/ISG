@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_isg_board_decision_list" model="ir.ui.view">
+        <field name="name">isg.board.decision.list</field>
+        <field name="model">isg.board.decision</field>
+        <field name="arch" type="xml">
+            <list string="Kurul Kararları"
+                decoration-danger="state == 'delayed'"
+                decoration-success="state == 'done'">
+                <field name="meeting_id"/>
+                <field name="workplace_id"/>
+                <field name="name"/>
+                <field name="responsible_id"/>
+                <field name="due_date"/>
+                <field name="state" widget="badge"
+                    decoration-success="state == 'done'"
+                    decoration-danger="state == 'delayed'"
+                    decoration-warning="state == 'open'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_isg_board_decision_form" model="ir.ui.view">
+        <field name="name">isg.board.decision.form</field>
+        <field name="model">isg.board.decision</field>
+        <field name="arch" type="xml">
+            <form string="Kurul Kararı">
+                <header>
+                    <button name="action_done" string="Tamamlandı"
+                        type="object" class="btn-primary"
+                        invisible="state == 'done'"/>
+                    <button name="action_reopen" string="Yeniden Aç"
+                        type="object"
+                        invisible="state == 'open'"/>
+                    <field name="state" widget="statusbar"
+                        statusbar_visible="open,done"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="meeting_id"/>
+                            <field name="workplace_id"/>
+                            <field name="name"/>
+                        </group>
+                        <group>
+                            <field name="responsible_id"/>
+                            <field name="due_date"/>
+                            <field name="is_delayed"/>
+                        </group>
+                    </group>
+                    <field name="description" placeholder="Karar detayı..."/>
+                    <field name="notes" placeholder="Notlar..."/>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_isg_board_decision" model="ir.actions.act_window">
+        <field name="name">Kurul Kararları</field>
+        <field name="res_model">isg.board.decision</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('state', 'in', ['open', 'delayed'])]</field>
+        <field name="context">{'search_default_open': 1}</field>
+    </record>
+</odoo>

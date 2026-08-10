@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_isg_contractor_document_form" model="ir.ui.view">
+        <field name="name">isg.contractor.document.form</field>
+        <field name="model">isg.contractor.document</field>
+        <field name="arch" type="xml">
+            <form string="Alt İşveren Belgesi">
+                <header>
+                    <button name="action_submit" type="object" string="Teslim Edildi"
+                            class="oe_highlight" invisible="state != 'missing'"/>
+                    <button name="action_approve" type="object" string="Onayla"
+                            class="oe_highlight" invisible="state != 'submitted'"/>
+                    <button name="action_reject" type="object" string="Reddet"
+                            invisible="state != 'submitted'"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="missing,submitted,approved"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Belge Bilgileri">
+                            <field name="contractor_id"/>
+                            <field name="document_type"/>
+                            <field name="name"/>
+                            <field name="is_mandatory"/>
+                        </group>
+                        <group string="Tarihler">
+                            <field name="submission_date"/>
+                            <field name="expiry_date"/>
+                            <field name="is_expired"/>
+                        </group>
+                    </group>
+                    <group string="Bağlantılar">
+                        <field name="isg_document_id"/>
+                        <field name="attachment_ids" widget="many2many_binary"/>
+                    </group>
+                    <group string="Notlar">
+                        <field name="notes" nolabel="1"/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_isg_contractor_document_list" model="ir.ui.view">
+        <field name="name">isg.contractor.document.list</field>
+        <field name="model">isg.contractor.document</field>
+        <field name="arch" type="xml">
+            <list string="Alt İşveren Belgeleri"
+                  decoration-danger="state == 'missing'"
+                  decoration-warning="state == 'expired'"
+                  decoration-success="state == 'approved'">
+                <field name="contractor_id"/>
+                <field name="document_type"/>
+                <field name="name"/>
+                <field name="is_mandatory"/>
+                <field name="submission_date"/>
+                <field name="expiry_date"/>
+                <field name="is_expired"/>
+                <field name="state" widget="badge"
+                       decoration-danger="state in ('missing','rejected','expired')"
+                       decoration-warning="state == 'submitted'"
+                       decoration-success="state == 'approved'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_isg_contractor_document" model="ir.actions.act_window">
+        <field name="name">Alt İşveren Belgeleri</field>
+        <field name="res_model">isg.contractor.document</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Belge eklemek için alt işveren kaydını açın
+            </p>
+        </field>
+    </record>
+
+</odoo>

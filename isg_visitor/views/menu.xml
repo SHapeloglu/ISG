@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_isg_visitor_root"
+        name="Ziyaretçiler"
+        parent="isg_core.menu_isg_root"
+        sequence="60"/>
+
+    <menuitem id="menu_isg_visitor_inside"
+        name="İçerideki Ziyaretçiler"
+        parent="menu_isg_visitor_root"
+        action="action_isg_visitor_inside"
+        sequence="10"/>
+
+    <menuitem id="menu_isg_visitor_all"
+        name="Tüm Ziyaretçiler"
+        parent="menu_isg_visitor_root"
+        action="action_isg_visitor_all"
+        sequence="20"/>
+</odoo>

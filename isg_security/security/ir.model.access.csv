@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_isg_workplace_readonly,isg.workplace readonly,isg_core.model_isg_workplace,isg_security.group_isg_readonly,1,0,0,0
+access_isg_workplace_expert,isg.workplace expert,isg_core.model_isg_workplace,isg_security.group_isg_expert,1,1,0,0
+access_isg_workplace_manager,isg.workplace manager,isg_core.model_isg_workplace,isg_security.group_isg_manager,1,1,1,1
+access_isg_site_readonly,isg.site readonly,isg_core.model_isg_site,isg_security.group_isg_readonly,1,0,0,0
+access_isg_site_expert,isg.site expert,isg_core.model_isg_site,isg_security.group_isg_expert,1,1,0,0
+access_isg_site_manager,isg.site manager,isg_core.model_isg_site,isg_security.group_isg_manager,1,1,1,1
+access_res_users_isg,res.users isg,base.model_res_users,isg_security.group_isg_manager,1,1,0,0

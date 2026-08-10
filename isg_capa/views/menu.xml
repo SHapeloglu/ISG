@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_isg_capa_root"
+        name="DÖF / CAPA"
+        parent="isg_core.menu_isg_root"
+        sequence="70"/>
+
+    <menuitem id="menu_isg_capa_open"
+        name="Açık DÖF'ler"
+        parent="menu_isg_capa_root"
+        action="action_isg_capa_open"
+        sequence="10"/>
+
+    <menuitem id="menu_isg_capa_actions"
+        name="Açık Aksiyonlar"
+        parent="menu_isg_capa_root"
+        action="action_isg_capa_action_open"
+        sequence="20"/>
+
+    <menuitem id="menu_isg_capa_all"
+        name="Tüm DÖF'ler"
+        parent="menu_isg_capa_root"
+        action="action_isg_capa_all"
+        sequence="30"/>
+</odoo>

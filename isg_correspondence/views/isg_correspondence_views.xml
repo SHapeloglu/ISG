@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_isg_correspondence_list" model="ir.ui.view">
+        <field name="name">isg.correspondence.list</field>
+        <field name="model">isg.correspondence</field>
+        <field name="arch" type="xml">
+            <list string="Yazışmalar"
+                decoration-danger="state == 'overdue'"
+                decoration-success="state == 'closed'"
+                decoration-muted="state == 'replied'">
+                <field name="name"/>
+                <field name="workplace_id"/>
+                <field name="direction" widget="badge"
+                    decoration-info="direction == 'incoming'"
+                    decoration-warning="direction == 'outgoing'"/>
+                <field name="correspondence_date"/>
+                <field name="institution"/>
+                <field name="subject"/>
+                <field name="category"/>
+                <field name="requires_reply"/>
+                <field name="reply_deadline"/>
+                <field name="days_remaining"/>
+                <field name="state" widget="badge"
+                    decoration-danger="state == 'overdue'"
+                    decoration-success="state == 'closed'"
+                    decoration-primary="state == 'replied'"
+                    decoration-warning="state == 'open'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_isg_correspondence_form" model="ir.ui.view">
+        <field name="name">isg.correspondence.form</field>
+        <field name="model">isg.correspondence</field>
+        <field name="arch" type="xml">
+            <form string="Yazışma Kaydı">
+                <header>
+                    <button name="action_reply" string="Cevaplandı"
+                        type="object" class="btn-primary"
+                        invisible="state not in ['open', 'overdue']"/>
+                    <button name="action_close" string="Kapat"
+                        type="object"
+                        invisible="state == 'closed'"/>
+                    <button name="action_reopen" string="Yeniden Aç"
+                        type="object"
+                        invisible="state == 'open'"/>
+                    <field name="state" widget="statusbar"
+                        statusbar_visible="open,replied,closed"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="workplace_id"/>
+                            <field name="direction"/>
+                            <field name="category"/>
+                            <field name="institution"/>
+                        </group>
+                        <group>
+                            <field name="correspondence_date"/>
+                            <field name="reference_no"/>
+                            <field name="requires_reply"/>
+                            <field name="reply_deadline"
+                                invisible="not requires_reply"/>
+                            <field name="reply_date"
+                                invisible="state not in ['replied', 'closed']"/>
+                            <field name="days_remaining"
+                                invisible="not requires_reply"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="subject"/>
+                    </group>
+                    <notebook>
+                        <page string="Detay">
+                            <field name="notes" placeholder="Notlar..."/>
+                        </page>
+                        <page string="Bağlantılar">
+                            <group>
+                                <field name="isg_document_id"/>
+                                <field name="related_correspondence_id"/>
+                            </group>
+                            <field name="attachment_ids" widget="many2many_binary"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_isg_correspondence_search" model="ir.ui.view">
+        <field name="name">isg.correspondence.search</field>
+        <field name="model">isg.correspondence</field>
+        <field name="arch" type="xml">
+            <search string="Yazışma Ara">
+                <field name="name"/>
+                <field name="subject"/>
+                <field name="institution"/>
+                <field name="workplace_id"/>
+                <filter string="Gelen" name="incoming"
+                    domain="[('direction', '=', 'incoming')]"/>
+                <filter string="Giden" name="outgoing"
+                    domain="[('direction', '=', 'outgoing')]"/>
+                <separator/>
+                <filter string="Açık" name="open"
+                    domain="[('state', '=', 'open')]"/>
+                <filter string="Süresi Geçmiş" name="overdue"
+                    domain="[('state', '=', 'overdue')]"/>
+                <filter string="Cevap Gerekiyor" name="requires_reply"
+                    domain="[('requires_reply', '=', True)]"/>
+                <group expand="0" string="Grupla">
+                    <filter string="Yön" name="group_direction"
+                        context="{'group_by': 'direction'}"/>
+                    <filter string="Kategori" name="group_category"
+                        context="{'group_by': 'category'}"/>
+                    <filter string="Durum" name="group_state"
+                        context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_isg_correspondence_all" model="ir.actions.act_window">
+        <field name="name">Tüm Yazışmalar</field>
+        <field name="res_model">isg.correspondence</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="action_isg_correspondence_open" model="ir.actions.act_window">
+        <field name="name">Açık Yazışmalar</field>
+        <field name="res_model">isg.correspondence</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('state', 'in', ['open', 'overdue'])]</field>
+    </record>
+</odoo>

@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_isg_capa_list" model="ir.ui.view">
+        <field name="name">isg.capa.list</field>
+        <field name="model">isg.capa</field>
+        <field name="arch" type="xml">
+            <list string="DÖF / CAPA Listesi"
+                decoration-danger="is_overdue == True"
+                decoration-muted="state in ['closed', 'cancelled']">
+                <field name="name"/>
+                <field name="workplace_id"/>
+                <field name="capa_type" widget="badge"
+                    decoration-warning="capa_type == 'preventive'"
+                    decoration-danger="capa_type == 'corrective'"/>
+                <field name="source"/>
+                <field name="severity" widget="badge"
+                    decoration-danger="severity == 'critical'"
+                    decoration-warning="severity == 'high'"
+                    decoration-info="severity == 'medium'"/>
+                <field name="responsible_id"/>
+                <field name="open_date"/>
+                <field name="due_date"/>
+                <field name="action_count"/>
+                <field name="is_overdue" widget="boolean_toggle"/>
+                <field name="state" widget="badge"
+                    decoration-danger="state == 'open'"
+                    decoration-warning="state in ['analysis', 'action', 'verification']"
+                    decoration-success="state == 'closed'"
+                    decoration-muted="state == 'cancelled'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_isg_capa_form" model="ir.ui.view">
+        <field name="name">isg.capa.form</field>
+        <field name="model">isg.capa</field>
+        <field name="arch" type="xml">
+            <form string="DÖF / CAPA Kaydı">
+                <header>
+                    <button name="action_to_analysis" string="Analize Al"
+                        type="object" class="btn-primary"
+                        invisible="state != 'open'"/>
+                    <button name="action_to_action" string="Aksiyona Geç"
+                        type="object" class="btn-primary"
+                        invisible="state != 'analysis'"/>
+                    <button name="action_to_verification" string="Doğrulamaya Gönder"
+                        type="object" class="btn-primary"
+                        invisible="state != 'action'"/>
+                    <button name="action_close" string="Kapat"
+                        type="object" class="btn-success"
+                        invisible="state != 'verification'"/>
+                    <button name="action_reopen" string="Yeniden Aç"
+                        type="object"
+                        invisible="state not in ['closed', 'cancelled']"/>
+                    <button name="action_cancel" string="İptal Et"
+                        type="object" class="btn-danger"
+                        invisible="state in ['closed', 'cancelled']"/>
+                    <field name="state" widget="statusbar"
+                        statusbar_visible="open,analysis,action,verification,closed"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group string="Temel Bilgiler">
+                            <field name="workplace_id"/>
+                            <field name="site_id"/>
+                            <field name="source"/>
+                            <field name="capa_type"/>
+                            <field name="severity"/>
+                        </group>
+                        <group string="Sorumluluk ve Tarih">
+                            <field name="opened_by_id"/>
+                            <field name="responsible_id"/>
+                            <field name="open_date"/>
+                            <field name="due_date"/>
+                            <field name="close_date"
+                                invisible="state != 'closed'"/>
+                            <field name="is_overdue"/>
+                            <field name="isg_document_id"/>
+                        </group>
+                    </group>
+                    <group string="Sorun Tanımı">
+                        <field name="description" nolabel="1"/>
+                    </group>
+                    <group string="Acil / Anlık Aksiyon">
+                        <field name="immediate_action" nolabel="1"/>
+                    </group>
+                    <notebook>
+                        <page string="Kök Neden Analizi">
+                            <group>
+                                <field name="root_cause_method"/>
+                            </group>
+                            <group invisible="root_cause_method != '5why'" string="5 Neden Analizi">
+                                <field name="why_1" string="1. Neden"/>
+                                <field name="why_2" string="2. Neden"/>
+                                <field name="why_3" string="3. Neden"/>
+                                <field name="why_4" string="4. Neden"/>
+                                <field name="why_5" string="5. Neden (Kök Neden)"/>
+                            </group>
+                            <group invisible="root_cause_method != 'fishbone'" string="Balık Kılçığı">
+                                <field name="cause_human"/>
+                                <field name="cause_machine"/>
+                                <field name="cause_method"/>
+                                <field name="cause_material"/>
+                                <field name="cause_environment"/>
+                                <field name="cause_management"/>
+                            </group>
+                            <group string="Kök Neden Özeti">
+                                <field name="root_cause" nolabel="1"/>
+                            </group>
+                        </page>
+                        <page string="Aksiyonlar">
+                            <field name="action_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="name"/>
+                                    <field name="action_type"/>
+                                    <field name="responsible_id"/>
+                                    <field name="due_date"/>
+                                    <field name="completion_date"/>
+                                    <field name="state" widget="badge"
+                                        decoration-success="state == 'done'"
+                                        decoration-danger="state == 'cancelled'"
+                                        decoration-warning="state == 'open'"/>
+                                    <button name="action_done" string="Tamamla"
+                                        type="object" icon="fa-check"
+                                        invisible="state == 'done'"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Doğrulama" invisible="state not in ['verification', 'closed']">
+                            <group>
+                                <field name="verified_by_id"/>
+                                <field name="verification_result"/>
+                            </group>
+                            <field name="verification_notes" placeholder="Doğrulama notları..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_isg_capa_search" model="ir.ui.view">
+        <field name="name">isg.capa.search</field>
+        <field name="model">isg.capa</field>
+        <field name="arch" type="xml">
+            <search string="DÖF Ara">
+                <field name="name"/>
+                <field name="workplace_id"/>
+                <field name="responsible_id"/>
+                <filter string="Açık" name="open"
+                    domain="[('state', '=', 'open')]"/>
+                <filter string="Süresi Geçmiş" name="overdue"
+                    domain="[('is_overdue', '=', True)]"/>
+                <filter string="Kritik" name="critical"
+                    domain="[('severity', '=', 'critical')]"/>
+                <filter string="Kapalı" name="closed"
+                    domain="[('state', '=', 'closed')]"/>
+                <separator/>
+                <filter string="Düzeltici" name="corrective"
+                    domain="[('capa_type', '=', 'corrective')]"/>
+                <filter string="Önleyici" name="preventive"
+                    domain="[('capa_type', '=', 'preventive')]"/>
+                <group expand="0" string="Grupla">
+                    <filter string="Kaynak" name="group_source"
+                        context="{'group_by': 'source'}"/>
+                    <filter string="Önem" name="group_severity"
+                        context="{'group_by': 'severity'}"/>
+                    <filter string="Durum" name="group_state"
+                        context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_isg_capa_open" model="ir.actions.act_window">
+        <field name="name">Açık DÖF'ler</field>
+        <field name="res_model">isg.capa</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('state', 'not in', ['closed', 'cancelled'])]</field>
+    </record>
+
+    <record id="action_isg_capa_all" model="ir.actions.act_window">
+        <field name="name">Tüm DÖF'ler</field>
+        <field name="res_model">isg.capa</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- FORM VIEW — res.partner genişletme -->
+    <record id="view_partner_form_isg" model="ir.ui.view">
+        <field name="name">res.partner.form.isg</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="İSG Bilgileri" name="isg_info">
+                    <group>
+                        <group string="İSG Rol Bilgileri">
+                            <field name="isg_party_type"/>
+                            <field name="is_isg_party" invisible="1"/>
+                        </group>
+                    </group>
+
+                    <!-- OSGB / İSGB Alanları -->
+                    <group string="Yetki Belgesi"
+                           invisible="isg_party_type not in ['osgb', 'isgb']">
+                        <group>
+                            <field name="osgb_license_no"/>
+                            <field name="osgb_license_date"/>
+                        </group>
+                        <group>
+                            <field name="osgb_license_expiry"/>
+                            <field name="osgb_license_expired"
+                                   widget="boolean_toggle"/>
+                        </group>
+                    </group>
+
+                    <!-- Laboratuvar / Muayene Alanları -->
+                    <group string="Akreditasyon Bilgileri"
+                           invisible="isg_party_type not in ['laboratory', 'inspection']">
+                        <group>
+                            <field name="accreditation_no"/>
+                            <field name="accreditation_expiry"/>
+                        </group>
+                        <group>
+                            <field name="accreditation_scope"/>
+                        </group>
+                    </group>
+
+                    <group string="Notlar">
+                        <field name="isg_note" nolabel="1"/>
+                    </group>
+
+                    <!-- Rol Geçmişi -->
+                    <separator string="Rol Geçmişi"/>
+                    <field name="isg_role_history_ids">
+                        <list editable="bottom">
+                            <field name="isg_party_type"/>
+                            <field name="date_start"/>
+                            <field name="date_end"/>
+                            <field name="note"/>
+                        </list>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- LIST VIEW — İSG Tarafları -->
+    <record id="view_isg_party_list" model="ir.ui.view">
+        <field name="name">res.partner.isg.party.list</field>
+        <field name="model">res.partner</field>
+        <field name="arch" type="xml">
+            <list string="İSG Tarafları">
+                <field name="name"/>
+                <field name="isg_party_type" widget="badge"/>
+                <field name="osgb_license_no"
+                       optional="show"/>
+                <field name="osgb_license_expiry"
+                       optional="show"/>
+                <field name="osgb_license_expired"
+                       widget="boolean"
+                       optional="show"/>
+                <field name="accreditation_no"
+                       optional="hide"/>
+                <field name="phone" optional="show"/>
+                <field name="email" optional="show"/>
+                <field name="city" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- SEARCH VIEW -->
+    <record id="view_isg_party_search" model="ir.ui.view">
+        <field name="name">res.partner.isg.party.search</field>
+        <field name="model">res.partner</field>
+        <field name="arch" type="xml">
+            <search string="İSG Tarafı Ara">
+                <field name="name"/>
+                <field name="osgb_license_no"/>
+                <field name="accreditation_no"/>
+                <filter string="OSGB" name="osgb"
+                    domain="[('isg_party_type','=','osgb')]"/>
+                <filter string="İSGB" name="isgb"
+                    domain="[('isg_party_type','=','isgb')]"/>
+                <filter string="Yetkili Lab." name="laboratory"
+                    domain="[('isg_party_type','=','laboratory')]"/>
+                <filter string="Muayene Kuruluşu" name="inspection"
+                    domain="[('isg_party_type','=','inspection')]"/>
+                <filter string="Alt İşveren" name="contractor"
+                    domain="[('isg_party_type','=','contractor')]"/>
+                <filter string="Tedarikçi" name="supplier"
+                    domain="[('isg_party_type','=','supplier')]"/>
+                <separator/>
+                <filter string="Süresi Dolmuş" name="expired"
+                    domain="[('osgb_license_expired','=',True)]"/>
+                <group expand="0" string="Grupla">
+                    <filter string="Rol Tipine Göre" name="group_type"
+                        context="{'group_by':'isg_party_type'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- ACTION -->
+    <record id="action_isg_party" model="ir.actions.act_window">
+        <field name="name">İSG Tarafları</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('is_isg_party','=',True)]</field>
+        <field name="view_ids" eval="[
+            (5, 0, 0),
+            (0, 0, {'view_mode': 'list', 'view_id': ref('view_isg_party_list')}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('base.view_partner_form')}),
+        ]"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                İlk İSG tarafını (OSGB, laboratuvar, alt işveren vb.) ekleyin
+            </p>
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,10 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_isg_board_member_readonly,isg.board.member readonly,model_isg_board_member,isg_security.group_isg_readonly,1,0,0,0
+access_isg_board_member_expert,isg.board.member expert,model_isg_board_member,isg_security.group_isg_expert,1,1,1,0
+access_isg_board_member_manager,isg.board.member manager,model_isg_board_member,isg_security.group_isg_manager,1,1,1,1
+access_isg_board_meeting_readonly,isg.board.meeting readonly,model_isg_board_meeting,isg_security.group_isg_readonly,1,0,0,0
+access_isg_board_meeting_expert,isg.board.meeting expert,model_isg_board_meeting,isg_security.group_isg_expert,1,1,1,0
+access_isg_board_meeting_manager,isg.board.meeting manager,model_isg_board_meeting,isg_security.group_isg_manager,1,1,1,1
+access_isg_board_decision_readonly,isg.board.decision readonly,model_isg_board_decision,isg_security.group_isg_readonly,1,0,0,0
+access_isg_board_decision_expert,isg.board.decision expert,model_isg_board_decision,isg_security.group_isg_expert,1,1,1,0
+access_isg_board_decision_manager,isg.board.decision manager,model_isg_board_decision,isg_security.group_isg_manager,1,1,1,1

@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_isg_visitor_readonly,isg.visitor readonly,model_isg_visitor,isg_security.group_isg_readonly,1,0,0,0
+access_isg_visitor_expert,isg.visitor expert,model_isg_visitor,isg_security.group_isg_expert,1,1,1,0
+access_isg_visitor_manager,isg.visitor manager,model_isg_visitor,isg_security.group_isg_manager,1,1,1,1

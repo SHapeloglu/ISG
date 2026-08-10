@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_isg_contractor_readonly,isg.contractor.readonly,model_isg_contractor,isg_security.group_isg_readonly,1,0,0,0
+access_isg_contractor_expert,isg.contractor.expert,model_isg_contractor,isg_security.group_isg_expert,1,1,1,0
+access_isg_contractor_manager,isg.contractor.manager,model_isg_contractor,isg_security.group_isg_manager,1,1,1,1
+access_isg_contractor_superadmin,isg.contractor.superadmin,model_isg_contractor,isg_security.group_isg_superadmin,1,1,1,1
+access_isg_contractor_doc_readonly,isg.contractor.document.readonly,model_isg_contractor_document,isg_security.group_isg_readonly,1,0,0,0
+access_isg_contractor_doc_expert,isg.contractor.document.expert,model_isg_contractor_document,isg_security.group_isg_expert,1,1,1,0
+access_isg_contractor_doc_manager,isg.contractor.document.manager,model_isg_contractor_document,isg_security.group_isg_manager,1,1,1,1
+access_isg_contractor_doc_superadmin,isg.contractor.document.superadmin,model_isg_contractor_document,isg_security.group_isg_superadmin,1,1,1,1

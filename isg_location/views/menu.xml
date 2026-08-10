@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_isg_assembly_point"
+        name="Toplanma Noktaları"
+        parent="isg_core.menu_isg_config"
+        action="action_assembly_point"
+        sequence="25"/>
+</odoo>

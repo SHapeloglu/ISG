@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Form View -->
+    <record id="view_isg_document_form" model="ir.ui.view">
+        <field name="name">isg.document.form</field>
+        <field name="model">isg.document</field>
+        <field name="arch" type="xml">
+            <form string="İSG Belgesi">
+                <header>
+                    <button name="action_approve" type="object" string="Onayla"
+                            class="oe_highlight" invisible="state != 'draft'"/>
+                    <button name="action_lock" type="object" string="Kilitle"
+                            class="oe_highlight" invisible="state != 'approved'"/>
+                    <button name="action_new_version" type="object" string="Yeni Sürüm Oluştur"
+                            invisible="state != 'locked'"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,approved,locked"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="Belge adı..."/></h1>
+                    </div>
+                    <group>
+                        <group string="Belge Bilgileri">
+                            <field name="document_type"/>
+                            <field name="version"/>
+                            <field name="parent_document_id" readonly="1"/>
+                            <field name="document_file" filename="document_filename" widget="binary"/>
+                            <field name="document_filename" invisible="1"/>
+                            <field name="attachment_id" readonly="1"/>
+                            <field name="isg_sha256" readonly="1"/>
+                        </group>
+                        <group string="Geçerlilik ve Kapsam">
+                            <field name="valid_from"/>
+                            <field name="valid_until"/>
+                            <field name="company_id"/>
+                            <field name="workplace_id"/>
+                            <field name="site_id"/>
+                        </group>
+                    </group>
+                    <group string="E-İmza (5070 s.K.)" invisible="state != 'locked'">
+                        <group>
+                            <field name="signed_by_id" readonly="1"/>
+                            <field name="signed_date" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="signature_reference"/>
+                        </group>
+                    </group>
+                    <group string="Sonraki Sürümler" invisible="not child_document_ids">
+                        <field name="child_document_ids" nolabel="1">
+                            <list>
+                                <field name="name"/>
+                                <field name="version"/>
+                                <field name="state"/>
+                            </list>
+                        </field>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- List View -->
+    <record id="view_isg_document_list" model="ir.ui.view">
+        <field name="name">isg.document.list</field>
+        <field name="model">isg.document</field>
+        <field name="arch" type="xml">
+            <list string="İSG Belgeleri" decoration-muted="state == 'locked'">
+                <field name="name"/>
+                <field name="document_type"/>
+                <field name="version"/>
+                <field name="workplace_id"/>
+                <field name="valid_from"/>
+                <field name="valid_until"/>
+                <field name="state" widget="badge"
+                       decoration-info="state == 'draft'"
+                       decoration-success="state == 'approved'"
+                       decoration-warning="state == 'locked'"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="view_isg_document_search" model="ir.ui.view">
+        <field name="name">isg.document.search</field>
+        <field name="model">isg.document</field>
+        <field name="arch" type="xml">
+            <search string="İSG Belgesi Ara">
+                <field name="name"/>
+                <field name="document_type"/>
+                <field name="workplace_id"/>
+                <filter string="Taslak" name="filter_draft" domain="[('state','=','draft')]"/>
+                <filter string="Onaylı" name="filter_approved" domain="[('state','=','approved')]"/>
+                <filter string="Kilitli" name="filter_locked" domain="[('state','=','locked')]"/>
+                <group expand="0" string="Grupla">
+                    <filter string="Belge Türü" name="group_type" context="{'group_by':'document_type'}"/>
+                    <filter string="İşyeri" name="group_workplace" context="{'group_by':'workplace_id'}"/>
+                    <filter string="Durum" name="group_state" context="{'group_by':'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_isg_document" model="ir.actions.act_window">
+        <field name="name">İSG Belgeleri</field>
+        <field name="res_model">isg.document</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_isg_document_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                İlk İSG belgesini oluşturun
+            </p>
+        </field>
+    </record>
+
+    <!-- Menu -->
+    <menuitem id="menu_isg_document"
+              name="Belgeler"
+              parent="isg_core.menu_isg_root"
+              action="action_isg_document"
+              sequence="50"/>
+
+</odoo>

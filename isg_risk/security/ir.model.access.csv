@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_isg_risk_assessment_readonly,isg.risk.assessment readonly,isg_risk.model_isg_risk_assessment,isg_security.group_isg_readonly,1,0,0,0
+access_isg_risk_assessment_expert,isg.risk.assessment expert,isg_risk.model_isg_risk_assessment,isg_security.group_isg_expert,1,1,1,0
+access_isg_risk_assessment_manager,isg.risk.assessment manager,isg_risk.model_isg_risk_assessment,isg_security.group_isg_manager,1,1,1,1
+access_isg_risk_line_readonly,isg.risk.line readonly,isg_risk.model_isg_risk_line,isg_security.group_isg_readonly,1,0,0,0
+access_isg_risk_line_expert,isg.risk.line expert,isg_risk.model_isg_risk_line,isg_security.group_isg_expert,1,1,1,0
+access_isg_risk_line_manager,isg.risk.line manager,isg_risk.model_isg_risk_line,isg_security.group_isg_manager,1,1,1,1

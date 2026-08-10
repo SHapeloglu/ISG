@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_isg_incident_root"
+        name="Kaza ve Ramak Kala"
+        parent="isg_core.menu_isg_root"
+        sequence="40"/>
+
+    <menuitem id="menu_isg_incident"
+        name="İş Kazaları / Ramak Kala"
+        parent="menu_isg_incident_root"
+        action="action_isg_incident"
+        sequence="10"/>
+</odoo>

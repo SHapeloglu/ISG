@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_isg_party"
+        name="İSG Tarafları"
+        parent="isg_core.menu_isg_config"
+        action="action_isg_party"
+        sequence="30"/>
+</odoo>

@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_isg_contractor_form" model="ir.ui.view">
+        <field name="name">isg.contractor.form</field>
+        <field name="model">isg.contractor</field>
+        <field name="arch" type="xml">
+            <form string="Alt İşveren">
+                <header>
+                    <button name="action_activate" type="object" string="Aktive Et"
+                            class="oe_highlight" invisible="state != 'draft'"/>
+                    <button name="action_terminate" type="object" string="Feshet"
+                            invisible="state not in ('draft','active')"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,active,expired,terminated"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" icon="fa-file-text"
+                                type="object" name="action_view_documents">
+                            <field name="document_count" widget="statinfo"
+                                   string="Belge"/>
+                        </button>
+                        <button class="oe_stat_button" icon="fa-warning"
+                                type="object" name="action_view_documents"
+                                invisible="missing_document_count == 0">
+                            <field name="missing_document_count" widget="statinfo"
+                                   string="Eksik"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="Alt işveren adı..."/></h1>
+                    </div>
+                    <group>
+                        <group string="Temel Bilgiler">
+                            <field name="partner_id"/>
+                            <field name="workplace_id"/>
+                            <field name="site_id"/>
+                            <field name="danger_class"/>
+                            <field name="contractor_level"/>
+                            <field name="parent_contractor_id"/>
+                        </group>
+                        <group string="Sözleşme">
+                            <field name="contract_no"/>
+                            <field name="contract_subject"/>
+                            <field name="contract_start"/>
+                            <field name="contract_end"/>
+                        </group>
+                    </group>
+                    <group string="Çalışan Bildirimi">
+                        <group>
+                            <field name="employee_count_declared"/>
+                        </group>
+                        <group>
+                            <field name="employee_count_actual"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Belgeler">
+                            <field name="document_ids">
+                                <list editable="bottom"
+                                      decoration-danger="state == 'missing'"
+                                      decoration-warning="state == 'expired'"
+                                      decoration-success="state == 'approved'">
+                                    <field name="document_type"/>
+                                    <field name="name"/>
+                                    <field name="is_mandatory"/>
+                                    <field name="submission_date"/>
+                                    <field name="expiry_date"/>
+                                    <field name="is_expired"/>
+                                    <field name="state"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Alt Taşeronlar"
+                              invisible="not child_contractor_ids">
+                            <field name="child_contractor_ids">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="contract_start"/>
+                                    <field name="contract_end"/>
+                                    <field name="employee_count_declared"/>
+                                    <field name="state"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Notlar">
+                            <field name="notes" nolabel="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_isg_contractor_list" model="ir.ui.view">
+        <field name="name">isg.contractor.list</field>
+        <field name="model">isg.contractor</field>
+        <field name="arch" type="xml">
+            <list string="Alt İşverenler"
+                  decoration-danger="missing_document_count > 0"
+                  decoration-muted="state == 'terminated'">
+                <field name="name"/>
+                <field name="workplace_id"/>
+                <field name="contractor_level"/>
+                <field name="contract_start"/>
+                <field name="contract_end"/>
+                <field name="employee_count_declared"/>
+                <field name="document_count"/>
+                <field name="missing_document_count"/>
+                <field name="state" widget="badge"
+                       decoration-info="state == 'draft'"
+                       decoration-success="state == 'active'"
+                       decoration-danger="state in ('expired','terminated')"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_isg_contractor_search" model="ir.ui.view">
+        <field name="name">isg.contractor.search</field>
+        <field name="model">isg.contractor</field>
+        <field name="arch" type="xml">
+            <search string="Alt İşveren Ara">
+                <field name="name"/>
+                <field name="workplace_id"/>
+                <filter string="Aktif" name="filter_active"
+                        domain="[('state','=','active')]"/>
+                <filter string="Eksik Belgeli" name="filter_missing"
+                        domain="[('document_ids.state','=','missing')]"/>
+                <filter string="Süresi Dolmuş" name="filter_expired"
+                        domain="[('state','=','expired')]"/>
+                <group expand="0" string="Grupla">
+                    <filter string="İşyeri" name="group_workplace"
+                            context="{'group_by':'workplace_id'}"/>
+                    <filter string="Durum" name="group_state"
+                            context="{'group_by':'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_isg_contractor" model="ir.actions.act_window">
+        <field name="name">Alt İşverenler</field>
+        <field name="res_model">isg.contractor</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_isg_contractor_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                İlk alt işvereni kaydedin
+            </p>
+        </field>
+    </record>
+
+</odoo>

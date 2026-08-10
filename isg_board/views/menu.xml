@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_isg_board_root"
+        name="İSG Kurulu"
+        parent="isg_core.menu_isg_root"
+        sequence="40"/>
+
+    <menuitem id="menu_isg_board_meeting"
+        name="Toplantılar"
+        parent="menu_isg_board_root"
+        action="action_isg_board_meeting"
+        sequence="10"/>
+
+    <menuitem id="menu_isg_board_decision"
+        name="Kurul Kararları"
+        parent="menu_isg_board_root"
+        action="action_isg_board_decision"
+        sequence="20"/>
+
+    <menuitem id="menu_isg_board_member"
+        name="Kurul Üyeleri"
+        parent="menu_isg_board_root"
+        action="action_isg_board_member"
+        sequence="30"/>
+</odoo>

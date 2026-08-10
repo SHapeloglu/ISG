@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- LIST VIEW — bağımsız tehlike/risk listesi -->
+    <record id="view_isg_risk_line_list" model="ir.ui.view">
+        <field name="name">isg.risk.line.list</field>
+        <field name="model">isg.risk.line</field>
+        <field name="arch" type="xml">
+            <list string="Tehlike / Risk Kayıtları"
+                decoration-danger="risk_level in ('high', 'intolerable')"
+                decoration-warning="risk_level == 'medium'">
+                <field name="assessment_id"/>
+                <field name="hazard_category"/>
+                <field name="hazard_description"/>
+                <field name="location_id"/>
+                <field name="risk_score"/>
+                <field name="risk_level" widget="badge"
+                    decoration-success="risk_level == 'acceptable'"
+                    decoration-info="risk_level == 'low'"
+                    decoration-warning="risk_level == 'medium'"
+                    decoration-danger="risk_level in ('high', 'intolerable')"/>
+                <field name="residual_score"/>
+                <field name="residual_level" widget="badge"
+                    decoration-success="residual_level == 'acceptable'"
+                    decoration-info="residual_level == 'low'"
+                    decoration-warning="residual_level == 'medium'"
+                    decoration-danger="residual_level in ('high', 'intolerable')"/>
+                <field name="responsible_id"/>
+                <field name="deadline"/>
+                <field name="capa_id"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- FORM VIEW — tek satır detay -->
+    <record id="view_isg_risk_line_form" model="ir.ui.view">
+        <field name="name">isg.risk.line.form</field>
+        <field name="model">isg.risk.line</field>
+        <field name="arch" type="xml">
+            <form string="Tehlike / Risk Kaydı">
+                <sheet>
+                    <group string="Tehlike Tanımı">
+                        <group>
+                            <field name="assessment_id"/>
+                            <field name="hazard_category"/>
+                            <field name="location_id"/>
+                            <field name="affected_persons"/>
+                        </group>
+                        <group>
+                            <field name="hazard_description"/>
+                            <field name="existing_controls"/>
+                        </group>
+                    </group>
+
+                    <group string="Risk Puanlama">
+                        <field name="method" readonly="1"/>
+                        <!-- L Matrisi -->
+                        <group string="L Matrisi" invisible="method != 'l_matrix'">
+                            <field name="probability_l"/>
+                            <field name="severity_l"/>
+                            <field name="risk_score"/>
+                            <field name="risk_level" widget="badge"
+                                decoration-success="risk_level == 'acceptable'"
+                                decoration-info="risk_level == 'low'"
+                                decoration-warning="risk_level == 'medium'"
+                                decoration-danger="risk_level in ('high', 'intolerable')"/>
+                        </group>
+                        <!-- Fine-Kinney -->
+                        <group string="Fine-Kinney" invisible="method != 'fine_kinney'">
+                            <field name="probability_fk"/>
+                            <field name="frequency_fk"/>
+                            <field name="severity_fk"/>
+                            <field name="risk_score"/>
+                            <field name="risk_level" widget="badge"
+                                decoration-success="risk_level == 'acceptable'"
+                                decoration-info="risk_level == 'low'"
+                                decoration-warning="risk_level == 'medium'"
+                                decoration-danger="risk_level in ('high', 'intolerable')"/>
+                        </group>
+                    </group>
+
+                    <group string="Kontrol Önlemleri">
+                        <group>
+                            <field name="control_hierarchy"/>
+                            <field name="responsible_id"/>
+                            <field name="deadline"/>
+                        </group>
+                        <group>
+                            <field name="additional_controls"/>
+                        </group>
+                    </group>
+
+                    <group string="Kalıntı Risk">
+                        <!-- L Matrisi kalıntı -->
+                        <group string="L Matrisi" invisible="method != 'l_matrix'">
+                            <field name="residual_probability_l"/>
+                            <field name="residual_severity_l"/>
+                            <field name="residual_score"/>
+                            <field name="residual_level" widget="badge"
+                                decoration-success="residual_level == 'acceptable'"
+                                decoration-info="residual_level == 'low'"
+                                decoration-warning="residual_level == 'medium'"
+                                decoration-danger="residual_level in ('high', 'intolerable')"/>
+                        </group>
+                        <!-- Fine-Kinney kalıntı -->
+                        <group string="Fine-Kinney" invisible="method != 'fine_kinney'">
+                            <field name="residual_probability_fk"/>
+                            <field name="residual_frequency_fk"/>
+                            <field name="residual_severity_fk"/>
+                            <field name="residual_score"/>
+                            <field name="residual_level" widget="badge"
+                                decoration-success="residual_level == 'acceptable'"
+                                decoration-info="residual_level == 'low'"
+                                decoration-warning="residual_level == 'medium'"
+                                decoration-danger="residual_level in ('high', 'intolerable')"/>
+                        </group>
+                    </group>
+
+                    <group string="DÖF Bağlantısı">
+                        <field name="capa_id" readonly="1"/>
+                        <button name="action_create_capa"
+                            string="DÖF Kaydı Oluştur"
+                            type="object"
+                            class="btn-warning"
+                            invisible="risk_level not in ('high', 'intolerable') or capa_id != False"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- SEARCH VIEW -->
+    <record id="view_isg_risk_line_search" model="ir.ui.view">
+        <field name="name">isg.risk.line.search</field>
+        <field name="model">isg.risk.line</field>
+        <field name="arch" type="xml">
+            <search string="Tehlike / Risk Ara">
+                <field name="hazard_description"/>
+                <field name="assessment_id"/>
+                <field name="location_id"/>
+                <separator/>
+                <filter string="Yüksek Risk" name="high"
+                    domain="[('risk_level','=','high')]"/>
+                <filter string="Tolerans Gösterilemez" name="intolerable"
+                    domain="[('risk_level','=','intolerable')]"/>
+                <filter string="DÖF Açılmamış Yüksek Risk" name="no_capa"
+                    domain="[('risk_level','in',['high','intolerable']),('capa_id','=',False)]"/>
+                <separator/>
+                <group expand="0" string="Grupla">
+                    <filter string="Tehlike Kategorisi" name="group_category"
+                        context="{'group_by': 'hazard_category'}"/>
+                    <filter string="Risk Seviyesi" name="group_level"
+                        context="{'group_by': 'risk_level'}"/>
+                    <filter string="Lokasyon" name="group_location"
+                        context="{'group_by': 'location_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- ACTION -->
+    <record id="action_isg_risk_line" model="ir.actions.act_window">
+        <field name="name">Tüm Tehlike / Risk Kayıtları</field>
+        <field name="res_model">isg.risk.line</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_isg_risk_line_search"/>
+        <field name="context">{'search_default_high': 1}</field>
+    </record>
+</odoo>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem id="menu_isg_contractor"
+              name="Alt İşverenler"
+              parent="isg_core.menu_isg_root"
+              action="action_isg_contractor"
+              sequence="40"/>
+
+</odoo>

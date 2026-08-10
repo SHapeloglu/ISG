@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_assembly_point_list" model="ir.ui.view">
+        <field name="name">isg.assembly.point.list</field>
+        <field name="model">isg.assembly.point</field>
+        <field name="arch" type="xml">
+            <list string="Toplanma Noktaları">
+                <field name="name"/>
+                <field name="site_id"/>
+                <field name="workplace_id"/>
+                <field name="capacity"/>
+                <field name="description"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_assembly_point_form" model="ir.ui.view">
+        <field name="name">isg.assembly.point.form</field>
+        <field name="model">isg.assembly.point</field>
+        <field name="arch" type="xml">
+            <form string="Toplanma Noktası">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Toplanma Noktası Adı"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Bağlantı">
+                            <field name="site_id"/>
+                            <field name="workplace_id"/>
+                            <field name="company_id"/>
+                        </group>
+                        <group string="Detaylar">
+                            <field name="capacity"/>
+                            <field name="latitude"/>
+                            <field name="longitude"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <group string="Açıklama / Yol Tarifi">
+                        <field name="description" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_assembly_point" model="ir.actions.act_window">
+        <field name="name">Toplanma Noktaları</field>
+        <field name="res_model">isg.assembly.point</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                İlk toplanma noktasını tanımlayın
+            </p>
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!--
+        İŞYERİ RECORD RULE'LARI
+        Kullanıcı hangi işyerlerine atandıysa yalnızca onları görebilir.
+        isg_workplace_ids boşsa şirket bazlı erişim devreye girer.
+    -->
+
+    <record id="rule_isg_workplace_company" model="ir.rule">
+        <field name="name">İSG İşyeri: Şirket Bazlı Erişim</field>
+        <field name="model_id" ref="isg_core.model_isg_workplace"/>
+        <field name="groups" eval="[(4, ref('group_isg_readonly'))]"/>
+        <field name="domain_force">
+            ['|',
+                ('company_id', 'in', company_ids),
+                ('id', 'in', user.isg_workplace_ids.ids)
+            ]
+        </field>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <record id="rule_isg_workplace_manager" model="ir.rule">
+        <field name="name">İSG İşyeri: Yönetici Tam Erişim</field>
+        <field name="model_id" ref="isg_core.model_isg_workplace"/>
+        <field name="groups" eval="[(4, ref('group_isg_manager'))]"/>
+        <field name="domain_force">
+            [('company_id', 'in', company_ids)]
+        </field>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <!--
+        SİTE RECORD RULE'LARI
+        Site, işyerine bağlı — işyeri erişimi varsa site de görünür.
+    -->
+
+    <record id="rule_isg_site_company" model="ir.rule">
+        <field name="name">İSG Site: Şirket Bazlı Erişim</field>
+        <field name="model_id" ref="isg_core.model_isg_site"/>
+        <field name="groups" eval="[(4, ref('group_isg_readonly'))]"/>
+        <field name="domain_force">
+            ['|',
+                ('company_id', 'in', company_ids),
+                ('workplace_id', 'in', user.isg_workplace_ids.ids)
+            ]
+        </field>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+</odoo>

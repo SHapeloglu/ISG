@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_users_form_isg" model="ir.ui.view">
+        <field name="name">res.users.form.isg</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='access_rights']" position="inside">
+                <separator string="İSG Platform"/>
+                <field name="isg_workplace_ids"
+                       widget="many2many_tags"
+                       string="Erişim İzni Verilen İşyerleri"/>
+                <separator string="İSG Rolü"/>
+                <field name="isg_group_ids"
+                       widget="many2many_tags"
+                       string="İSG Grupları"
+                       domain="[('category_id.name', '=', 'İSG Platform')]"
+                       options="{'no_create': True, 'no_open': True}"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

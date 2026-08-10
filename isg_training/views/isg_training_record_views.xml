@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_isg_training_record_form" model="ir.ui.view">
+        <field name="name">isg.training.record.form</field>
+        <field name="model">isg.training.record</field>
+        <field name="arch" type="xml">
+            <form string="Eğitim Kaydı">
+                <header>
+                    <button name="action_confirm" type="object" string="Onayla"
+                            class="oe_highlight" invisible="state != 'draft'"/>
+                    <button name="action_cancel" type="object" string="İptal Et"
+                            invisible="state != 'draft'"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,confirmed"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" icon="fa-users"
+                                type="object" name="action_confirm">
+                            <field name="attendee_count" widget="statinfo"
+                                   string="Katılımcı"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="Eğitim adı..."/></h1>
+                    </div>
+                    <group>
+                        <group string="Eğitim Bilgileri">
+                            <field name="training_type_id"/>
+                            <field name="training_category"/>
+                            <field name="delivery_method"/>
+                            <field name="training_date"/>
+                            <field name="duration_hours"/>
+                        </group>
+                        <group string="Kapsam">
+                            <field name="workplace_id"/>
+                            <field name="site_id"/>
+                            <field name="company_id"/>
+                            <field name="document_id"/>
+                        </group>
+                    </group>
+                    <group string="Eğitmen Bilgileri">
+                        <group>
+                            <field name="trainer_name"/>
+                            <field name="trainer_institution"/>
+                        </group>
+                        <group>
+                            <field name="trainer_certificate"/>
+                        </group>
+                    </group>
+                    <group string="2 Nisan 2026 Yönetmelik Uygunluğu">
+                        <group>
+                            <field name="regulation_compliant" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="compliance_notes" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Katılımcılar">
+                            <field name="attendee_ids">
+                                <list editable="bottom">
+                                    <field name="employee_id"/>
+                                    <field name="workplace_id"/>
+                                    <field name="attended"/>
+                                    <field name="passed"/>
+                                    <field name="score"/>
+                                    <field name="certificate_no"/>
+                                    <field name="next_training_date"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_isg_training_record_list" model="ir.ui.view">
+        <field name="name">isg.training.record.list</field>
+        <field name="model">isg.training.record</field>
+        <field name="arch" type="xml">
+            <list string="Eğitim Kayıtları"
+                  decoration-danger="not regulation_compliant">
+                <field name="name"/>
+                <field name="training_type_id"/>
+                <field name="training_category"/>
+                <field name="training_date"/>
+                <field name="duration_hours"/>
+                <field name="workplace_id"/>
+                <field name="attendee_count"/>
+                <field name="regulation_compliant" widget="boolean"/>
+                <field name="state" widget="badge"
+                       decoration-info="state == 'draft'"
+                       decoration-success="state == 'confirmed'"
+                       decoration-danger="state == 'cancelled'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_isg_training_record_search" model="ir.ui.view">
+        <field name="name">isg.training.record.search</field>
+        <field name="model">isg.training.record</field>
+        <field name="arch" type="xml">
+            <search string="Eğitim Kaydı Ara">
+                <field name="name"/>
+                <field name="training_type_id"/>
+                <field name="workplace_id"/>
+                <filter string="Uyumsuz" name="filter_noncompliant"
+                        domain="[('regulation_compliant','=',False)]"/>
+                <filter string="Onaylı" name="filter_confirmed"
+                        domain="[('state','=','confirmed')]"/>
+                <filter string="Taslak" name="filter_draft"
+                        domain="[('state','=','draft')]"/>
+                <group expand="0" string="Grupla">
+                    <filter string="Eğitim Türü" name="group_type"
+                            context="{'group_by':'training_type_id'}"/>
+                    <filter string="İşyeri" name="group_workplace"
+                            context="{'group_by':'workplace_id'}"/>
+                    <filter string="Kategori" name="group_category"
+                            context="{'group_by':'training_category'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_isg_training_record" model="ir.actions.act_window">
+        <field name="name">Eğitim Kayıtları</field>
+        <field name="res_model">isg.training.record</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_isg_training_record_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                İlk eğitim kaydını oluşturun
+            </p>
+        </field>
+    </record>
+
+</odoo>

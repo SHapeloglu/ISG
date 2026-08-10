@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_isg_correspondence_root"
+        name="Yazışmalar"
+        parent="isg_core.menu_isg_root"
+        sequence="50"/>
+
+    <menuitem id="menu_isg_correspondence_open"
+        name="Açık Yazışmalar"
+        parent="menu_isg_correspondence_root"
+        action="action_isg_correspondence_open"
+        sequence="10"/>
+
+    <menuitem id="menu_isg_correspondence_all"
+        name="Tüm Yazışmalar"
+        parent="menu_isg_correspondence_root"
+        action="action_isg_correspondence_all"
+        sequence="20"/>
+</odoo>

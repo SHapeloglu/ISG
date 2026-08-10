@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- LIST VIEW -->
+    <record id="view_isg_risk_assessment_list" model="ir.ui.view">
+        <field name="name">isg.risk.assessment.list</field>
+        <field name="model">isg.risk.assessment</field>
+        <field name="arch" type="xml">
+            <list string="Risk Değerlendirmeleri">
+                <field name="name"/>
+                <field name="workplace_id"/>
+                <field name="site_id"/>
+                <field name="assessment_date"/>
+                <field name="method"/>
+                <field name="danger_class"/>
+                <field name="total_hazards"/>
+                <field name="high_risk_count"/>
+                <field name="next_review_date"/>
+                <field name="state" widget="badge"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- FORM VIEW -->
+    <record id="view_isg_risk_assessment_form" model="ir.ui.view">
+        <field name="name">isg.risk.assessment.form</field>
+        <field name="model">isg.risk.assessment</field>
+        <field name="arch" type="xml">
+            <form string="Risk Değerlendirmesi">
+                <header>
+                    <button name="action_start" string="Başlat"
+                        type="object" class="btn-primary"
+                        invisible="state != 'draft'"/>
+                    <button name="action_done" string="Tamamla"
+                        type="object" class="btn-primary"
+                        invisible="state != 'in_progress'"/>
+                    <button name="action_approve" string="Onayla"
+                        type="object" class="btn-success"
+                        invisible="state != 'done'"/>
+                    <button name="action_renewal" string="Yenileme Gerekli"
+                        type="object" class="btn-warning"
+                        invisible="state != 'approved'"/>
+                    <button name="action_new_revision" string="Yeni Revizyon Aç"
+                        type="object"
+                        invisible="state not in ('approved', 'renewal')"/>
+                    <button name="action_archive_assessment" string="Arşivle"
+                        type="object"
+                        invisible="state == 'archived'"/>
+                    <field name="state" widget="statusbar"
+                        statusbar_visible="draft,in_progress,done,approved"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group string="Genel Bilgiler">
+                            <field name="company_id"/>
+                            <field name="workplace_id"/>
+                            <field name="site_id"/>
+                            <field name="danger_class"/>
+                            <field name="assessment_date"/>
+                            <field name="method"/>
+                        </group>
+                        <group string="Yenileme ve Onay">
+                            <field name="renewal_reason"/>
+                            <field name="previous_assessment_id"/>
+                            <field name="next_review_date"/>
+                            <field name="approver_id" readonly="1"/>
+                            <field name="approval_date" readonly="1"/>
+                            <field name="document_id"/>
+                        </group>
+                    </group>
+                    <group string="Risk Değerlendirme Ekibi">
+                        <field name="team_ids" widget="many2many_tags"/>
+                    </group>
+                    <group string="Özet">
+                        <group>
+                            <field name="total_hazards"/>
+                            <field name="high_risk_count"/>
+                        </group>
+                        <group>
+                            <field name="open_capa_count"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Tehlike / Risk Kayıtları">
+                            <field name="risk_line_ids" mode="list"
+                                context="{'default_method': method}">
+                                <list editable="bottom"
+                                    decoration-danger="risk_level in ('high', 'intolerable')"
+                                    decoration-warning="risk_level == 'medium'">
+                                    <field name="hazard_category"/>
+                                    <field name="hazard_description"/>
+                                    <field name="location_id"/>
+                                    <field name="method" column_invisible="1"/>
+                                    <field name="probability_l"
+                                        column_invisible="parent.method != 'l_matrix'"/>
+                                    <field name="severity_l"
+                                        column_invisible="parent.method != 'l_matrix'"/>
+                                    <field name="probability_fk"
+                                        column_invisible="parent.method != 'fine_kinney'"/>
+                                    <field name="frequency_fk"
+                                        column_invisible="parent.method != 'fine_kinney'"/>
+                                    <field name="severity_fk"
+                                        column_invisible="parent.method != 'fine_kinney'"/>
+                                    <field name="risk_score"/>
+                                    <field name="risk_level" widget="badge"/>
+                                    <field name="control_hierarchy"/>
+                                    <field name="responsible_id"/>
+                                    <field name="deadline"/>
+                                    <field name="residual_score"/>
+                                    <field name="residual_level" widget="badge"/>
+                                    <field name="capa_id"/>
+                                    <button name="action_create_capa"
+                                        string="DÖF Aç" type="object"
+                                        icon="fa-exclamation-triangle"
+                                        invisible="risk_level not in ('high', 'intolerable') or capa_id != False"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Notlar">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- SEARCH VIEW -->
+    <record id="view_isg_risk_assessment_search" model="ir.ui.view">
+        <field name="name">isg.risk.assessment.search</field>
+        <field name="model">isg.risk.assessment</field>
+        <field name="arch" type="xml">
+            <search string="Risk Değerlendirmesi Ara">
+                <field name="name"/>
+                <field name="workplace_id"/>
+                <field name="site_id"/>
+                <separator/>
+                <filter string="Taslak" name="draft" domain="[('state','=','draft')]"/>
+                <filter string="Devam Ediyor" name="in_progress" domain="[('state','=','in_progress')]"/>
+                <filter string="Onaylandı" name="approved" domain="[('state','=','approved')]"/>
+                <filter string="Yenileme Gerekli" name="renewal" domain="[('state','=','renewal')]"/>
+                <separator/>
+                <filter string="Yüksek Risk Var" name="high_risk"
+                    domain="[('high_risk_count','&gt;',0)]"/>
+                <separator/>
+                <filter string="L Matrisi" name="l_matrix" domain="[('method','=','l_matrix')]"/>
+                <filter string="Fine-Kinney" name="fine_kinney" domain="[('method','=','fine_kinney')]"/>
+                <group expand="0" string="Grupla">
+                    <filter string="İşyeri" name="group_workplace" context="{'group_by': 'workplace_id'}"/>
+                    <filter string="Tehlike Sınıfı" name="group_danger" context="{'group_by': 'danger_class'}"/>
+                    <filter string="Durum" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="Yöntem" name="group_method" context="{'group_by': 'method'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- ACTION -->
+    <record id="action_isg_risk_assessment" model="ir.actions.act_window">
+        <field name="name">Risk Değerlendirmeleri</field>
+        <field name="res_model">isg.risk.assessment</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_isg_risk_assessment_search"/>
+        <field name="context">{'search_default_approved': 1}</field>
+    </record>
+</odoo>
