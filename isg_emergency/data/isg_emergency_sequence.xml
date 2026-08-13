@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="seq_isg_emergency_plan" model="ir.sequence">
+            <field name="name">İSG Acil Durum Planı</field>
+            <field name="code">isg.emergency.plan</field>
+            <field name="prefix">ISG-ADP-%(year)s-</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        <record id="seq_isg_emergency_drill" model="ir.sequence">
+            <field name="name">İSG Acil Durum Tatbikatı</field>
+            <field name="code">isg.emergency.drill</field>
+            <field name="prefix">ISG-TAT-%(year)s-</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+    </data>
+</odoo>

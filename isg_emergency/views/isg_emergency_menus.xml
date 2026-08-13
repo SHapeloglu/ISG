@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_isg_emergency_root"
+        name="Acil Durum"
+        parent="isg_core.menu_isg_root"
+        sequence="60"/>
+    <menuitem id="menu_isg_emergency_plan"
+        name="Acil Durum Planları"
+        parent="menu_isg_emergency_root"
+        action="action_isg_emergency_plan"
+        sequence="10"/>
+    <menuitem id="menu_isg_emergency_drill"
+        name="Tatbikatlar"
+        parent="menu_isg_emergency_root"
+        action="action_isg_emergency_drill"
+        sequence="20"/>
+    <menuitem id="menu_isg_emergency_type"
+        name="Acil Durum Türleri"
+        parent="menu_isg_emergency_root"
+        action="action_isg_emergency_type"
+        sequence="30"/>
+</odoo>

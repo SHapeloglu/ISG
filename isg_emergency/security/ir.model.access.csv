@@ -1,0 +1,10 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_isg_emergency_plan_readonly,isg.emergency.plan readonly,isg_emergency.model_isg_emergency_plan,isg_security.group_isg_readonly,1,0,0,0
+access_isg_emergency_plan_expert,isg.emergency.plan expert,isg_emergency.model_isg_emergency_plan,isg_security.group_isg_expert,1,1,1,0
+access_isg_emergency_plan_manager,isg.emergency.plan manager,isg_emergency.model_isg_emergency_plan,isg_security.group_isg_manager,1,1,1,1
+access_isg_emergency_drill_readonly,isg.emergency.drill readonly,isg_emergency.model_isg_emergency_drill,isg_security.group_isg_readonly,1,0,0,0
+access_isg_emergency_drill_expert,isg.emergency.drill expert,isg_emergency.model_isg_emergency_drill,isg_security.group_isg_expert,1,1,1,0
+access_isg_emergency_drill_manager,isg.emergency.drill manager,isg_emergency.model_isg_emergency_drill,isg_security.group_isg_manager,1,1,1,1
+access_isg_emergency_type_readonly,isg.emergency.type readonly,isg_emergency.model_isg_emergency_type,isg_security.group_isg_readonly,1,0,0,0
+access_isg_emergency_type_expert,isg.emergency.type expert,isg_emergency.model_isg_emergency_type,isg_security.group_isg_expert,1,1,1,0
+access_isg_emergency_type_manager,isg.emergency.type manager,isg_emergency.model_isg_emergency_type,isg_security.group_isg_manager,1,1,1,1

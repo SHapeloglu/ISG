@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- PLAN LIST VIEW -->
+    <record id="view_isg_emergency_plan_list" model="ir.ui.view">
+        <field name="name">isg.emergency.plan.list</field>
+        <field name="model">isg.emergency.plan</field>
+        <field name="arch" type="xml">
+            <list string="Acil Durum Planları"
+                decoration-success="state == 'active'"
+                decoration-warning="state == 'review'"
+                decoration-muted="state == 'archived'">
+                <field name="name"/>
+                <field name="title"/>
+                <field name="workplace_id"/>
+                <field name="plan_date"/>
+                <field name="review_date"/>
+                <field name="responsible_id"/>
+                <field name="drill_count"/>
+                <field name="state" widget="badge"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- PLAN FORM VIEW -->
+    <record id="view_isg_emergency_plan_form" model="ir.ui.view">
+        <field name="name">isg.emergency.plan.form</field>
+        <field name="model">isg.emergency.plan</field>
+        <field name="arch" type="xml">
+            <form string="Acil Durum Planı">
+                <header>
+                    <button name="action_activate" string="Aktifleştir"
+                        type="object" class="btn-primary"
+                        invisible="state != 'draft'"/>
+                    <button name="action_review" string="Gözden Geçirmeye Al"
+                        type="object" class="btn-warning"
+                        invisible="state != 'active'"/>
+                    <button name="action_activate" string="Tekrar Aktifleştir"
+                        type="object" class="btn-primary"
+                        invisible="state != 'review'"/>
+                    <button name="action_archive_plan" string="Arşivle"
+                        type="object"
+                        invisible="state == 'archived'"/>
+                    <button name="action_reset_draft" string="Taslağa Al"
+                        type="object"
+                        invisible="state not in ('active', 'review')"/>
+                    <field name="state" widget="statusbar"
+                        statusbar_visible="draft,active,review"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                        <h2><field name="title"/></h2>
+                    </div>
+                    <group>
+                        <group string="Genel Bilgiler">
+                            <field name="company_id"/>
+                            <field name="workplace_id"/>
+                            <field name="site_id"/>
+                            <field name="plan_date"/>
+                            <field name="review_date"/>
+                        </group>
+                        <group string="Sorumluluk">
+                            <field name="responsible_id"/>
+                            <field name="team_ids" widget="many2many_tags"/>
+                            <field name="emergency_types" widget="many2many_tags"/>
+                            <field name="assembly_point_ids" widget="many2many_tags"/>
+                            <field name="document_id"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Plan İçeriği">
+                            <field name="description"/>
+                        </page>
+                        <page string="Tatbikatlar">
+                            <field name="drill_ids">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="drill_type"/>
+                                    <field name="drill_date"/>
+                                    <field name="responsible_id"/>
+                                    <field name="participant_count"/>
+                                    <field name="result"/>
+                                    <field name="state" widget="badge"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Notlar">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- PLAN SEARCH VIEW -->
+    <record id="view_isg_emergency_plan_search" model="ir.ui.view">
+        <field name="name">isg.emergency.plan.search</field>
+        <field name="model">isg.emergency.plan</field>
+        <field name="arch" type="xml">
+            <search string="Acil Durum Planı Ara">
+                <field name="name"/>
+                <field name="title"/>
+                <field name="workplace_id"/>
+                <separator/>
+                <filter string="Aktif" name="active" domain="[('state','=','active')]"/>
+                <filter string="Gözden Geçirme" name="review" domain="[('state','=','review')]"/>
+                <filter string="Taslak" name="draft" domain="[('state','=','draft')]"/>
+                <group expand="0" string="Grupla">
+                    <filter string="İşyeri" name="group_workplace"
+                        context="{'group_by': 'workplace_id'}"/>
+                    <filter string="Durum" name="group_state"
+                        context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- PLAN ACTION -->
+    <record id="action_isg_emergency_plan" model="ir.actions.act_window">
+        <field name="name">Acil Durum Planları</field>
+        <field name="res_model">isg.emergency.plan</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_isg_emergency_plan_search"/>
+        <field name="context">{'search_default_active': 1}</field>
+    </record>
+
+    <!-- DRILL LIST VIEW -->
+    <record id="view_isg_emergency_drill_list" model="ir.ui.view">
+        <field name="name">isg.emergency.drill.list</field>
+        <field name="model">isg.emergency.drill</field>
+        <field name="arch" type="xml">
+            <list string="Tatbikatlar"
+                decoration-success="state == 'done' and result == 'successful'"
+                decoration-warning="state == 'done' and result == 'partial'"
+                decoration-danger="state == 'done' and result == 'failed'">
+                <field name="name"/>
+                <field name="plan_id"/>
+                <field name="drill_type"/>
+                <field name="drill_date"/>
+                <field name="workplace_id"/>
+                <field name="responsible_id"/>
+                <field name="participant_count"/>
+                <field name="evacuation_time_minutes"/>
+                <field name="result"/>
+                <field name="state" widget="badge"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- DRILL FORM VIEW -->
+    <record id="view_isg_emergency_drill_form" model="ir.ui.view">
+        <field name="name">isg.emergency.drill.form</field>
+        <field name="model">isg.emergency.drill</field>
+        <field name="arch" type="xml">
+            <form string="Acil Durum Tatbikatı">
+                <header>
+                    <button name="action_done" string="Gerçekleşti"
+                        type="object" class="btn-primary"
+                        invisible="state != 'planned'"/>
+                    <button name="action_cancel" string="İptal Et"
+                        type="object"
+                        invisible="state != 'planned'"/>
+                    <button name="action_reset_planned" string="Planlandıya Al"
+                        type="object"
+                        invisible="state == 'planned'"/>
+                    <field name="state" widget="statusbar"
+                        statusbar_visible="planned,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group string="Tatbikat Bilgileri">
+                            <field name="plan_id"/>
+                            <field name="drill_type"/>
+                            <field name="drill_date"/>
+                            <field name="drill_time"/>
+                            <field name="duration_minutes"/>
+                        </group>
+                        <group string="Katılım">
+                            <field name="responsible_id"/>
+                            <field name="observer_ids" widget="many2many_tags"/>
+                            <field name="participant_count"/>
+                            <field name="evacuation_time_minutes"/>
+                        </group>
+                    </group>
+                    <group string="Sonuç" invisible="state == 'planned'">
+                        <group>
+                            <field name="result"/>
+                            <field name="next_drill_date"/>
+                            <field name="document_id"/>
+                        </group>
+                        <group>
+                            <field name="findings"/>
+                            <field name="improvements"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Notlar">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- DRILL ACTION -->
+    <record id="action_isg_emergency_drill" model="ir.actions.act_window">
+        <field name="name">Tatbikatlar</field>
+        <field name="res_model">isg.emergency.drill</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- EMERGENCY TYPE ACTION -->
+    <record id="action_isg_emergency_type" model="ir.actions.act_window">
+        <field name="name">Acil Durum Türleri</field>
+        <field name="res_model">isg.emergency.type</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>
