@@ -227,7 +227,6 @@ class IsgIncident(models.Model):
                 self.name,
                 self.description or '',
             ),
-            'responsible_id': self.env.user.id,
         })
         self.capa_id = capa.id
         return {

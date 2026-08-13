@@ -1,11 +1,15 @@
-from odoo import models, fields
+# -*- coding: utf-8 -*-
+from odoo import fields, models
 
 
-class IsgCapaRiskExt(models.Model):
+class IsgCapaRiskExtension(models.Model):
     _inherit = 'isg.capa'
 
-    risk_assessment_id = fields.Many2one(
-        'isg.risk.assessment',
-        string='İlgili Risk Değerlendirmesi',
-        ondelete='set null',
+    source = fields.Selection(
+        selection_add=[('risk_assessment', 'Risk Değerlendirmesi')],
+        ondelete={'risk_assessment': 'cascade'},
+    )
+    risk_line_id = fields.Many2one(
+        'isg.risk.line', string='Kaynak Risk Satırı',
+        readonly=True, copy=False,
     )

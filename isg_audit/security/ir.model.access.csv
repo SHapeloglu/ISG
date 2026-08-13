@@ -1,0 +1,13 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_isg_audit_template_readonly,isg.audit.template readonly,isg_audit.model_isg_audit_template,isg_security.group_isg_readonly,1,0,0,0
+access_isg_audit_template_expert,isg.audit.template expert,isg_audit.model_isg_audit_template,isg_security.group_isg_expert,1,1,1,0
+access_isg_audit_template_manager,isg.audit.template manager,isg_audit.model_isg_audit_template,isg_security.group_isg_manager,1,1,1,1
+access_isg_audit_template_question_readonly,isg.audit.template.question readonly,isg_audit.model_isg_audit_template_question,isg_security.group_isg_readonly,1,0,0,0
+access_isg_audit_template_question_expert,isg.audit.template.question expert,isg_audit.model_isg_audit_template_question,isg_security.group_isg_expert,1,1,1,0
+access_isg_audit_template_question_manager,isg.audit.template.question manager,isg_audit.model_isg_audit_template_question,isg_security.group_isg_manager,1,1,1,1
+access_isg_audit_readonly,isg.audit readonly,isg_audit.model_isg_audit,isg_security.group_isg_readonly,1,0,0,0
+access_isg_audit_expert,isg.audit expert,isg_audit.model_isg_audit,isg_security.group_isg_expert,1,1,1,0
+access_isg_audit_manager,isg.audit manager,isg_audit.model_isg_audit,isg_security.group_isg_manager,1,1,1,1
+access_isg_audit_line_readonly,isg.audit.line readonly,isg_audit.model_isg_audit_line,isg_security.group_isg_readonly,1,0,0,0
+access_isg_audit_line_expert,isg.audit.line expert,isg_audit.model_isg_audit_line,isg_security.group_isg_expert,1,1,1,0
+access_isg_audit_line_manager,isg.audit.line manager,isg_audit.model_isg_audit_line,isg_security.group_isg_manager,1,1,1,1

@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- LIST VIEW -->
+    <record id="view_isg_audit_list" model="ir.ui.view">
+        <field name="name">isg.audit.list</field>
+        <field name="model">isg.audit</field>
+        <field name="arch" type="xml">
+            <list string="Denetimler"
+                decoration-success="state == 'closed'"
+                decoration-info="state == 'in_progress'">
+                <field name="name"/>
+                <field name="audit_type"/>
+                <field name="audit_date"/>
+                <field name="workplace_id"/>
+                <field name="site_id"/>
+                <field name="total_questions"/>
+                <field name="conformity_count"/>
+                <field name="nonconformity_count"/>
+                <field name="open_capa_count"/>
+                <field name="state" widget="badge"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- FORM VIEW -->
+    <record id="view_isg_audit_form" model="ir.ui.view">
+        <field name="name">isg.audit.form</field>
+        <field name="model">isg.audit</field>
+        <field name="arch" type="xml">
+            <form string="Denetim Kaydı">
+                <header>
+                    <button name="action_load_template" string="Şablonu Yükle"
+                        type="object" class="btn-secondary"
+                        invisible="state != 'draft' or not template_id"/>
+                    <button name="action_start" string="Başlat"
+                        type="object" class="btn-primary"
+                        invisible="state != 'draft'"/>
+                    <button name="action_done" string="Tamamla"
+                        type="object" class="btn-primary"
+                        invisible="state != 'in_progress'"/>
+                    <button name="action_close" string="Kapat"
+                        type="object" class="btn-success"
+                        invisible="state != 'done'"/>
+                    <button name="action_reset_draft" string="Taslağa Al"
+                        type="object"
+                        invisible="state == 'closed'"/>
+                    <field name="state" widget="statusbar"
+                        statusbar_visible="draft,in_progress,done,closed"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group string="Denetim Bilgileri">
+                            <field name="audit_type"/>
+                            <field name="template_id"/>
+                            <field name="company_id"/>
+                            <field name="workplace_id"/>
+                            <field name="site_id"/>
+                            <field name="audit_date"/>
+                        </group>
+                        <group string="Denetçi">
+                            <field name="auditor_ids" widget="many2many_tags"/>
+                            <field name="external_auditor"
+                                invisible="audit_type not in ('external', 'inspection')"/>
+                            <field name="document_id"/>
+                        </group>
+                    </group>
+                    <group string="Kapsam">
+                        <field name="scope" nolabel="1"/>
+                    </group>
+                    <group string="Özet">
+                        <group>
+                            <field name="total_questions"/>
+                            <field name="conformity_count"/>
+                        </group>
+                        <group>
+                            <field name="nonconformity_count"/>
+                            <field name="open_capa_count"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Kontrol Listesi / Bulgular">
+                            <field name="line_ids">
+                                <list editable="bottom"
+                                    decoration-danger="result == 'nok'"
+                                    decoration-warning="result == 'obs'"
+                                    decoration-muted="result == 'na'">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="category"/>
+                                    <field name="question"/>
+                                    <field name="legal_reference"/>
+                                    <field name="is_critical"/>
+                                    <field name="result"/>
+                                    <field name="finding"/>
+                                    <field name="capa_id" readonly="1"/>
+                                    <button name="action_create_capa"
+                                        string="DÖF" type="object"
+                                        icon="fa-exclamation-triangle"
+                                        invisible="result != 'nok' or capa_id != False"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Notlar">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- SEARCH VIEW -->
+    <record id="view_isg_audit_search" model="ir.ui.view">
+        <field name="name">isg.audit.search</field>
+        <field name="model">isg.audit</field>
+        <field name="arch" type="xml">
+            <search string="Denetim Ara">
+                <field name="name"/>
+                <field name="workplace_id"/>
+                <separator/>
+                <filter string="İç Denetim" name="internal"
+                    domain="[('audit_type','=','internal')]"/>
+                <filter string="Dış Denetim" name="external"
+                    domain="[('audit_type','=','external')]"/>
+                <filter string="Müfettiş" name="inspection"
+                    domain="[('audit_type','=','inspection')]"/>
+                <separator/>
+                <filter string="Açık DÖF Var" name="open_capa"
+                    domain="[('open_capa_count','>',0)]"/>
+                <separator/>
+                <filter string="Taslak" name="draft" domain="[('state','=','draft')]"/>
+                <filter string="Devam Ediyor" name="in_progress" domain="[('state','=','in_progress')]"/>
+                <filter string="Tamamlandı" name="done" domain="[('state','=','done')]"/>
+                <filter string="Kapalı" name="closed" domain="[('state','=','closed')]"/>
+                <group expand="0" string="Grupla">
+                    <filter string="Denetim Türü" name="group_type"
+                        context="{'group_by': 'audit_type'}"/>
+                    <filter string="İşyeri" name="group_workplace"
+                        context="{'group_by': 'workplace_id'}"/>
+                    <filter string="Durum" name="group_state"
+                        context="{'group_by': 'state'}"/>
+                    <filter string="Ay" name="group_month"
+                        context="{'group_by': 'audit_date:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- ACTION -->
+    <record id="action_isg_audit" model="ir.actions.act_window">
+        <field name="name">Denetimler</field>
+        <field name="res_model">isg.audit</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_isg_audit_search"/>
+        <field name="context">{}</field>
+    </record>
+</odoo>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_isg_audit_root"
+        name="Denetim"
+        parent="isg_core.menu_isg_root"
+        sequence="50"/>
+    <menuitem id="menu_isg_audit"
+        name="Denetimler"
+        parent="menu_isg_audit_root"
+        action="action_isg_audit"
+        sequence="10"/>
+    <menuitem id="menu_isg_audit_template"
+        name="Kontrol Listesi Şablonları"
+        parent="menu_isg_audit_root"
+        action="action_isg_audit_template"
+        sequence="20"/>
+</odoo>
