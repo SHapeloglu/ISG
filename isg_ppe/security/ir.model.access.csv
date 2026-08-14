@@ -1,0 +1,10 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_isg_ppe_type_readonly,isg.ppe.type readonly,isg_ppe.model_isg_ppe_type,isg_security.group_isg_readonly,1,0,0,0
+access_isg_ppe_type_expert,isg.ppe.type expert,isg_ppe.model_isg_ppe_type,isg_security.group_isg_expert,1,1,1,0
+access_isg_ppe_type_manager,isg.ppe.type manager,isg_ppe.model_isg_ppe_type,isg_security.group_isg_manager,1,1,1,1
+access_isg_ppe_stock_readonly,isg.ppe.stock readonly,isg_ppe.model_isg_ppe_stock,isg_security.group_isg_readonly,1,0,0,0
+access_isg_ppe_stock_expert,isg.ppe.stock expert,isg_ppe.model_isg_ppe_stock,isg_security.group_isg_expert,1,1,1,0
+access_isg_ppe_stock_manager,isg.ppe.stock manager,isg_ppe.model_isg_ppe_stock,isg_security.group_isg_manager,1,1,1,1
+access_isg_ppe_issue_readonly,isg.ppe.issue readonly,isg_ppe.model_isg_ppe_issue,isg_security.group_isg_readonly,1,0,0,0
+access_isg_ppe_issue_expert,isg.ppe.issue expert,isg_ppe.model_isg_ppe_issue,isg_security.group_isg_expert,1,1,1,0
+access_isg_ppe_issue_manager,isg.ppe.issue manager,isg_ppe.model_isg_ppe_issue,isg_security.group_isg_manager,1,1,1,1

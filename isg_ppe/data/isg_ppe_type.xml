@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="ppe_type_safety_helmet" model="isg.ppe.type">
+            <field name="name">Emniyet Miğferi / Baret</field>
+            <field name="code">HELMET</field>
+            <field name="category">head</field>
+            <field name="standard">EN 397</field>
+            <field name="lifespan_months">60</field>
+            <field name="requires_size">False</field>
+        </record>
+        <record id="ppe_type_safety_glasses" model="isg.ppe.type">
+            <field name="name">Koruyucu Gözlük</field>
+            <field name="code">GLASSES</field>
+            <field name="category">eye</field>
+            <field name="standard">EN 166</field>
+            <field name="lifespan_months">24</field>
+            <field name="requires_size">False</field>
+        </record>
+        <record id="ppe_type_face_shield" model="isg.ppe.type">
+            <field name="name">Yüz Siperliği</field>
+            <field name="code">FACESHIELD</field>
+            <field name="category">eye</field>
+            <field name="standard">EN 166</field>
+            <field name="lifespan_months">36</field>
+            <field name="requires_size">False</field>
+        </record>
+        <record id="ppe_type_earmuff" model="isg.ppe.type">
+            <field name="name">Kulak Koruyucu (Kapsül)</field>
+            <field name="code">EARMUFF</field>
+            <field name="category">hearing</field>
+            <field name="standard">EN 352</field>
+            <field name="lifespan_months">36</field>
+            <field name="requires_size">False</field>
+        </record>
+        <record id="ppe_type_earplug" model="isg.ppe.type">
+            <field name="name">Kulak Tıkacı</field>
+            <field name="code">EARPLUG</field>
+            <field name="category">hearing</field>
+            <field name="standard">EN 352</field>
+            <field name="lifespan_months">12</field>
+            <field name="requires_size">True</field>
+            <field name="size_type">glove</field>
+        </record>
+        <record id="ppe_type_dust_mask" model="isg.ppe.type">
+            <field name="name">Toz Maskesi</field>
+            <field name="code">DUSTMASK</field>
+            <field name="category">respiratory</field>
+            <field name="standard">EN 149</field>
+            <field name="lifespan_months">12</field>
+            <field name="requires_size">False</field>
+        </record>
+        <record id="ppe_type_respirator" model="isg.ppe.type">
+            <field name="name">Fullface Respiratör</field>
+            <field name="code">RESPIRATOR</field>
+            <field name="category">respiratory</field>
+            <field name="standard">EN 140</field>
+            <field name="lifespan_months">60</field>
+            <field name="requires_size">False</field>
+        </record>
+        <record id="ppe_type_gloves_nitrile" model="isg.ppe.type">
+            <field name="name">Nitril Eldiven</field>
+            <field name="code">GLOVES_NITRILE</field>
+            <field name="category">hand</field>
+            <field name="standard">EN 388</field>
+            <field name="lifespan_months">12</field>
+            <field name="requires_size">True</field>
+            <field name="size_type">glove</field>
+        </record>
+        <record id="ppe_type_gloves_leather" model="isg.ppe.type">
+            <field name="name">Deri Eldiven</field>
+            <field name="code">GLOVES_LEATHER</field>
+            <field name="category">hand</field>
+            <field name="standard">EN 388</field>
+            <field name="lifespan_months">24</field>
+            <field name="requires_size">True</field>
+            <field name="size_type">glove</field>
+        </record>
+        <record id="ppe_type_gloves_chemical" model="isg.ppe.type">
+            <field name="name">Kimyasal Eldiven</field>
+            <field name="code">GLOVES_CHEM</field>
+            <field name="category">hand</field>
+            <field name="standard">EN 374</field>
+            <field name="lifespan_months">12</field>
+            <field name="requires_size">True</field>
+            <field name="size_type">glove</field>
+        </record>
+        <record id="ppe_type_safety_shoes" model="isg.ppe.type">
+            <field name="name">Emniyet Ayakkabısı</field>
+            <field name="code">SHOES</field>
+            <field name="category">foot</field>
+            <field name="standard">EN ISO 20345</field>
+            <field name="lifespan_months">24</field>
+            <field name="requires_size">True</field>
+            <field name="size_type">shoe</field>
+        </record>
+        <record id="ppe_type_work_overalls" model="isg.ppe.type">
+            <field name="name">Çalışma Tulumu</field>
+            <field name="code">OVERALLS</field>
+            <field name="category">body</field>
+            <field name="standard">EN ISO 13688</field>
+            <field name="lifespan_months">12</field>
+            <field name="requires_size">True</field>
+            <field name="size_type">clothing</field>
+        </record>
+        <record id="ppe_type_work_shirt" model="isg.ppe.type">
+            <field name="name">Çalışma Tişörtü</field>
+            <field name="code">TSHIRT</field>
+            <field name="category">body</field>
+            <field name="standard">EN ISO 13688</field>
+            <field name="lifespan_months">12</field>
+            <field name="requires_size">True</field>
+            <field name="size_type">clothing</field>
+        </record>
+        <record id="ppe_type_work_vest" model="isg.ppe.type">
+            <field name="name">Yüksek Görünürlük Yeleği</field>
+            <field name="code">VEST</field>
+            <field name="category">body</field>
+            <field name="standard">EN ISO 20471</field>
+            <field name="lifespan_months">24</field>
+            <field name="requires_size">True</field>
+            <field name="size_type">clothing</field>
+        </record>
+        <record id="ppe_type_rain_jacket" model="isg.ppe.type">
+            <field name="name">Yağmurluk</field>
+            <field name="code">RAINJACKET</field>
+            <field name="category">body</field>
+            <field name="standard">EN ISO 13688</field>
+            <field name="lifespan_months">36</field>
+            <field name="requires_size">True</field>
+            <field name="size_type">clothing</field>
+        </record>
+        <record id="ppe_type_safety_harness" model="isg.ppe.type">
+            <field name="name">Emniyet Kemeri (Harness)</field>
+            <field name="code">HARNESS</field>
+            <field name="category">fall</field>
+            <field name="standard">EN 361</field>
+            <field name="lifespan_months">60</field>
+            <field name="requires_size">False</field>
+        </record>
+        <record id="ppe_type_lanyard" model="isg.ppe.type">
+            <field name="name">Emniyet İpli (Lanyard)</field>
+            <field name="code">LANYARD</field>
+            <field name="category">fall</field>
+            <field name="standard">EN 355</field>
+            <field name="lifespan_months">36</field>
+            <field name="requires_size">False</field>
+        </record>
+        <record id="ppe_type_first_aid_kit" model="isg.ppe.type">
+            <field name="name">İlk Yardım Çantası</field>
+            <field name="code">FIRSTAID</field>
+            <field name="category">other</field>
+            <field name="standard">DIN 13157</field>
+            <field name="lifespan_months">24</field>
+            <field name="requires_size">False</field>
+        </record>
+    </data>
+</odoo>

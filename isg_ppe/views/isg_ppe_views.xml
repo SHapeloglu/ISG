@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- PPE TYPE LIST -->
+    <record id="view_isg_ppe_type_list" model="ir.ui.view">
+        <field name="name">isg.ppe.type.list</field>
+        <field name="model">isg.ppe.type</field>
+        <field name="arch" type="xml">
+            <list string="KKD Türleri">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="category"/>
+                <field name="standard"/>
+                <field name="lifespan_months"/>
+                <field name="requires_size"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- PPE TYPE FORM -->
+    <record id="view_isg_ppe_type_form" model="ir.ui.view">
+        <field name="name">isg.ppe.type.form</field>
+        <field name="model">isg.ppe.type</field>
+        <field name="arch" type="xml">
+            <form string="KKD Türü">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="category"/>
+                            <field name="standard"/>
+                        </group>
+                        <group>
+                            <field name="lifespan_months"/>
+                            <field name="requires_size"/>
+                            <field name="size_type" invisible="not requires_size"/>
+                            <field name="active"/>
+                            <field name="company_id"/>
+                        </group>
+                    </group>
+                    <field name="description"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- PPE TYPE ACTION -->
+    <record id="action_isg_ppe_type" model="ir.actions.act_window">
+        <field name="name">KKD Türleri</field>
+        <field name="res_model">isg.ppe.type</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- PPE STOCK LIST -->
+    <record id="view_isg_ppe_stock_list" model="ir.ui.view">
+        <field name="name">isg.ppe.stock.list</field>
+        <field name="model">isg.ppe.stock</field>
+        <field name="arch" type="xml">
+            <list string="KKD Stok"
+                decoration-danger="is_low_stock == True">
+                <field name="ppe_type_id"/>
+                <field name="workplace_id"/>
+                <field name="size"/>
+                <field name="brand"/>
+                <field name="quantity"/>
+                <field name="min_quantity"/>
+                <field name="is_low_stock"/>
+                <field name="location"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- PPE STOCK FORM -->
+    <record id="view_isg_ppe_stock_form" model="ir.ui.view">
+        <field name="name">isg.ppe.stock.form</field>
+        <field name="model">isg.ppe.stock</field>
+        <field name="arch" type="xml">
+            <form string="KKD Stok">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="ppe_type_id"/>
+                            <field name="company_id"/>
+                            <field name="workplace_id"/>
+                            <field name="size"/>
+                            <field name="brand"/>
+                        </group>
+                        <group>
+                            <field name="quantity"/>
+                            <field name="min_quantity"/>
+                            <field name="is_low_stock" readonly="1"/>
+                            <field name="location"/>
+                        </group>
+                    </group>
+                    <field name="notes"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- PPE STOCK ACTION -->
+    <record id="action_isg_ppe_stock" model="ir.actions.act_window">
+        <field name="name">KKD Stok</field>
+        <field name="res_model">isg.ppe.stock</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- PPE ISSUE LIST -->
+    <record id="view_isg_ppe_issue_list" model="ir.ui.view">
+        <field name="name">isg.ppe.issue.list</field>
+        <field name="model">isg.ppe.issue</field>
+        <field name="arch" type="xml">
+            <list string="KKD Zimmet Kayıtları"
+                decoration-warning="state == 'expired'"
+                decoration-muted="state in ('returned', 'lost')">
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="ppe_type_id"/>
+                <field name="size"/>
+                <field name="quantity"/>
+                <field name="issue_date"/>
+                <field name="expiry_date"/>
+                <field name="return_date"/>
+                <field name="state" widget="badge"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- PPE ISSUE FORM -->
+    <record id="view_isg_ppe_issue_form" model="ir.ui.view">
+        <field name="name">isg.ppe.issue.form</field>
+        <field name="model">isg.ppe.issue</field>
+        <field name="arch" type="xml">
+            <form string="KKD Zimmet Kaydı">
+                <header>
+                    <button name="action_return" string="İade Al"
+                        type="object" class="btn-primary"
+                        invisible="state != 'issued'"/>
+                    <button name="action_lost" string="Kayıp / Hasarlı"
+                        type="object" class="btn-warning"
+                        invisible="state != 'issued'"/>
+                    <button name="action_reissue" string="Tekrar Zimmetle"
+                        type="object"
+                        invisible="state not in ('returned', 'lost')"/>
+                    <field name="state" widget="statusbar"
+                        statusbar_visible="issued,returned"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group string="Zimmet Bilgileri">
+                            <field name="company_id"/>
+                            <field name="workplace_id"/>
+                            <field name="employee_id"/>
+                            <field name="ppe_type_id"/>
+                            <field name="size"/>
+                            <field name="brand"/>
+                            <field name="quantity"/>
+                        </group>
+                        <group string="Çalışan Beden Ölçüleri">
+                            <field name="employee_clothing_size" readonly="1"/>
+                            <field name="employee_shoe_size" readonly="1"/>
+                            <field name="employee_glove_size" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Tarihler">
+                            <field name="issue_date"/>
+                            <field name="expiry_date" readonly="1"/>
+                            <field name="return_date" readonly="1"/>
+                            <field name="document_id"/>
+                        </group>
+                    </group>
+                    <field name="notes"/>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- PPE ISSUE SEARCH -->
+    <record id="view_isg_ppe_issue_search" model="ir.ui.view">
+        <field name="name">isg.ppe.issue.search</field>
+        <field name="model">isg.ppe.issue</field>
+        <field name="arch" type="xml">
+            <search string="KKD Zimmet Ara">
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="ppe_type_id"/>
+                <separator/>
+                <filter string="Zimmetli" name="issued" domain="[('state','=','issued')]"/>
+                <filter string="İade Edildi" name="returned" domain="[('state','=','returned')]"/>
+                <filter string="Süresi Doldu" name="expired" domain="[('state','=','expired')]"/>
+                <separator/>
+                <group expand="0" string="Grupla">
+                    <filter string="Çalışan" name="group_employee"
+                        context="{'group_by': 'employee_id'}"/>
+                    <filter string="KKD Türü" name="group_type"
+                        context="{'group_by': 'ppe_type_id'}"/>
+                    <filter string="Durum" name="group_state"
+                        context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- PPE ISSUE ACTION -->
+    <record id="action_isg_ppe_issue" model="ir.actions.act_window">
+        <field name="name">KKD Zimmet Kayıtları</field>
+        <field name="res_model">isg.ppe.issue</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_isg_ppe_issue_search"/>
+        <field name="context">{'search_default_issued': 1}</field>
+    </record>
+</odoo>

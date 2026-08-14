@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_isg_ppe_root"
+        name="KKD"
+        parent="isg_core.menu_isg_root"
+        sequence="70"/>
+    <menuitem id="menu_isg_ppe_issue"
+        name="Zimmet Kayıtları"
+        parent="menu_isg_ppe_root"
+        action="action_isg_ppe_issue"
+        sequence="10"/>
+    <menuitem id="menu_isg_ppe_stock"
+        name="KKD Stok"
+        parent="menu_isg_ppe_root"
+        action="action_isg_ppe_stock"
+        sequence="20"/>
+    <menuitem id="menu_isg_ppe_type"
+        name="KKD Türleri"
+        parent="menu_isg_ppe_root"
+        action="action_isg_ppe_type"
+        sequence="30"/>
+</odoo>
