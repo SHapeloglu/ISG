@@ -1,115 +1,138 @@
-# TASKS.md — Proje İş Planı ve İlerleme
+# TASKS.md — Görev Listesi (14 Ağustos 2026 Güncellemesi)
 
-## Proje Durumu: %60 FAZ 2 Tamamlandı
+## Tamamlanan Görevler ✅
 
 ### FAZ 0 — Temel Mimari ✅ TAMAMLANDI
-- [x] Veri modeli, sequence, security groups
-- [x] İSG ana menü yapısı
-- [x] Base model templates (mail.thread, record rule, ACL)
+- [x] F0-001 `isg_core`
+- [x] F0-002 `isg_security`
+- [x] F0-003 `isg_party`
+- [x] F0-004 `isg_location`
+- [x] F0-005 `isg_document`
+- [x] F0-006 `isg_hr`
+- [x] F0-007 `isg_base`
 
-### FAZ 1 — Kurumsal Yönetişim (13 modül) ✅ TAMAMLANDI
-- [x] F1-001 `isg_core` — İşyeri, lokasyon, işçi sağlığı uzmanı, OSGB
-- [x] F1-002 `isg_security` — Güvenlik grupları, menü, API
-- [x] F1-003 `isg_party` — Şirket, personel, iletişim bilgileri
-- [x] F1-004 `isg_location` — Lokasyon/site, tehlike sınıfı, depo
-- [x] F1-005 `isg_document` — Belge tabanı, yönetim sistemi
-- [x] F1-006 `isg_hr` — Çalışan, KKD beden ölçüleri, eğitim saatleri, sağlık muayene
-- [x] F1-007 `isg_base` — İstenmeyen etkinlik kuralları, uyarılar
-- [x] F1-008 `isg_training` — Eğitim planı, periyodik takvim, muafiyet
-- [x] F1-009 `isg_contractor` — Alt işveren, işçi kontrol, ihraç
-- [x] F1-010 `isg_board` — İSG Kurulu, karar ve tutanaklar
-- [x] F1-011 `isg_correspondence` — Müfettiş yazışması, resmi yazı
-- [x] F1-012 `isg_visitor` — Ziyaretçi, KKD muhasebesi, iç prosedür
-- [x] F1-013 `isg_health_basic` — Sağlık muayene, ruh sağlığı değerlendirmesi
+### FAZ 1 — Kurumsal Yönetişim ✅ TAMAMLANDI (F1-002 hariç)
+- [x] F1-001 `isg_contractor`
+- [x] F1-003 `isg_training`
+- [x] F1-004 `isg_visitor`
+- [x] F1-005 `isg_board`
+- [x] F1-006 `isg_correspondence`
 
-### FAZ 2 — Çekirdek İSG Operasyonları (32 modül planlı, 5 tamamlandı)
+### FAZ 2 — Çekirdek İSG Operasyonları ✅ 6/9 TAMAMLANDI
+- [x] F2-001 `isg_capa` — DÖF/CAPA
+- [x] F2-002 `isg_risk` — Risk değerlendirmesi
+- [x] F2-003 `isg_incident` — İş kazası
+- [x] F2-004 `isg_audit` — Denetim
+- [x] F2-005 `isg_ppe` — KKD yönetimi
+- [x] F2-006 `isg_emergency` — Acil durum
 
-**Tamamlanan:**
-- [x] F2-001 `isg_capa` — DÖF (Düzeltici/Önleyici Faaliyet), takip, tutma belgesi
-- [x] F2-002 `isg_risk` — Risk Değerlendirmesi, L Matrisi + Fine-Kinney, yenileme
-- [x] F2-003 `isg_incident` — İş kazası, ramak kala, SGK 3 gün takibi
-- [x] F2-004 `isg_audit` — Denetim, kontrol listesi, bulgu kaydı
-- [x] F2-005 `isg_ppe` — KKD yönetimi, zimmet, envanter
-- [x] F2-006 `isg_emergency` — Acil durum planı, tatbikat
+---
 
-**Devam Ediyor / Planlanıyor:**
-- [ ] **F2-007 `isg_chemical`** (ÖNCELİK: Kimyasal envanter, OEL/STEL tablosu, MSDS, depolama matrisi) — BAŞLANACAK
-- [ ] F2-008 `isg_equipment` — Ekipman periyodik kontrol, bakım takvimi
-- [ ] F2-009 `isg_ptw` — İş İzni (PTW) sistemi
-- [ ] F2-010 `isg_loto` — LOTO (Lockout Tagout) kaydı
-- [ ] F2-011 `isg_confined_space` — Kapalı alan çalışması
-- [ ] F2-012 `isg_hot_work` — Sıcak işler, ateşli işler
-- [ ] F2-013 `isg_excavation` — Kazı / Hafriyat
-- [ ] F2-014 `isg_scaffold` — İskele / Çatı Güvenliği
-- [ ] F2-015 `isg_electrical` — Elektriksel çalışmalar, yüksek gerilim
-- [ ] F2-016 `isg_noise` — Gürültü ölçümü, OEL
-- [ ] F2-017 `isg_vibration` — Titreşim ölçümü
-- [ ] F2-018 `isg_lighting` — Aydınlatma ölçümü (lux)
-- [ ] F2-019 `isg_air_quality` — Hava kalitesi ölçümü, partikül
-- [ ] F2-020 `isg_ergonomics` — Ergonomi değerlendirmesi
-- [ ] F2-021 `isg_psychosocial` — Psikososyal risk değerlendirmesi, stres
-- [ ] F2-022 `isg_biological` — Biyolojik tehlike, universal precautions
-- [ ] F2-023 `isg_fire_safety` — Yangın güvenliği, söndürücü, acil çıkış
-- [ ] F2-024 `isg_hazmat` — Tehlikeli madde taşıması
-- [ ] F2-025 `isg_vehicle` — Araç güvenliği, telematics
-- [ ] F2-026 `isg_contractor_supervision` — Alt işveren denetimi (işyeri ziyareti)
-- [ ] F2-027 `isg_accident_investigation` — Kaza soruşturması (beş neden analizi)
-- [ ] F2-028 `isg_near_miss_tracking` — Ramak kala analiz (opsiyonel, incident'te birleştirilebilir)
-- [ ] F2-029 `isg_medical_removal` — Tıbbi çıkarma prosedürü
-- [ ] F2-030 `isg_occupational_disease` — Mesleki hastalık kaydı
-- [ ] F2-031 `isg_statistics` — İstatistik, raporlama (TRIR, LWDR, vb.)
-- [ ] F2-032 `isg_audit_action_plan` — Denetim sonrası aksiyon planı ve izleme
+## Devam Eden / Sıradaki Görevler 🔄
 
-### FAZ 3 — İleri Yönetim & Entegrasyon (İleriki)
-- [ ] Muhasebe entegrasyonu (kaza masrafları, DÖF maliyeti)
-- [ ] İş Emri (MRP) entegrasyonu (KKD yenileme, ekipman bakım)
-- [ ] HR Özlük Dosyası (eğitim, muayene, iş geçmişi)
-- [ ] Uyum Raporlaması (mevzuat matrix)
-- [ ] İSG-KATİP sistemi (muvazzaf İSG sorumlusu yönetimi, aylık rapor)
+### FAZ 2 — Devam (Öncelik Sırası)
 
-### HSE Radar Paritesi Hedefi
+- [ ] **F2-007** `isg_chemical` — Kimyasal envanter ve SDS/GBF
+      - Kimyasal envanter (marka, hazırlık tarihi, SDS dosyası)
+      - GBF/SDS yönetimi (ir.attachment bağlantısı)
+      - GHS sınıflama kategorileri
+      - Depolama uyumluluk matrisi (temel)
+      - Mevzuat: Kimyasal Maddeler Yönetmeliği
 
-Şu anda HSE Radar fonksiyonlarının ~60%'i kapsanmış durumda:
-- ✅ Risk Değerlendirmesi
-- ✅ İş Kazası Takibi
-- ✅ Denetim & Bulgu
-- ✅ KKD Yönetimi
-- ✅ Acil Durum Planı
-- ⏳ Kimyasal Envanter (devam ediyor)
-- ⏳ Ekipman Güvenliği (planlanıyor)
-- ⏳ İş İzni Sistemi (planlanıyor)
+- [ ] **F2-008** `isg_equipment` — Ekipman ve periyodik kontrol (EKİPNET)
+      - EK-II ekipman kataloğu (Ara.2025 güncellemesi)
+      - Periyodik kontrol takvimi
+      - EKİPNET hazırlık raporu
+      - Yetkili muayene kuruluşu kaydı
+      - Kontrol sonuç ve rapor
 
-### Bilinen Açık Konular (BACKLOG)
+- [ ] **F2-009** `isg_ptw` + `isg_loto` — İş izni ve LOTO
+      - İzin türleri (sıcak iş, kapalı alan, elektrik, yüksekte)
+      - Ön koşul kontrol listeleri
+      - Çok aşamalı onay zinciri
+      - LOTO izolasyon nokta yönetimi
+      - Süre ve uzatma kontrolleri
 
-**Teknik Borç:**
-1. isg_contractor.contractor_level — recursive=True bug (önceki oturumda not düşüldü)
-2. isg_location.hazard_type — unknown parameter 'invisible' (view yükselmesi gerekiyor)
-3. isg_ppe.type.size_type — unknown parameter 'invisible' (view yükselmesi gerekiyor)
-4. isg_health_basic — KVKK danışman yönetimi eksik
-5. isg_risk_line + isg_audit_line — record rule eksik (cross-company isolation)
+### FAZ 1 — Bekleyen
+- [ ] **F1-002** `isg_health_basic` — Temel sağlık gözetimi + KVKK maskeleme
+      ⚠️ KVKK mimarisi için danışman onayı bekliyor — EN SONA BIRAK
 
-**Feature Borcu (HSE Radar'ın Ötesi):**
-1. İstatistik paneli (TRIR, LWDR, frequency rate)
-2. Muhasebe entegrasyonu (kaza masrafları)
-3. Otomatik e-posta bildirimleri (kaza, DÖF gecikme, tatbikat hatırlatıcısı)
-4. Excel/PDF rapor şablonları
-5. Mobil uygulama (KKD zimmet, tatbikat kontrol)
+### FAZ 3 — Ölçüm ve Çevre (Planlanıyor)
+- [ ] F3-001 `isg_measurement_core` + `isg_measurement_hygiene`
+      - Ölçüm kampanyası ve numune yönetimi
+      - Kalibrasyon snapshot ve sürüm yönetimi
+      - Limit profili ve uygunluk değerlendirmesi
+      - Yetkili laboratuvar onay akışı
+      - Gürültü, toz, kimyasal, titreşim, ısıl, aydınlatma
 
-### Sıradaki Geliştirmeler (Şimdiden Ola)
+- [ ] F3-002 `isg_environment` — Çevre etkileri analizi
 
-- **F2-007 `isg_chemical`** — OEL/STEL tablosu, MSDS bağlantısı, depolama uyarısı
-- **F2-008 `isg_equipment`** — Periyodik kontrol planı, takvim entegrasyonu
-- **F2-009 F2-010 `isg_ptw` + `isg_loto`** — İş İzni sistemi (PTW-LOTO entegrasyonu)
-- **F2-026 `isg_contractor_supervision`** — Alt işveren denetim ziyareti
+### FAZ 4 — Sanal Müfettiş (Planlanıyor)
+- [ ] F4-001 `isg_legislation` + `isg_obligation`
+      - Mevzuat kaydı ve sürüm yönetimi
+      - Yükümlülük tanımlama (kural motoru)
+      - Uygulanabilirlik motoru (işyeri profili bazlı)
+      - Mevzuat güncelleme akışı
 
-### Proje Metrikleri
+- [ ] F4-002 `isg_compliance` — Uygunluk değerlendirmesi
+      - Kanıt yönetimi
+      - Snapshot (tarihi dondurma)
+      - Uygunluk raporu
 
-| Metrik | Değer |
-|--------|-------|
-| Kurulu Toplam Modül | 47 |
-| İSG Modülü | 20 |
-| Tamamlanan FAZ | 1 + 2/5 |
-| Tahmini Tamamlanma | %60 |
-| Ortalama Modül Boyutu | 300-500 satır (model+view+security) |
-| Toplam İSG Kodu | ~8000 satır Python + XML |
+- [ ] F4-003 `isg_penalty` — Ceza ve yaptırımlar (2026 güncellemesi)
+- [ ] F4-004 `isg_simulator` — Sanal müfettiş simülasyonu
 
+### FAZ 5 — Raporlama (Planlanıyor)
+- [ ] F5-001 `isg_reporting` + Superset entegrasyonu
+- [ ] F5-002 QWeb PDF şablonları
+- [ ] F5-003 HSE Radar kabul testi
+
+### OSGB Modülü (Özel)
+- [ ] `isg_osgb` — OSGB planlama ve görevlendirme motoru
+      - Uzman/hekim atama
+      - Kapasite planlama (6331 md.6 hesaplaması)
+      - Ziyaret takvimi
+      - İSG-KATİP bildirimi hazırlığı
+
+---
+
+## Bilinen Hatalar / Düzeltilecekler 🐛
+
+- [ ] `isg_contractor` contractor_level — recursive=True eklenmeli
+- [ ] `isg_location` hazard_type — unknown parameter 'invisible' WARNING
+- [ ] `isg_visitor` ppe_notes — model seviyesinde invisible
+- [ ] `isg_risk` site_id — NOT NULL constraint warning
+- [ ] Admin şifresi — kalıcı şifre belirlenmeli
+
+---
+
+## İlerleme Özeti (14 Ağustos 2026)
+
+| Faz | Toplam | Tamamlanan | % |
+|-----|--------|------------|---|
+| FAZ 0 | 7 | 7 | %100 |
+| FAZ 1 | 6 | 5 | %83 |
+| FAZ 2 | 9 | 6 | %67 |
+| FAZ 3 | 2 | 0 | %0 |
+| FAZ 4 | 4 | 0 | %0 |
+| FAZ 5 | 3 | 0 | %0 |
+| OSGB | 1 | 0 | %0 |
+| **TOPLAM** | **32** | **18** | **%56** |
+
+**Adam-gün**: ~65-75 / 200 (harcanmış) = %32-37 tamamlandı
+
+---
+
+## Definition of Done (Her Modül İçin)
+
+- [ ] Odoo 18 uyumlu manifest
+- [ ] Model alanları ve constraint'ler
+- [ ] Liste, form, arama görünümleri
+- [ ] Menü, action, sequence
+- [ ] ACL ve record rule
+- [ ] Mail activity ve bildirim
+- [ ] Belge/kanıt bağlantısı (gerekiyorsa)
+- [ ] Çok şirket/işyeri/site testleri
+- [ ] Normal/olumsuz/yetkisiz akış testleri
+- [ ] Türkçe alan metinleri
+- [ ] Mevzuat uygunluk notu
