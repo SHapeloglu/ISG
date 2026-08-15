@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- CHEMICAL MAIN MENU -->
+    <menuitem id="menu_isg_chemical_root"
+        name="Kimyasal Yönetimi"
+        parent="isg_core.menu_isg_root"
+        sequence="50"/>
+
+    <!-- CHEMICAL SUBMENU -->
+    <menuitem id="menu_isg_chemical"
+        name="Kimyasallar"
+        parent="menu_isg_chemical_root"
+        action="action_isg_chemical"
+        sequence="10"/>
+
+    <!-- INVENTORY SUBMENU -->
+    <menuitem id="menu_isg_chemical_inventory"
+        name="Stok Takibi"
+        parent="menu_isg_chemical_root"
+        action="action_isg_chemical_inventory"
+        sequence="20"/>
+</odoo>

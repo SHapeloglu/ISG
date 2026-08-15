@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="seq_isg_chemical" model="ir.sequence">
+            <field name="name">ISG Kimyasal</field>
+            <field name="code">isg.chemical</field>
+            <field name="prefix">KIM-%(year)s-</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+    </data>
+</odoo>

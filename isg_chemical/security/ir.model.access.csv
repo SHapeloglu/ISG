@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_isg_chemical_readonly,isg.chemical readonly,isg_chemical.model_isg_chemical,isg_security.group_isg_readonly,1,0,0,0
+access_isg_chemical_expert,isg.chemical expert,isg_chemical.model_isg_chemical,isg_security.group_isg_expert,1,1,1,0
+access_isg_chemical_manager,isg.chemical manager,isg_chemical.model_isg_chemical,isg_security.group_isg_manager,1,1,1,1
+access_isg_chemical_inventory_readonly,isg.chemical.inventory readonly,isg_chemical.model_isg_chemical_inventory,isg_security.group_isg_readonly,1,0,0,0
+access_isg_chemical_inventory_expert,isg.chemical.inventory expert,isg_chemical.model_isg_chemical_inventory,isg_security.group_isg_expert,1,1,1,0
+access_isg_chemical_inventory_manager,isg.chemical.inventory manager,isg_chemical.model_isg_chemical_inventory,isg_security.group_isg_manager,1,1,1,1

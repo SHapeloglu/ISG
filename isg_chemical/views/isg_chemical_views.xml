@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- CHEMICAL LIST VIEW -->
+    <record id="view_isg_chemical_list" model="ir.ui.view">
+        <field name="name">isg.chemical.list</field>
+        <field name="model">isg.chemical</field>
+        <field name="arch" type="xml">
+            <list string="Kimyasallar">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="cas_number"/>
+                <field name="supplier_id"/>
+                <field name="ghs_class"/>
+                <field name="quantity"/>
+                <field name="unit"/>
+                <field name="min_quantity"/>
+                <field name="preparation_date"/>
+                <field name="location"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- CHEMICAL FORM VIEW -->
+    <record id="view_isg_chemical_form" model="ir.ui.view">
+        <field name="name">isg.chemical.form</field>
+        <field name="model">isg.chemical</field>
+        <field name="arch" type="xml">
+            <form string="Kimyasal Madde">
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group string="Kimyasal Bilgileri">
+                            <field name="code"/>
+                            <field name="cas_number"/>
+                            <field name="supplier_id"/>
+                            <field name="brand"/>
+                        </group>
+                        <group string="Kurumsal">
+                            <field name="company_id"/>
+                            <field name="workplace_id"/>
+                            <field name="site_id"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="GHS Sınıflandırması">
+                            <field name="ghs_class"/>
+                        </group>
+                        <group string="Stok">
+                            <field name="quantity"/>
+                            <field name="unit"/>
+                            <field name="min_quantity"/>
+                            <field name="preparation_date"/>
+                            <field name="location"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Tehlike ve Önlemler">
+                            <field name="hazard_statement"/>
+                            <field name="precautionary_statement"/>
+                        </group>
+                        <group string="Belgeler">
+                            <field name="sds_document_id"/>
+                        </group>
+                    </group>
+                    <field name="notes"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- CHEMICAL SEARCH VIEW -->
+    <record id="view_isg_chemical_search" model="ir.ui.view">
+        <field name="name">isg.chemical.search</field>
+        <field name="model">isg.chemical</field>
+        <field name="arch" type="xml">
+            <search string="Kimyasal Ara">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="cas_number"/>
+                <field name="supplier_id"/>
+                <separator/>
+                <filter string="Alevlenir" name="flammable" domain="[('ghs_class','=','flammable')]"/>
+                <filter string="Toksik" name="toxic" domain="[('ghs_class','=','toxic')]"/>
+                <filter string="Aşındırıcı" name="corrosive" domain="[('ghs_class','=','corrosive')]"/>
+                <separator/>
+                <group expand="0" string="Grupla">
+                    <filter string="GHS Sınıfı" name="group_ghs" context="{'group_by': 'ghs_class'}"/>
+                    <filter string="İşyeri" name="group_workplace" context="{'group_by': 'workplace_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- CHEMICAL ACTION -->
+    <record id="action_isg_chemical" model="ir.actions.act_window">
+        <field name="name">Kimyasallar</field>
+        <field name="res_model">isg.chemical</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_isg_chemical_search"/>
+    </record>
+
+    <!-- CHEMICAL INVENTORY LIST VIEW -->
+    <record id="view_isg_chemical_inventory_list" model="ir.ui.view">
+        <field name="name">isg.chemical.inventory.list</field>
+        <field name="model">isg.chemical.inventory</field>
+        <field name="arch" type="xml">
+            <list string="Stok Takibi">
+                <field name="date"/>
+                <field name="chemical_id"/>
+                <field name="transaction_type"/>
+                <field name="quantity"/>
+                <field name="unit"/>
+                <field name="reference"/>
+                <field name="notes"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- CHEMICAL INVENTORY FORM VIEW -->
+    <record id="view_isg_chemical_inventory_form" model="ir.ui.view">
+        <field name="name">isg.chemical.inventory.form</field>
+        <field name="model">isg.chemical.inventory</field>
+        <field name="arch" type="xml">
+            <form string="Stok İşlemi">
+                <sheet>
+                    <group>
+                        <group string="İşlem Bilgileri">
+                            <field name="chemical_id"/>
+                            <field name="date"/>
+                            <field name="transaction_type"/>
+                        </group>
+                        <group string="Kurumsal">
+                            <field name="company_id"/>
+                            <field name="workplace_id"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Miktar">
+                            <field name="quantity"/>
+                            <field name="unit"/>
+                        </group>
+                        <group string="Referans">
+                            <field name="reference"/>
+                        </group>
+                    </group>
+                    <field name="notes"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- CHEMICAL INVENTORY ACTION -->
+    <record id="action_isg_chemical_inventory" model="ir.actions.act_window">
+        <field name="name">Stok Takibi</field>
+        <field name="res_model">isg.chemical.inventory</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>
