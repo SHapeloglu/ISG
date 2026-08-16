@@ -1,0 +1,10 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_isg_equipment_type_readonly,isg.equipment.type readonly,isg_equipment.model_isg_equipment_type,isg_security.group_isg_readonly,1,0,0,0
+access_isg_equipment_type_expert,isg.equipment.type expert,isg_equipment.model_isg_equipment_type,isg_security.group_isg_expert,1,1,1,0
+access_isg_equipment_type_manager,isg.equipment.type manager,isg_equipment.model_isg_equipment_type,isg_security.group_isg_manager,1,1,1,1
+access_isg_equipment_readonly,isg.equipment readonly,isg_equipment.model_isg_equipment,isg_security.group_isg_readonly,1,0,0,0
+access_isg_equipment_expert,isg.equipment expert,isg_equipment.model_isg_equipment,isg_security.group_isg_expert,1,1,1,0
+access_isg_equipment_manager,isg.equipment manager,isg_equipment.model_isg_equipment,isg_security.group_isg_manager,1,1,1,1
+access_isg_equipment_inspection_readonly,isg.equipment.inspection readonly,isg_equipment.model_isg_equipment_inspection,isg_security.group_isg_readonly,1,0,0,0
+access_isg_equipment_inspection_expert,isg.equipment.inspection expert,isg_equipment.model_isg_equipment_inspection,isg_security.group_isg_expert,1,1,1,0
+access_isg_equipment_inspection_manager,isg.equipment.inspection manager,isg_equipment.model_isg_equipment_inspection,isg_security.group_isg_manager,1,1,1,1

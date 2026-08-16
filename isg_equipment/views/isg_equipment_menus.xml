@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- EQUIPMENT MAIN MENU -->
+    <menuitem id="menu_isg_equipment_root"
+        name="Ekipman Yönetimi"
+        parent="isg_core.menu_isg_root"
+        sequence="60"/>
+    
+    <!-- EQUIPMENT TYPE SUBMENU -->
+    <menuitem id="menu_isg_equipment_type"
+        name="Ekipman Türleri (EK-II)"
+        parent="menu_isg_equipment_root"
+        action="action_isg_equipment_type"
+        sequence="10"/>
+    
+    <!-- EQUIPMENT SUBMENU -->
+    <menuitem id="menu_isg_equipment"
+        name="Ekipmanlar"
+        parent="menu_isg_equipment_root"
+        action="action_isg_equipment"
+        sequence="20"/>
+    
+    <!-- INSPECTION SUBMENU -->
+    <menuitem id="menu_isg_equipment_inspection"
+        name="Periyodik Kontrol Kayıtları"
+        parent="menu_isg_equipment_root"
+        action="action_isg_equipment_inspection"
+        sequence="30"/>
+</odoo>

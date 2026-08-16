@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- EK-II Ekipman Türleri (İş Ekipmanları Yönetmeliği, Ara.2025 güncellemesi) -->
+        
+        <!-- Kompresörler -->
+        <record id="equipment_type_compressor" model="isg.equipment.type">
+            <field name="name">Havalı Kompresör (≥0.5 L)</field>
+            <field name="code">COMPRESS_AIR</field>
+            <field name="ekii_category">1</field>
+            <field name="inspection_period_months">12</field>
+            <field name="authorized_body_type">both</field>
+            <field name="inspection_method">TS EN 4413, TS EN 12922</field>
+            <field name="description">Basınçlı hava üreten kompresörler, 0.5 litre ve üzeri</field>
+        </record>
+        
+        <!-- Vinçler -->
+        <record id="equipment_type_crane" model="isg.equipment.type">
+            <field name="name">Vinç (Vinç Sistemi)</field>
+            <field name="code">CRANE</field>
+            <field name="ekii_category">1</field>
+            <field name="inspection_period_months">12</field>
+            <field name="authorized_body_type">a</field>
+            <field name="inspection_method">TS EN 14502, TS EN 14503</field>
+            <field name="description">Sabit veya hareketli vinçler, kaldırma kapasitesi 1 ton ve üzeri</field>
+        </record>
+        
+        <!-- Asansörler -->
+        <record id="equipment_type_elevator" model="isg.equipment.type">
+            <field name="name">Asansör (Yolcu/Kargo)</field>
+            <field name="code">ELEVATOR</field>
+            <field name="ekii_category">1</field>
+            <field name="inspection_period_months">12</field>
+            <field name="authorized_body_type">a</field>
+            <field name="inspection_method">TS EN 81-1, TS EN 81-2</field>
+            <field name="description">Yolcu ve kargo asansörleri, tüm kapasitelerde</field>
+        </record>
+        
+        <!-- Baskı Kapları -->
+        <record id="equipment_type_pressure_vessel" model="isg.equipment.type">
+            <field name="name">Basınçlı Kap (≥0.5 L × bar)</field>
+            <field name="code">PRESSURE_VESSEL</field>
+            <field name="ekii_category">1</field>
+            <field name="inspection_period_months">24</field>
+            <field name="authorized_body_type">a</field>
+            <field name="inspection_method">TS EN 13445, TS EN 13146-1</field>
+            <field name="description">Basınçlı kaplar, 0.5 L × bar eşik değeri ve üzeri</field>
+        </record>
+        
+        <!-- Forkliftler -->
+        <record id="equipment_type_forklift" model="isg.equipment.type">
+            <field name="name">Forklift (Tekerlemeli Kaldırma)</field>
+            <field name="code">FORKLIFT</field>
+            <field name="ekii_category">2</field>
+            <field name="inspection_period_months">12</field>
+            <field name="authorized_body_type">both</field>
+            <field name="inspection_method">TS EN 16001</field>
+            <field name="description">Tekerlemeli forkliftler, kaldırma kapasitesi tüm ağırlıklarda</field>
+        </record>
+        
+        <!-- Yüksekte Çalışma Platformları -->
+        <record id="equipment_type_working_platform" model="isg.equipment.type">
+            <field name="name">Yüksekte Çalışma Platformu (MEWP)</field>
+            <field name="code">MEWP</field>
+            <field name="ekii_category">2</field>
+            <field name="inspection_period_months">12</field>
+            <field name="authorized_body_type">both</field>
+            <field name="inspection_method">TS EN 280</field>
+            <field name="description">Motorlu yüksekte çalışma platformları (lift, teleskopu vb.)</field>
+        </record>
+        
+        <!-- Kaldırma Cihazları (Yeni — Ara.2025) -->
+        <record id="equipment_type_lifting_chains" model="isg.equipment.type">
+            <field name="name">Kaldırma Zincirleri ve Aks</field>
+            <field name="code">LIFTING_CHAINS</field>
+            <field name="ekii_category">2</field>
+            <field name="inspection_period_months">12</field>
+            <field name="authorized_body_type">both</field>
+            <field name="inspection_method">TS EN 818-2, TS EN 818-4</field>
+            <field name="description">Kaldırma için kullanılan zincirler, aks ve diğer cihazlar</field>
+        </record>
+        
+        <!-- Emniyet Çitesi ve Emniyet Kemeri Sistemleri -->
+        <record id="equipment_type_fall_protection" model="isg.equipment.type">
+            <field name="name">Yüksek Açıdan Düşme Koruması</field>
+            <field name="code">FALL_PROTECTION</field>
+            <field name="ekii_category">3</field>
+            <field name="inspection_period_months">12</field>
+            <field name="authorized_body_type">both</field>
+            <field name="inspection_method">TS EN 795, TS EN 353-1, TS EN 360</field>
+            <field name="description">Çatı çitesi, kemerler, emniyet ipi sistemleri (>2m düşme risk)</field>
+        </record>
+        
+        <!-- Elektrik Panolar -->
+        <record id="equipment_type_electrical_panel" model="isg.equipment.type">
+            <field name="name">Elektrik Dağıtım Panası (İnsan Tarafından Kullanılan)</field>
+            <field name="code">ELECTRICAL_PANEL</field>
+            <field name="ekii_category">2</field>
+            <field name="inspection_period_months">12</field>
+            <field name="authorized_body_type">b</field>
+            <field name="inspection_method">TS EN 61439-1</field>
+            <field name="description">İşyerinde kullanılan elektrik panoları ve şalter sistemleri</field>
+        </record>
+        
+        <!-- Patlayıcı Ortam Ekipmanları -->
+        <record id="equipment_type_atex" model="isg.equipment.type">
+            <field name="name">Patlayıcı Ortam Ekipmanları (ATEX)</field>
+            <field name="code">ATEX_EQUIPMENT</field>
+            <field name="ekii_category">1</field>
+            <field name="inspection_period_months">12</field>
+            <field name="authorized_body_type">a</field>
+            <field name="inspection_method">TS EN 60079-19</field>
+            <field name="description">Patlayıcı ortamda kullanılan tüm motorlu ekipmanlar</field>
+        </record>
+        
+        <!-- Elle Taşınan Elektrikli Aletler -->
+        <record id="equipment_type_handheld_power_tools" model="isg.equipment.type">
+            <field name="name">Elle Taşınan Elektrikli Aletler</field>
+            <field name="code">HANDHELD_TOOLS</field>
+            <field name="ekii_category">3</field>
+            <field name="inspection_period_months">6</field>
+            <field name="authorized_body_type">b</field>
+            <field name="inspection_method">TS IEC 60745 serisi</field>
+            <field name="description">Matkap, zımpara, matkap-dalgıç vb. elle tutulur elektrikli aletler</field>
+        </record>
+    </data>
+</odoo>

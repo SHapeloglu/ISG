@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- EQUIPMENT TYPE LIST VIEW -->
+    <record id="view_isg_equipment_type_list" model="ir.ui.view">
+        <field name="name">isg.equipment.type.list</field>
+        <field name="model">isg.equipment.type</field>
+        <field name="arch" type="xml">
+            <list string="Ekipman Türleri">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="ekii_category"/>
+                <field name="inspection_period_months"/>
+                <field name="authorized_body_type"/>
+                <field name="inspection_method"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- EQUIPMENT TYPE FORM VIEW -->
+    <record id="view_isg_equipment_type_form" model="ir.ui.view">
+        <field name="name">isg.equipment.type.form</field>
+        <field name="model">isg.equipment.type</field>
+        <field name="arch" type="xml">
+            <form string="Ekipman Türü">
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group string="Temel Bilgiler">
+                            <field name="code"/>
+                            <field name="ekii_category"/>
+                            <field name="inspection_method"/>
+                        </group>
+                        <group string="Kontrol">
+                            <field name="inspection_period_months"/>
+                            <field name="authorized_body_type"/>
+                        </group>
+                    </group>
+                    <field name="description"/>
+                    <field name="active"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- EQUIPMENT TYPE SEARCH VIEW -->
+    <record id="view_isg_equipment_type_search" model="ir.ui.view">
+        <field name="name">isg.equipment.type.search</field>
+        <field name="model">isg.equipment.type</field>
+        <field name="arch" type="xml">
+            <search string="Ekipman Türü Ara">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="ekii_category"/>
+                <separator/>
+                <filter string="Aktif" name="active" domain="[('active','=',True)]"/>
+                <group expand="0" string="Grupla">
+                    <filter string="EK-II Kategorisi" name="group_ekii" context="{'group_by': 'ekii_category'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- EQUIPMENT TYPE ACTION -->
+    <record id="action_isg_equipment_type" model="ir.actions.act_window">
+        <field name="name">Ekipman Türleri (EK-II)</field>
+        <field name="res_model">isg.equipment.type</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_isg_equipment_type_search"/>
+    </record>
+
+    <!-- ===== EQUIPMENT ===== -->
+
+    <!-- EQUIPMENT LIST VIEW -->
+    <record id="view_isg_equipment_list" model="ir.ui.view">
+        <field name="name">isg.equipment.list</field>
+        <field name="model">isg.equipment</field>
+        <field name="arch" type="xml">
+            <list string="Ekipmanlar">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="equipment_type_id"/>
+                <field name="serial_number"/>
+                <field name="manufacturer"/>
+                <field name="workplace_id"/>
+                <field name="last_inspection_date"/>
+                <field name="next_inspection_date" decoration-danger="next_inspection_date &lt; context_today()"/>
+                <field name="status"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- EQUIPMENT FORM VIEW -->
+    <record id="view_isg_equipment_form" model="ir.ui.view">
+        <field name="name">isg.equipment.form</field>
+        <field name="model">isg.equipment</field>
+        <field name="arch" type="xml">
+            <form string="Ekipman">
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group string="Ekipman Bilgileri">
+                            <field name="code"/>
+                            <field name="equipment_type_id"/>
+                            <field name="status"/>
+                        </group>
+                        <group string="Teknik Detaylar">
+                            <field name="manufacturer"/>
+                            <field name="model"/>
+                            <field name="serial_number"/>
+                            <field name="manufacturing_date"/>
+                            <field name="put_in_service_date"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Muayene ve Kontrol">
+                            <field name="authorized_body_id"/>
+                            <field name="last_inspection_date"/>
+                            <field name="next_inspection_date"/>
+                            <field name="inspection_period_months"/>
+                        </group>
+                        <group string="Kurumsal">
+                            <field name="company_id"/>
+                            <field name="workplace_id"/>
+                            <field name="site_id"/>
+                            <field name="location_description"/>
+                        </group>
+                    </group>
+                    <field name="notes"/>
+                    <field name="active"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- EQUIPMENT SEARCH VIEW -->
+    <record id="view_isg_equipment_search" model="ir.ui.view">
+        <field name="name">isg.equipment.search</field>
+        <field name="model">isg.equipment</field>
+        <field name="arch" type="xml">
+            <search string="Ekipman Ara">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="serial_number"/>
+                <field name="equipment_type_id"/>
+                <field name="workplace_id"/>
+                <separator/>
+                <filter string="Aktif" name="active" domain="[('status','=','active')]"/>
+                <filter string="Kontrol Süresi Geçmiş" name="inspection_overdue" 
+                    domain="[('next_inspection_date','&lt;',context_today())]"/>
+                <separator/>
+                <filter string="Bakım Durumunda" name="maintenance" domain="[('status','=','maintenance')]"/>
+                <separator/>
+                <group expand="0" string="Grupla">
+                    <filter string="Ekipman Türü" name="group_type" context="{'group_by': 'equipment_type_id'}"/>
+                    <filter string="İşyeri" name="group_workplace" context="{'group_by': 'workplace_id'}"/>
+                    <filter string="Durum" name="group_status" context="{'group_by': 'status'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- EQUIPMENT ACTION -->
+    <record id="action_isg_equipment" model="ir.actions.act_window">
+        <field name="name">Ekipmanlar</field>
+        <field name="res_model">isg.equipment</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_isg_equipment_search"/>
+    </record>
+
+    <!-- ===== EQUIPMENT INSPECTION ===== -->
+
+    <!-- INSPECTION LIST VIEW -->
+    <record id="view_isg_equipment_inspection_list" model="ir.ui.view">
+        <field name="name">isg.equipment.inspection.list</field>
+        <field name="model">isg.equipment.inspection</field>
+        <field name="arch" type="xml">
+            <list string="Periyodik Kontrol Kayıtları">
+                <field name="equipment_id"/>
+                <field name="inspection_date"/>
+                <field name="authorized_body_id"/>
+                <field name="inspection_result"/>
+                <field name="next_inspection_date" decoration-danger="next_inspection_date &lt; context_today()"/>
+                <field name="ekipnet_submitted"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- INSPECTION FORM VIEW -->
+    <record id="view_isg_equipment_inspection_form" model="ir.ui.view">
+        <field name="name">isg.equipment.inspection.form</field>
+        <field name="model">isg.equipment.inspection</field>
+        <field name="arch" type="xml">
+            <form string="Periyodik Kontrol Kaydı">
+                <sheet>
+                    <group>
+                        <group string="Kontrol Bilgileri">
+                            <field name="equipment_id"/>
+                            <field name="inspection_date"/>
+                        </group>
+                        <group string="Muayene Kuruluşu">
+                            <field name="authorized_body_id"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Kontrol Sonucu">
+                            <field name="inspection_result"/>
+                        </group>
+                        <group string="Sonraki Kontrol">
+                            <field name="next_inspection_date"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="findings"/>
+                        <field name="restrictions"/>
+                    </group>
+                    <group>
+                        <group string="Belge">
+                            <field name="report_document_id"/>
+                        </group>
+                        <group string="EKİPNET">
+                            <field name="ekipnet_ready"/>
+                            <field name="ekipnet_submitted"/>
+                            <field name="ekipnet_reference"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Kurumsal">
+                            <field name="company_id"/>
+                            <field name="workplace_id"/>
+                        </group>
+                    </group>
+                    <field name="notes"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- INSPECTION SEARCH VIEW -->
+    <record id="view_isg_equipment_inspection_search" model="ir.ui.view">
+        <field name="name">isg.equipment.inspection.search</field>
+        <field name="model">isg.equipment.inspection</field>
+        <field name="arch" type="xml">
+            <search string="Kontrol Ara">
+                <field name="equipment_id"/>
+                <field name="authorized_body_id"/>
+                <field name="inspection_date"/>
+                <separator/>
+                <filter string="Uygun" name="conforming" domain="[('inspection_result','=','conforming')]"/>
+                <filter string="Uygun Değil" name="non_conforming" domain="[('inspection_result','=','non_conforming')]"/>
+                <filter string="EKİPNET'e Gönderilmemiş" name="ekipnet_pending" domain="[('ekipnet_submitted','=',False)]"/>
+                <group expand="0" string="Grupla">
+                    <filter string="Sonuç" name="group_result" context="{'group_by': 'inspection_result'}"/>
+                    <filter string="Muayene Kuruluşu" name="group_body" context="{'group_by': 'authorized_body_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- INSPECTION ACTION -->
+    <record id="action_isg_equipment_inspection" model="ir.actions.act_window">
+        <field name="name">Periyodik Kontrol Kayıtları</field>
+        <field name="res_model">isg.equipment.inspection</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_isg_equipment_inspection_search"/>
+    </record>
+</odoo>
