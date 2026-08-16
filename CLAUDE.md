@@ -1,70 +1,76 @@
-# CLAUDE.md — Yeni Chat Bağlamı (14 Ağustos 2026)
+# CLAUDE.md — Yeni Chat Bağlamı (16 Ağustos 2026)
 
 ## Proje Özeti
 
-Contabo VPS üzerinde Odoo 18 tabanlı Türkiye ISG platformu geliştiriyoruz.
-Hedef: HSE Radar ile 90%+ işlevsel eşdeğerlik + Odoo ERP entegrasyonu.
+Contabo VPS: Odoo 18 tabanlı Türkiye İSG platformu
+- **Hedef:** HSE Radar %90+ eşdeğerlik
+- **Durum:** 20/32 modül (%63) | FAZ 2 TAMAMLANDI
+- **Domain:** isg.powerbi.com.tr
 
-## Mevcut Durum
+## Kurulu Modüller (20/32)
 
-Kurulu Modüller: 46 (Odoo native 27 + ISG 19)
+FAZ 0: 7/7 - isg_core, isg_security, isg_party, isg_location, isg_document, isg_hr, isg_base
 
-FAZ Ilerleme:
-- FAZ 0 Temel Mimari: 100%
-- FAZ 1 Kurumsal Yönetişim: 83%
-- FAZ 2 Çekirdek ISG Ops: 67%
-- GENEL: 56% (18/32 modül)
+FAZ 1: 5/6 - isg_contractor, isg_training, isg_visitor, isg_board, isg_correspondence
 
-FAZ 2 Tamamlanan (6/9):
-- isg_capa (F2-001)
-- isg_risk (F2-002)
-- isg_incident (F2-003)
-- isg_audit (F2-004)
-- isg_ppe (F2-005)
-- isg_emergency (F2-006)
+FAZ 2: 9/9 TAMAMLANDI - isg_capa, isg_risk, isg_incident, isg_audit, isg_ppe, isg_emergency, isg_chemical, isg_equipment, isg_ptw
 
-Sırada (FAZ 2): isg_chemical, isg_equipment, isg_ptw+isg_loto
+## Dosya Yolları
 
-## Geliştirici Profili
+- /opt/odoo/isg_addons/ - ISG modülleri
+- /opt/odoo/venv18-isg/ - Python venv
+- /etc/odoo/odoo18-isg.conf - Config
+- .claude/ - Handoff dosyaları
 
-Junior Odoo developer, terminal komutlarını çalıştırıp çıktı paylaşıyor.
-SSH bağlantısı var, VPS'e direkt erişim.
+## Terminal Kuralları
 
-## Çalışma Kuralları
+1. Komutları tek tek ver (art arda yazma)
+2. Her komuta "--logfile=""" ekle (config'de logfile var)
+3. Çıktısı: | tail -25
+4. Permission denied: sudo chown -R odoo:odoo /path/
 
-Terminal Komutları:
-- Tek tek ver, art arda değil
-- Her komutun çıktısını bekle
-- MUTLAK: --logfile="" (config'de logfile tanımlı)
-- Hata yoksa çıktı yok → normal, devam et
+## Modül Yükleme
 
-Session Başlangıç (KRİTİK!):
-- Her chat'te ls -la /opt/odoo/isg_addons/
-- cat ile dosyaları doğrula
-- Varsayım yapma — gerçek durumu kontrol et
+```bash
+sudo systemctl stop odoo18-isg.service
 
-Modül Geliştirme:
-- Dosya: sudo -u odoo tee ... > /dev/null << 'EOF'
-- Sequence: ISG-XXX-YYYY-NNNN
-- Test: kurulum sonrası hata kontrolü
+sudo -u odoo /opt/odoo/venv18-isg/bin/python3 /opt/odoo/odoo18/odoo-bin \
+  -c /etc/odoo/odoo18-isg.conf --logfile="" -d isg -i MODUL --stop-after-init 2>&1 | tail -25
 
-## Mevzuat Kritik Notlar
+sudo systemctl start odoo18-isg.service
+```
 
-- Eğitim Yönetmeliği (2 Nisan 2026): isg_training
-- İş Ekipmanları EK-II (Aralık 2025): isg_equipment
-- Cezalar %49 artış (2026): isg_penalty
-- Uzman/hekim süreleri (2025): isg_hr, isg_osgb
+## Modül Standartı
 
-## Sıradaki Modül: F2-007 isg_chemical
+Her modül: __init__.py, __manifest__.py, models/, views/, security/, data/
 
-Kimyasal Envanter ve SDS/GBF Yönetimi
-- isg.chemical: Kimyasal envanter
-- isg.chemical.inventory: Stok
-- Mevzuat: Kimyasal Maddeler Yönetmeliği
-- GHS sınıflama kategorileri
+Sequence: ISG-XXX-YYYY-NNNN
+ACL: readonly (read), expert (r/w), manager (r/w/delete)
+Record rules: company_id + workplace_id + site_id
 
-Temel alanlar:
-- name, sku, ghs_class
-- Hazırlık tarihi, depo konumu, min/max stok
-- SDS dosyası (ir.attachment)
-- company_id, workplace_id, site_id
+## Bilinen Sorunlar
+
+- recursive=True uyarısı (işlevsel değil)
+- invisible parameter uyarıları
+- Admin şifresi NULL (kalıcı şifre gerekli)
+- isg_health_basic KVKK maskeleme (danışman onayı bekliyor)
+
+## Son Tamamlananlar (16 Ağustos)
+
+- isg_equipment (EK-II, periyodik kontrol)
+- isg_ptw (İş izni, LOTO)
+- FAZ 2 %100 bitti
+
+## Sıradaki: FAZ 3
+
+- isg_measurement_core + isg_measurement_hygiene
+- isg_environment
+
+## Git
+
+cd /opt/odoo/isg_addons
+git add -A
+git commit -m "..."
+git push origin main
+
+Repo: https://github.com/SHapeloglu/ISG
