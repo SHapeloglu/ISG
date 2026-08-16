@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- PTW MAIN MENU -->
+    <menuitem id="menu_isg_ptw_root"
+        name="İş İzni ve LOTO"
+        parent="isg_core.menu_isg_root"
+        sequence="70"/>
+    
+    <!-- PTW TYPE SUBMENU -->
+    <menuitem id="menu_isg_ptw_type"
+        name="İzin Türleri"
+        parent="menu_isg_ptw_root"
+        action="action_isg_ptw_type"
+        sequence="10"/>
+    
+    <!-- PTW SUBMENU -->
+    <menuitem id="menu_isg_ptw"
+        name="İş İzinleri"
+        parent="menu_isg_ptw_root"
+        action="action_isg_ptw"
+        sequence="20"/>
+    
+    <!-- LOTO SUBMENU -->
+    <menuitem id="menu_isg_loto"
+        name="LOTO Kayıtları"
+        parent="menu_isg_ptw_root"
+        action="action_isg_loto"
+        sequence="30"/>
+</odoo>

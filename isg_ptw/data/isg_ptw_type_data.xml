@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Sıcak İş İzni -->
+        <record id="ptw_type_hot_work" model="isg.ptw.type">
+            <field name="name">Sıcak İş (Kaynak/Kesme)</field>
+            <field name="code">HOT_WORK</field>
+            <field name="approval_sequence">supervisor,expert</field>
+            <field name="default_validity_hours">8</field>
+            <field name="hazard_level">high</field>
+            <field name="description">Kaynak, kesme, ısıtma işleri (300°C üzeri)</field>
+        </record>
+
+        <!-- Kapalı Alan Girişi -->
+        <record id="ptw_type_confined_space" model="isg.ptw.type">
+            <field name="name">Kapalı Alan Girişi</field>
+            <field name="code">CONFINED_SPACE</field>
+            <field name="approval_sequence">supervisor,expert,physician</field>
+            <field name="default_validity_hours">4</field>
+            <field name="hazard_level">critical</field>
+            <field name="description">Tank, çukur, silindir vb. kapalı alanlar</field>
+        </record>
+
+        <!-- Elektrik İzni -->
+        <record id="ptw_type_electrical" model="isg.ptw.type">
+            <field name="name">Elektrik Panosu / Sisteemi İzni</field>
+            <field name="code">ELECTRICAL</field>
+            <field name="approval_sequence">supervisor,expert</field>
+            <field name="default_validity_hours">6</field>
+            <field name="hazard_level">high</field>
+            <field name="description">Elektrik panosu açma, kablo çalışmaları</field>
+        </record>
+
+        <!-- Yüksekte Çalışma -->
+        <record id="ptw_type_working_at_height" model="isg.ptw.type">
+            <field name="name">Yüksekte Çalışma (2m üzeri)</field>
+            <field name="code">WORKING_AT_HEIGHT</field>
+            <field name="approval_sequence">supervisor,expert</field>
+            <field name="default_validity_hours">8</field>
+            <field name="hazard_level">high</field>
+            <field name="description">Iskele, çatı, yüksek platform çalışmaları</field>
+        </record>
+
+        <!-- Radyasyon İzni -->
+        <record id="ptw_type_radiation" model="isg.ptw.type">
+            <field name="name">Radyasyon Maruziyeti İzni</field>
+            <field name="code">RADIATION</field>
+            <field name="approval_sequence">expert,physician</field>
+            <field name="default_validity_hours">4</field>
+            <field name="hazard_level">critical</field>
+            <field name="description">İyonlaştırıcı radyasyon ile çalışmalar</field>
+        </record>
+
+        <!-- Genel İzin -->
+        <record id="ptw_type_general" model="isg.ptw.type">
+            <field name="name">Genel İş İzni</field>
+            <field name="code">GENERAL</field>
+            <field name="approval_sequence">supervisor</field>
+            <field name="default_validity_hours">12</field>
+            <field name="hazard_level">low</field>
+            <field name="description">Standart iş operasyonları</field>
+        </record>
+
+        <!-- Sıcak İş Ön Koşulları -->
+        <record id="precond_hot_work_1" model="isg.ptw.precondition">
+            <field name="ptw_type_id" ref="ptw_type_hot_work"/>
+            <field name="sequence">10</field>
+            <field name="description">Yangın söndürücü (min. 2 adet) hazır mı?</field>
+            <field name="is_mandatory">True</field>
+        </record>
+
+        <record id="precond_hot_work_2" model="isg.ptw.precondition">
+            <field name="ptw_type_id" ref="ptw_type_hot_work"/>
+            <field name="sequence">20</field>
+            <field name="description">Yanıcı malzeler kaldırıldı mı (2m çapında)?</field>
+            <field name="is_mandatory">True</field>
+        </record>
+
+        <record id="precond_hot_work_3" model="isg.ptw.precondition">
+            <field name="ptw_type_id" ref="ptw_type_hot_work"/>
+            <field name="sequence">30</field>
+            <field name="description">Gaz ölçümü yapıldı mı (yanıcı gaz)?</field>
+            <field name="is_mandatory">True</field>
+        </record>
+
+        <record id="precond_hot_work_4" model="isg.ptw.precondition">
+            <field name="ptw_type_id" ref="ptw_type_hot_work"/>
+            <field name="sequence">40</field>
+            <field name="description">Nöbetçi atanmış mı (işin son 30 dk sonra)?</field>
+            <field name="is_mandatory">True</field>
+        </record>
+
+        <!-- Kapalı Alan Ön Koşulları -->
+        <record id="precond_confined_1" model="isg.ptw.precondition">
+            <field name="ptw_type_id" ref="ptw_type_confined_space"/>
+            <field name="sequence">10</field>
+            <field name="description">Hava analizi yapıldı mı (O2, CO, H2S, LEL)?</field>
+            <field name="is_mandatory">True</field>
+        </record>
+
+        <record id="precond_confined_2" model="isg.ptw.precondition">
+            <field name="ptw_type_id" ref="ptw_type_confined_space"/>
+            <field name="sequence">20</field>
+            <field name="description">Kurtarma ekibi hazır mı?</field>
+            <field name="is_mandatory">True</field>
+        </record>
+
+        <record id="precond_confined_3" model="isg.ptw.precondition">
+            <field name="ptw_type_id" ref="ptw_type_confined_space"/>
+            <field name="sequence">30</field>
+            <field name="description">Emniyet kemerı ve halatı takılmış mı?</field>
+            <field name="is_mandatory">True</field>
+        </record>
+
+        <!-- Elektrik Ön Koşulları -->
+        <record id="precond_elec_1" model="isg.ptw.precondition">
+            <field name="ptw_type_id" ref="ptw_type_electrical"/>
+            <field name="sequence">10</field>
+            <field name="description">Elektrik kaynağı kesildi mi (LOTO uygulanmış)?</field>
+            <field name="is_mandatory">True</field>
+        </record>
+
+        <record id="precond_elec_2" model="isg.ptw.precondition">
+            <field name="ptw_type_id" ref="ptw_type_electrical"/>
+            <field name="sequence">20</field>
+            <field name="description">Gerilim ölçü aleti ile kontrol edildi mi?</field>
+            <field name="is_mandatory">True</field>
+        </record>
+
+        <!-- Yüksekte Çalışma Ön Koşulları -->
+        <record id="precond_height_1" model="isg.ptw.precondition">
+            <field name="ptw_type_id" ref="ptw_type_working_at_height"/>
+            <field name="sequence">10</field>
+            <field name="description">Emniyet kemeri ve halatı hazır mı?</field>
+            <field name="is_mandatory">True</field>
+        </record>
+
+        <record id="precond_height_2" model="isg.ptw.precondition">
+            <field name="ptw_type_id" ref="ptw_type_working_at_height"/>
+            <field name="sequence">20</field>
+            <field name="description">İskele/platform stabil ve emniyetli mi?</field>
+            <field name="is_mandatory">True</field>
+        </record>
+    </data>
+</odoo>

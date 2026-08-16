@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- PTW TYPE VIEWS -->
+    <record id="view_isg_ptw_type_list" model="ir.ui.view">
+        <field name="name">isg.ptw.type.list</field>
+        <field name="model">isg.ptw.type</field>
+        <field name="arch" type="xml">
+            <list string="İzin Türleri">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="approval_sequence"/>
+                <field name="default_validity_hours"/>
+                <field name="hazard_level"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_isg_ptw_type_form" model="ir.ui.view">
+        <field name="name">isg.ptw.type.form</field>
+        <field name="model">isg.ptw.type</field>
+        <field name="arch" type="xml">
+            <form string="İzin Türü">
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group string="Temel">
+                            <field name="code"/>
+                            <field name="hazard_level"/>
+                            <field name="default_validity_hours"/>
+                        </group>
+                        <group string="Onay">
+                            <field name="approval_sequence"/>
+                        </group>
+                    </group>
+                    <field name="description"/>
+                    <field name="active"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_isg_ptw_type" model="ir.actions.act_window">
+        <field name="name">İzin Türleri</field>
+        <field name="res_model">isg.ptw.type</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- PTW MAIN VIEWS -->
+    <record id="view_isg_ptw_list" model="ir.ui.view">
+        <field name="name">isg.ptw.list</field>
+        <field name="model">isg.ptw</field>
+        <field name="arch" type="xml">
+            <list string="İş İzinleri">
+                <field name="name"/>
+                <field name="ptw_type_id"/>
+                <field name="requester_id"/>
+                <field name="work_location"/>
+                <field name="issue_date"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_isg_ptw_form" model="ir.ui.view">
+        <field name="name">isg.ptw.form</field>
+        <field name="model">isg.ptw</field>
+        <field name="arch" type="xml">
+            <form string="İş İzni">
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group string="İzin Bilgileri">
+                            <field name="ptw_type_id"/>
+                            <field name="issue_date"/>
+                            <field name="validity_hours"/>
+                            <field name="expiry_datetime" readonly="1"/>
+                        </group>
+                        <group string="Talep Eden">
+                            <field name="requester_id"/>
+                            <field name="requester_employee_id"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Çalışma Yeri">
+                            <field name="work_location"/>
+                            <field name="workplace_id"/>
+                            <field name="site_id"/>
+                        </group>
+                        <group string="Durum">
+                            <field name="state"/>
+                        </group>
+                    </group>
+                    <field name="work_description" colspan="2"/>
+                    <field name="notes" colspan="2"/>
+                    <field name="document_id"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_isg_ptw_search" model="ir.ui.view">
+        <field name="name">isg.ptw.search</field>
+        <field name="model">isg.ptw</field>
+        <field name="arch" type="xml">
+            <search string="İş İzni Ara">
+                <field name="name"/>
+                <field name="ptw_type_id"/>
+                <field name="requester_id"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_isg_ptw" model="ir.actions.act_window">
+        <field name="name">İş İzinleri</field>
+        <field name="res_model">isg.ptw</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_isg_ptw_search"/>
+    </record>
+
+    <!-- LOTO VIEWS -->
+    <record id="view_isg_loto_list" model="ir.ui.view">
+        <field name="name">isg.loto.list</field>
+        <field name="model">isg.loto</field>
+        <field name="arch" type="xml">
+            <list string="LOTO Kayıtları">
+                <field name="ptw_id"/>
+                <field name="energy_source"/>
+                <field name="energy_type"/>
+                <field name="lockout_date"/>
+                <field name="locked_by"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_isg_loto_form" model="ir.ui.view">
+        <field name="name">isg.loto.form</field>
+        <field name="model">isg.loto</field>
+        <field name="arch" type="xml">
+            <form string="LOTO Kaydı">
+                <sheet>
+                    <group>
+                        <group string="Kilit Bilgileri">
+                            <field name="ptw_id"/>
+                            <field name="energy_source"/>
+                            <field name="energy_type"/>
+                            <field name="lock_number"/>
+                        </group>
+                        <group string="Kilitleyen">
+                            <field name="lockout_date"/>
+                            <field name="locked_by"/>
+                            <field name="state"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Kilit Açma">
+                            <field name="unlock_date"/>
+                            <field name="unlocked_by"/>
+                        </group>
+                    </group>
+                    <field name="notes"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_isg_loto" model="ir.actions.act_window">
+        <field name="name">LOTO Kayıtları</field>
+        <field name="res_model">isg.loto</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

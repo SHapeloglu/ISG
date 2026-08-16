@@ -1,0 +1,19 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_isg_ptw_type_readonly,isg.ptw.type readonly,isg_ptw.model_isg_ptw_type,isg_security.group_isg_readonly,1,0,0,0
+access_isg_ptw_type_expert,isg.ptw.type expert,isg_ptw.model_isg_ptw_type,isg_security.group_isg_expert,1,1,1,0
+access_isg_ptw_type_manager,isg.ptw.type manager,isg_ptw.model_isg_ptw_type,isg_security.group_isg_manager,1,1,1,1
+access_isg_ptw_readonly,isg.ptw readonly,isg_ptw.model_isg_ptw,isg_security.group_isg_readonly,1,0,0,0
+access_isg_ptw_expert,isg.ptw expert,isg_ptw.model_isg_ptw,isg_security.group_isg_expert,1,1,1,0
+access_isg_ptw_manager,isg.ptw manager,isg_ptw.model_isg_ptw,isg_security.group_isg_manager,1,1,1,1
+access_isg_ptw_precondition_readonly,isg.ptw.precondition readonly,isg_ptw.model_isg_ptw_precondition,isg_security.group_isg_readonly,1,0,0,0
+access_isg_ptw_precondition_expert,isg.ptw.precondition expert,isg_ptw.model_isg_ptw_precondition,isg_security.group_isg_expert,1,1,1,0
+access_isg_ptw_precondition_manager,isg.ptw.precondition manager,isg_ptw.model_isg_ptw_precondition,isg_security.group_isg_manager,1,1,1,1
+access_isg_ptw_precondition_check_readonly,isg.ptw.precondition.check readonly,isg_ptw.model_isg_ptw_precondition_check,isg_security.group_isg_readonly,1,0,0,0
+access_isg_ptw_precondition_check_expert,isg.ptw.precondition.check expert,isg_ptw.model_isg_ptw_precondition_check,isg_security.group_isg_expert,1,1,1,0
+access_isg_ptw_precondition_check_manager,isg.ptw.precondition.check manager,isg_ptw.model_isg_ptw_precondition_check,isg_security.group_isg_manager,1,1,1,1
+access_isg_ptw_approval_readonly,isg.ptw.approval readonly,isg_ptw.model_isg_ptw_approval,isg_security.group_isg_readonly,1,0,0,0
+access_isg_ptw_approval_expert,isg.ptw.approval expert,isg_ptw.model_isg_ptw_approval,isg_security.group_isg_expert,1,1,1,0
+access_isg_ptw_approval_manager,isg.ptw.approval manager,isg_ptw.model_isg_ptw_approval,isg_security.group_isg_manager,1,1,1,1
+access_isg_loto_readonly,isg.loto readonly,isg_ptw.model_isg_loto,isg_security.group_isg_readonly,1,0,0,0
+access_isg_loto_expert,isg.loto expert,isg_ptw.model_isg_loto,isg_security.group_isg_expert,1,1,1,0
+access_isg_loto_manager,isg.loto manager,isg_ptw.model_isg_loto,isg_security.group_isg_manager,1,1,1,1
