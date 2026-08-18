@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem id="menu_isg_reporting_root"
+              name="Raporlama"
+              parent="isg_core.menu_isg_root"
+              sequence="90"/>
+
+    <menuitem id="menu_isg_reporting_workhours"
+              name="İSG KPI / TRIR / LWDR"
+              parent="menu_isg_reporting_root"
+              action="action_isg_reporting_workhours"
+              sequence="10"/>
+
+</odoo>

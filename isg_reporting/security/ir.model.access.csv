@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_isg_reporting_workhours_readonly,isg.reporting.workhours.readonly,model_isg_reporting_workhours,isg_security.group_isg_readonly,1,0,0,0
+access_isg_reporting_workhours_expert,isg.reporting.workhours.expert,model_isg_reporting_workhours,isg_security.group_isg_expert,1,1,1,0
+access_isg_reporting_workhours_manager,isg.reporting.workhours.manager,model_isg_reporting_workhours,isg_security.group_isg_manager,1,1,1,1
