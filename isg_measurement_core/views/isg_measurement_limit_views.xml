@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tree View: Limits -->
+    <record id="view_isg_measurement_limit_tree" model="ir.ui.view">
+        <field name="name">isg.measurement.limit.tree</field>
+        <field name="model">isg.measurement.limit</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name" />
+                <field name="parameter_type" />
+                <field name="regulation_version" />
+                <field name="twa_value" />
+                <field name="stel_value" />
+                <field name="unit" />
+            </list>
+        </field>
+    </record>
+
+    <!-- Form View: Limit Detail -->
+    <record id="view_isg_measurement_limit_form" model="ir.ui.view">
+        <field name="name">isg.measurement.limit.form</field>
+        <field name="model">isg.measurement.limit</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name" />
+                        <field name="parameter_type" />
+                        <field name="chemical_id" />
+                    </group>
+                    <group>
+                        <field name="regulation_version" />
+                        <field name="effective_date" />
+                        <field name="unit" />
+                    </group>
+                    <separator string="Limit Değerleri" />
+                    <group>
+                        <field name="twa_value" />
+                        <field name="stel_value" />
+                        <field name="ceil_value" />
+                    </group>
+                    <separator string="Notlar" />
+                    <field name="notes" nolabel="1" />
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search View: Limit -->
+    <record id="view_isg_measurement_limit_search" model="ir.ui.view">
+        <field name="name">isg.measurement.limit.search</field>
+        <field name="model">isg.measurement.limit</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name" string="Limit Adı" />
+                <field name="parameter_type" string="Parametre Türü" />
+                <field name="regulation_version" string="Mevzuat" />
+                <separator />
+                <filter name="active" string="Aktif" domain="[('active', '=', True)]" />
+                <group expand="1" string="Grupla">
+                    <filter name="group_by_regulation" string="Mevzuat'a göre" context="{'group_by': 'regulation_version'}" />
+                    <filter name="group_by_parameter" string="Parametre'ye göre" context="{'group_by': 'parameter_type'}" />
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action: Limits -->
+    <record id="action_isg_measurement_limit" model="ir.actions.act_window">
+        <field name="name">Ölçüm Limitleri (OEL/STEL)</field>
+        <field name="res_model">isg.measurement.limit</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_ids" eval="[(5, 0, 0), (0, 0, {'view_mode': 'list', 'view_id': ref('view_isg_measurement_limit_tree')}), (0, 0, {'view_mode': 'form', 'view_id': ref('view_isg_measurement_limit_form')})]" />
+        <field name="search_view_id" ref="view_isg_measurement_limit_search" />
+    </record>
+</odoo>

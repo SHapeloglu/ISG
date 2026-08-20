@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tree View: Samples -->
+    <record id="view_isg_measurement_sample_tree" model="ir.ui.view">
+        <field name="name">isg.measurement.sample.tree</field>
+        <field name="model">isg.measurement.sample</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="campaign_id" />
+                <field name="name" />
+                <field name="parameter_type" />
+                <field name="seg_id" />
+                <field name="measurement_date" />
+                <field name="state" />
+            </list>
+        </field>
+    </record>
+
+    <!-- Form View: Sample Detail -->
+    <record id="view_isg_measurement_sample_form" model="ir.ui.view">
+        <field name="name">isg.measurement.sample.form</field>
+        <field name="model">isg.measurement.sample</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" class="oe_inline" /></h1>
+                    </div>
+                    <group>
+                        <field name="campaign_id" />
+                        <field name="code" />
+                        <field name="parameter_type" />
+                    </group>
+                    <group>
+                        <field name="site_id" />
+                        <field name="seg_id" />
+                    </group>
+                    <separator string="Çalışanlar" />
+                    <field name="affected_employees" widget="many2many_tags" />
+                    <separator string="Ölçüm Planı" />
+                    <group>
+                        <field name="measurement_duration_hours" />
+                        <field name="measurement_date" />
+                    </group>
+                    <group>
+                        <field name="device_id" />
+                        <field name="operator_id" />
+                    </group>
+                    <group>
+                        <field name="state" />
+                        <field name="workplace_id" readonly="1" />
+                    </group>
+                    <separator string="Ölçüm Sonuçları" />
+                    <field name="result_ids" nolabel="1">
+                        <list>
+                            <field name="measurement_date" />
+                            <field name="raw_value" />
+                            <field name="unit" />
+                            <field name="compliance_status" />
+                            <field name="exceeding_percentage" />
+                        </list>
+                    </field>
+                    <separator string="Notlar" />
+                    <field name="notes" nolabel="1" />
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search View: Sample -->
+    <record id="view_isg_measurement_sample_search" model="ir.ui.view">
+        <field name="name">isg.measurement.sample.search</field>
+        <field name="model">isg.measurement.sample</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name" />
+                <field name="campaign_id" />
+                <field name="seg_id" />
+                <field name="parameter_type" />
+                <separator />
+                <filter name="pending" string="Beklemede" domain="[('state', '=', 'pending')]" />
+                <filter name="in_progress" string="Devam Ediyor" domain="[('state', '=', 'in_progress')]" />
+                <filter name="completed" string="Tamamlandı" domain="[('state', '=', 'completed')]" />
+                <group expand="1" string="Grupla">
+                    <filter name="group_by_campaign" string="Kampanya'ya göre" context="{'group_by': 'campaign_id'}" />
+                    <filter name="group_by_parameter" string="Parametre'ye göre" context="{'group_by': 'parameter_type'}" />
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action: Samples -->
+    <record id="action_isg_measurement_sample" model="ir.actions.act_window">
+        <field name="name">Numune Noktaları</field>
+        <field name="res_model">isg.measurement.sample</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_ids" eval="[(5, 0, 0), (0, 0, {'view_mode': 'list', 'view_id': ref('view_isg_measurement_sample_tree')}), (0, 0, {'view_mode': 'form', 'view_id': ref('view_isg_measurement_sample_form')})]" />
+        <field name="search_view_id" ref="view_isg_measurement_sample_search" />
+    </record>
+</odoo>

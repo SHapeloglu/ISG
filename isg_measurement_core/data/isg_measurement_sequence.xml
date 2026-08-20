@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Sequence: ISG-OLÇ-YYYY-NNNN -->
+        <record id="seq_isg_measurement_campaign" model="ir.sequence">
+            <field name="name">ISG Ölçüm Kampanyası</field>
+            <field name="code">isg.measurement.campaign</field>
+            <field name="prefix">ISG-KMP-%(year)s-</field>
+            <field name="padding">4</field>
+            <field name="number_next">1</field>
+            <field name="number_increment">1</field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tree View: Devices -->
+    <record id="view_isg_measurement_device_tree" model="ir.ui.view">
+        <field name="name">isg.measurement.device.tree</field>
+        <field name="model">isg.measurement.device</field>
+        <field name="arch" type="xml">
+            <list decoration-danger="calibration_valid_until and calibration_valid_until &lt; today()">
+                <field name="name" />
+                <field name="device_type" />
+                <field name="calibration_date" />
+                <field name="calibration_valid_until" />
+                <field name="measurement_unit" />
+                <field name="active" invisible="1" />
+            </list>
+        </field>
+    </record>
+
+    <!-- Form View: Device Detail -->
+    <record id="view_isg_measurement_device_form" model="ir.ui.view">
+        <field name="name">isg.measurement.device.form</field>
+        <field name="model">isg.measurement.device</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" class="oe_inline" /></h1>
+                    </div>
+                    <group>
+                        <field name="code" />
+                        <field name="device_type" />
+                        <field name="active" />
+                    </group>
+                    <separator string="Cihaz Bilgisi" />
+                    <group>
+                        <field name="manufacturer" />
+                        <field name="model" />
+                        <field name="serial_number" />
+                    </group>
+                    <separator string="Kalibrasyon" />
+                    <group>
+                        <field name="calibration_date" />
+                        <field name="calibration_period_months" />
+                        <field name="calibration_valid_until" />
+                        <field name="calibration_certificate_id" />
+                    </group>
+                    <separator string="Ölçüm Özellikleri" />
+                    <group>
+                        <field name="measurement_unit" />
+                        <field name="measurement_range_min" />
+                        <field name="measurement_range_max" />
+                    </group>
+                    <group>
+                        <field name="location" />
+                        <field name="workplace_id" />
+                    </group>
+                    <separator string="Notlar" />
+                    <field name="notes" nolabel="1" />
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search View: Device -->
+    <record id="view_isg_measurement_device_search" model="ir.ui.view">
+        <field name="name">isg.measurement.device.search</field>
+        <field name="model">isg.measurement.device</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name" />
+                <field name="device_type" />
+                <field name="workplace_id" />
+                <separator />
+                <filter name="expired" string="Kalibrasyon Süresi Geçmiş" domain="[('calibration_valid_until', '&lt;', today())]" />
+                <filter name="expiring_soon" string="Kalibrasyon 30 Gün İçinde Bitiyor" domain="[('calibration_valid_until', '&lt;=', context_today().replace(day=context_today().day) + datetime.timedelta(days=30))]" />
+                <filter name="active" string="Aktif" domain="[('active', '=', True)]" />
+            </search>
+        </field>
+    </record>
+
+    <!-- Action: Devices -->
+    <record id="action_isg_measurement_device" model="ir.actions.act_window">
+        <field name="name">Ölçüm Cihazları</field>
+        <field name="res_model">isg.measurement.device</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_ids" eval="[(5, 0, 0), (0, 0, {'view_mode': 'list', 'view_id': ref('view_isg_measurement_device_tree')}), (0, 0, {'view_mode': 'form', 'view_id': ref('view_isg_measurement_device_form')})]" />
+        <field name="search_view_id" ref="view_isg_measurement_device_search" />
+    </record>
+</odoo>

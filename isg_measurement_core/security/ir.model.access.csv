@@ -1,0 +1,16 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_isg_measurement_campaign_readonly,isg.measurement.campaign — readonly,model_isg_measurement_campaign,isg_security.group_isg_readonly,1,0,0,0
+access_isg_measurement_campaign_expert,isg.measurement.campaign — expert,model_isg_measurement_campaign,isg_security.group_isg_expert,1,1,1,0
+access_isg_measurement_campaign_manager,isg.measurement.campaign — manager,model_isg_measurement_campaign,isg_security.group_isg_manager,1,1,1,1
+access_isg_measurement_device_readonly,isg.measurement.device — readonly,model_isg_measurement_device,isg_security.group_isg_readonly,1,0,0,0
+access_isg_measurement_device_expert,isg.measurement.device — expert,model_isg_measurement_device,isg_security.group_isg_expert,1,1,1,0
+access_isg_measurement_device_manager,isg.measurement.device — manager,model_isg_measurement_device,isg_security.group_isg_manager,1,1,1,1
+access_isg_measurement_sample_readonly,isg.measurement.sample — readonly,model_isg_measurement_sample,isg_security.group_isg_readonly,1,0,0,0
+access_isg_measurement_sample_expert,isg.measurement.sample — expert,model_isg_measurement_sample,isg_security.group_isg_expert,1,1,1,0
+access_isg_measurement_sample_manager,isg.measurement.sample — manager,model_isg_measurement_sample,isg_security.group_isg_manager,1,1,1,1
+access_isg_measurement_result_readonly,isg.measurement.result — readonly,model_isg_measurement_result,isg_security.group_isg_readonly,1,0,0,0
+access_isg_measurement_result_expert,isg.measurement.result — expert,model_isg_measurement_result,isg_security.group_isg_expert,1,1,1,0
+access_isg_measurement_result_manager,isg.measurement.result — manager,model_isg_measurement_result,isg_security.group_isg_manager,1,1,1,1
+access_isg_measurement_limit_readonly,isg.measurement.limit — readonly,model_isg_measurement_limit,isg_security.group_isg_readonly,1,0,0,0
+access_isg_measurement_limit_expert,isg.measurement.limit — expert,model_isg_measurement_limit,isg_security.group_isg_expert,1,1,1,0
+access_isg_measurement_limit_manager,isg.measurement.limit — manager,model_isg_measurement_limit,isg_security.group_isg_manager,1,1,1,1

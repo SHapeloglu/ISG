@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Parent Menu: Ölçüm Yönetimi -->
+    <menuitem id="menu_isg_measurement_root" name="Ölçüm Yönetimi" parent="isg_core.menu_isg_root" sequence="50" />
+
+    <!-- Kampanya Menüsü -->
+    <menuitem id="menu_isg_measurement_campaign" name="Kampanyalar" parent="menu_isg_measurement_root" action="action_isg_measurement_campaign" sequence="10" />
+
+    <!-- Cihaz Menüsü -->
+    <menuitem id="menu_isg_measurement_device" name="Cihazlar &amp; Kalibrasyon" parent="menu_isg_measurement_root" action="action_isg_measurement_device" sequence="20" />
+
+    <!-- Numune Menüsü -->
+    <menuitem id="menu_isg_measurement_sample" name="Numune Noktaları" parent="menu_isg_measurement_root" action="action_isg_measurement_sample" sequence="30" />
+
+    <!-- Sonuç Menüsü -->
+    <menuitem id="menu_isg_measurement_result" name="Ölçüm Sonuçları" parent="menu_isg_measurement_root" action="action_isg_measurement_result" sequence="40" />
+
+    <!-- Limit Menüsü (Reference Data) -->
+    <menuitem id="menu_isg_measurement_limit" name="Limitler &amp; Standartlar" parent="menu_isg_measurement_root" action="action_isg_measurement_limit" sequence="50" />
+</odoo>

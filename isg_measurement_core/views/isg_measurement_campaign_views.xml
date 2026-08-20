@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tree View: Campaigns -->
+    <record id="view_isg_measurement_campaign_tree" model="ir.ui.view">
+        <field name="name">isg.measurement.campaign.tree</field>
+        <field name="model">isg.measurement.campaign</field>
+        <field name="arch" type="xml">
+            <list decoration-success="state == 'completed'" decoration-info="state == 'approved'" decoration-warning="state == 'in_progress'">
+                <field name="name" />
+                <field name="year" />
+                <field name="parameter_type" />
+                <field name="workplace_id" />
+                <field name="state" />
+                <field name="result_count" />
+            </list>
+        </field>
+    </record>
+
+    <!-- Form View: Campaign Detail -->
+    <record id="view_isg_measurement_campaign_form" model="ir.ui.view">
+        <field name="name">isg.measurement.campaign.form</field>
+        <field name="model">isg.measurement.campaign</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_approve" string="Onayla" type="object" class="oe_highlight" />
+                    <button name="action_start" string="Başlat" type="object" class="oe_highlight" />
+                    <button name="action_complete" string="Tamamla" type="object" class="oe_highlight" />
+                    <button name="action_cancel" string="İptal Et" type="object" />
+                    <field name="state" widget="statusbar" statusbar_visible="draft,approved,in_progress,completed" />
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" class="oe_inline" /></h1>
+                    </div>
+                    <group>
+                        <field name="year" />
+                        <field name="quarter" />
+                        <field name="parameter_type" />
+                    </group>
+                    <group>
+                        <field name="workplace_id" />
+                        <field name="site_id" />
+                    </group>
+                    <separator string="Tarihler" />
+                    <group>
+                        <field name="planned_start_date" />
+                        <field name="planned_end_date" />
+                    </group>
+                    <separator string="Amaç / Açıklama" />
+                    <field name="description" nolabel="1" />
+                    <separator string="Numune Noktaları" />
+                    <field name="sample_line_ids" nolabel="1">
+                        <list editable="bottom">
+                            <field name="name" />
+                            <field name="parameter_type" />
+                            <field name="seg_id" />
+                            <field name="state" />
+                            <field name="measurement_date" />
+                        </list>
+                    </field>
+                    <group class="oe_subtotal_footer">
+                        <field name="result_count" readonly="1" />
+                    </group>
+                    <separator string="Notlar" />
+                    <field name="notes" nolabel="1" />
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search View: Campaign -->
+    <record id="view_isg_measurement_campaign_search" model="ir.ui.view">
+        <field name="name">isg.measurement.campaign.search</field>
+        <field name="model">isg.measurement.campaign</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name" />
+                <field name="workplace_id" />
+                <field name="parameter_type" />
+                <separator />
+                <filter name="draft" string="Taslak" domain="[('state', '=', 'draft')]" />
+                <filter name="approved" string="Onaylanmış" domain="[('state', '=', 'approved')]" />
+                <filter name="in_progress" string="Devam Ediyor" domain="[('state', '=', 'in_progress')]" />
+                <filter name="completed" string="Tamamlanmış" domain="[('state', '=', 'completed')]" />
+                <separator />
+                <group expand="1" string="Grupla">
+                    <filter name="group_by_year" string="Yıl'a göre" context="{'group_by': 'year'}" />
+                    <filter name="group_by_parameter" string="Parametre'ye göre" context="{'group_by': 'parameter_type'}" />
+                    <filter name="group_by_workplace" string="İşyeri'ne göre" context="{'group_by': 'workplace_id'}" />
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action: Campaigns -->
+    <record id="action_isg_measurement_campaign" model="ir.actions.act_window">
+        <field name="name">Ölçüm Kampanyaları</field>
+        <field name="res_model">isg.measurement.campaign</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_ids" eval="[(5, 0, 0), (0, 0, {'view_mode': 'list', 'view_id': ref('view_isg_measurement_campaign_tree')}), (0, 0, {'view_mode': 'form', 'view_id': ref('view_isg_measurement_campaign_form')})]" />
+        <field name="search_view_id" ref="view_isg_measurement_campaign_search" />
+    </record>
+</odoo>

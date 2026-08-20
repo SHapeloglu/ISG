@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- List View: Results -->
+    <record id="view_isg_measurement_result_list" model="ir.ui.view">
+        <field name="name">isg.measurement.result.list</field>
+        <field name="model">isg.measurement.result</field>
+        <field name="arch" type="xml">
+            <list decoration-danger="compliance_status == 'exceeding'" decoration-success="compliance_status == 'compliant'">
+                <field name="measurement_date" />
+                <field name="sample_id" />
+                <field name="raw_value" />
+                <field name="unit" />
+                <field name="limit_twa_snapshot" />
+                <field name="compliance_status" />
+                <field name="exceeding_percentage" />
+                <field name="state" />
+            </list>
+        </field>
+    </record>
+
+    <!-- Form View: Result Detail (SNAPSHOT FROZEN) -->
+    <record id="view_isg_measurement_result_form" model="ir.ui.view">
+        <field name="name">isg.measurement.result.form</field>
+        <field name="model">isg.measurement.result</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_create_capa" string="DÖF Oluştur (Limit Aşımı)" type="object" class="oe_highlight" />
+                    <field name="state" widget="statusbar" />
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <span>Ölçüm Sonucu — </span>
+                            <field name="measurement_date" class="oe_inline" />
+                        </h1>
+                    </div>
+                    
+                    <!-- NUMUNE VE KAMPANYA -->
+                    <group>
+                        <field name="sample_id" readonly="1" />
+                        <field name="campaign_id" readonly="1" />
+                    </group>
+                    
+                    <!-- HAM SONUÇ (DONDURULMUŞ) -->
+                    <separator string="Ham Ölçüm Sonucu (SNAPSHOT — DEĞİŞMEZ)" />
+                    <group>
+                        <field name="raw_value" readonly="1" />
+                        <field name="unit" readonly="1" />
+                    </group>
+                    <group>
+                        <field name="measurement_time_start" />
+                        <field name="measurement_time_end" />
+                        <field name="measurement_duration_hours" />
+                    </group>
+                    
+                    <!-- CIHAZ SNAPSHOT -->
+                    <separator string="Cihaz &amp; Kalibrasyon (SNAPSHOT)" />
+                    <group>
+                        <field name="device_id" readonly="1" />
+                        <field name="device_calibration_date_snapshot" readonly="1" />
+                        <field name="device_calibration_valid_until_snapshot" readonly="1" />
+                        <field name="device_calibration_certificate_snapshot" readonly="1" />
+                    </group>
+                    
+                    <!-- LIMIT SNAPSHOT (VERSİYONLÜ) -->
+                    <separator string="Uygulanan Limit (SNAPSHOT — Mevzuat Versiyonlu)" />
+                    <group>
+                        <field name="limit_id" readonly="1" />
+                        <field name="limit_regulation_version" readonly="1" />
+                    </group>
+                    <group>
+                        <field name="limit_twa_snapshot" readonly="1" />
+                        <field name="limit_stel_snapshot" readonly="1" />
+                    </group>
+                    
+                    <!-- UYGUNLUK HESAPLAMA -->
+                    <separator string="Uygunluk Değerlendirmesi" />
+                    <group>
+                        <field name="compliance_status" readonly="1" widget="badge" />
+                        <field name="exceeding_value" readonly="1" />
+                        <field name="exceeding_percentage" readonly="1" />
+                    </group>
+                    
+                    <!-- DÖF BAĞLANTISI -->
+                    <group>
+                        <field name="capa_id" readonly="1" />
+                    </group>
+                    
+                    <!-- OPERATÖR VE DOĞRULAMA -->
+                    <separator string="Operatör &amp; Doğrulama" />
+                    <group>
+                        <field name="operator_id" />
+                        <field name="reviewed_by_id" />
+                        <field name="reviewed_date" />
+                    </group>
+                    
+                    <!-- NOTLAR -->
+                    <separator string="Notlar" />
+                    <field name="notes" nolabel="1" />
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search View: Result -->
+    <record id="view_isg_measurement_result_search" model="ir.ui.view">
+        <field name="name">isg.measurement.result.search</field>
+        <field name="model">isg.measurement.result</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="sample_id" />
+                <field name="campaign_id" />
+                <field name="operator_id" />
+                <separator />
+                <filter name="compliant" string="Uyumlu" domain="[('compliance_status', '=', 'compliant')]" />
+                <filter name="exceeding" string="Limit Aşımı" domain="[('compliance_status', '=', 'exceeding')]" />
+                <filter name="not_evaluated" string="Değerlendirilmedi" domain="[('compliance_status', '=', 'not_evaluated')]" />
+                <separator />
+                <filter name="with_capa" string="DÖF Oluşturulmuş" domain="[('capa_id', '!=', False)]" />
+                <separator />
+                <filter name="draft" string="Taslak" domain="[('state', '=', 'draft')]" />
+                <filter name="recorded" string="Kaydedildi" domain="[('state', '=', 'recorded')]" />
+                <filter name="reviewed" string="Doğrulandı" domain="[('state', '=', 'reviewed')]" />
+                <group expand="1" string="Grupla">
+                    <filter name="group_by_sample" string="Numune'ye göre" context="{'group_by': 'sample_id'}" />
+                    <filter name="group_by_compliance" string="Uygunluk'a göre" context="{'group_by': 'compliance_status'}" />
+                    <filter name="group_by_date" string="Tarihe göre" context="{'group_by': 'measurement_date'}" />
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action: Results -->
+    <record id="action_isg_measurement_result" model="ir.actions.act_window">
+        <field name="name">Ölçüm Sonuçları</field>
+        <field name="res_model">isg.measurement.result</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_ids" eval="[(5, 0, 0), (0, 0, {'view_mode': 'list', 'view_id': ref('view_isg_measurement_result_list')}), (0, 0, {'view_mode': 'form', 'view_id': ref('view_isg_measurement_result_form')})]" />
+        <field name="search_view_id" ref="view_isg_measurement_result_search" />
+    </record>
+</odoo>

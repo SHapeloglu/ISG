@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <!-- FORM VIEW EXTENSION: Hijyen Parametreleri Alanları -->
+        <record id="isg_measurement_result_form_hygiene" model="ir.ui.view">
+            <field name="name">isg.measurement.result.form.hygiene</field>
+            <field name="model">isg.measurement.result</field>
+            <field name="inherit_id" ref="isg_measurement_core.view_isg_measurement_result_form"/>
+            <field name="arch" type="xml">
+
+                <!-- measurement_type seçim alanını raw_value'den sonra ekle -->
+                <xpath expr="//field[@name='raw_value']" position="after">
+                    <field name="measurement_type" 
+                           widget="radio"
+                           help="Hijyen parametresi türünü seç"/>
+                </xpath>
+
+                <!-- Gürültü (Noise) parametreleri için grubu ekle -->
+                <xpath expr="//field[@name='unit']" position="after">
+                    <group string="Gürültü (LAeq / LCeq / Lpeak)" 
+                           invisible="measurement_type != 'noise'"
+                           colspan="2">
+                        <field name="laeq_value" 
+                               help="A-ağırlıklı eşdeğer ses basınç seviyesi"/>
+                        <field name="lceq_value" 
+                               help="C-ağırlıklı eşdeğer ses basınç seviyesi"/>
+                        <field name="lpeak_value" 
+                               help="Tepe ses basınç seviyesi"/>
+                        <field name="lpeak_reference" 
+                               help="Tepe ses limiti (ÇSGB: 140 dB)"/>
+                    </group>
+                </xpath>
+
+            </field>
+        </record>
+
+    </data>
+</odoo>
