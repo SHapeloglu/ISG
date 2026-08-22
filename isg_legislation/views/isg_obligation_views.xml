@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <!-- APPLICABILITY FORM VIEW -->
+        <record id="view_isg_obligation_applicability_form" model="ir.ui.view">
+            <field name="name">isg.obligation.applicability.form</field>
+            <field name="model">isg.obligation.applicability</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <field name="name"/>
+                        <field name="danger_class"/>
+                        <field name="min_employee_count"/>
+                        <field name="is_public_sector"/>
+                        <field name="sector_codes"/>
+                    </group>
+                    <field name="description" widget="html"/>
+                </form>
+            </field>
+        </record>
+
+        <!-- OBLIGATION LIST VIEW -->
+        <record id="view_isg_obligation_list" model="ir.ui.view">
+            <field name="name">isg.obligation.list</field>
+            <field name="model">isg.obligation</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="name"/>
+                    <field name="legislation_id"/>
+                    <field name="article_reference"/>
+                    <field name="evidence_type"/>
+                    <field name="retention_days"/>
+                    <field name="state"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- OBLIGATION FORM VIEW -->
+        <record id="view_isg_obligation_form" model="ir.ui.view">
+            <field name="name">isg.obligation.form</field>
+            <field name="model">isg.obligation</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="legislation_id"/>
+                            <field name="article_reference"/>
+                        </group>
+                        <group>
+                            <field name="evidence_type"/>
+                            <field name="retention_days"/>
+                            <field name="state"/>
+                        </group>
+                        <group>
+                            <field name="is_periodic"/>
+                            <field name="periodic_days" invisible="not is_periodic"/>
+                        </group>
+                        <field name="description" widget="html"/>
+                        <notebook>
+                            <page string="Uygulanabilirlik Kuralları">
+                                <field name="applicability_ids" nolabel="1"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- OBLIGATION SEARCH VIEW -->
+        <record id="view_isg_obligation_search" model="ir.ui.view">
+            <field name="name">isg.obligation.search</field>
+            <field name="model">isg.obligation</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                    <field name="legislation_id"/>
+                    <field name="evidence_type"/>
+                    <filter name="active" string="Aktif" domain="[('state', '=', 'active')]"/>
+                    <filter name="periodic" string="Periyodik" domain="[('is_periodic', '=', True)]"/>
+                </search>
+            </field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,10 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+isg_legislation_readonly,isg.legislation readonly,model_isg_legislation,isg_security.group_isg_readonly,1,0,0,0
+isg_legislation_expert,isg.legislation expert,model_isg_legislation,isg_security.group_isg_expert,1,1,1,0
+isg_legislation_manager,isg.legislation manager,model_isg_legislation,isg_security.group_isg_manager,1,1,1,1
+isg_obligation_readonly,isg.obligation readonly,model_isg_obligation,isg_security.group_isg_readonly,1,0,0,0
+isg_obligation_expert,isg.obligation expert,model_isg_obligation,isg_security.group_isg_expert,1,1,1,0
+isg_obligation_manager,isg.obligation manager,model_isg_obligation,isg_security.group_isg_manager,1,1,1,1
+isg_applicability_readonly,isg.obligation.applicability readonly,model_isg_obligation_applicability,isg_security.group_isg_readonly,1,0,0,0
+isg_applicability_expert,isg.obligation.applicability expert,model_isg_obligation_applicability,isg_security.group_isg_expert,1,1,1,0
+isg_applicability_manager,isg.obligation.applicability manager,model_isg_obligation_applicability,isg_security.group_isg_manager,1,1,1,1

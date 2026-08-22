@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- 6331 KANUNU -->
+        <record id="legislation_6331" model="isg.legislation">
+            <field name="name">6331 sayılı İSG Kanunu</field>
+            <field name="regulation_type">law</field>
+            <field name="regulation_number">6331</field>
+            <field name="effective_date">2012-06-30</field>
+            <field name="last_amendment_date">2025-01-01</field>
+            <field name="source_url">https://www.mevzuat.gov.tr/MevzuatMetin/1.5.6331.pdf</field>
+            <field name="description">Türkiye'nin ana İSG kanunu. Tüm işverenlerin temel yükümlülüklerini tanımlar.</field>
+            <field name="state">active</field>
+        </record>
+
+        <!-- MD.10 — Risk Değerlendirmesi -->
+        <record id="obligation_risk_assessment" model="isg.obligation">
+            <field name="name">Risk Değerlendirmesi Yapılmalı</field>
+            <field name="legislation_id" ref="legislation_6331"/>
+            <field name="article_reference">Md. 10</field>
+            <field name="evidence_type">risk_assessment</field>
+            <field name="retention_days">730</field>
+            <field name="is_periodic">True</field>
+            <field name="periodic_days">730</field>
+            <field name="description">Her işyerinde tehlikelerin belirlenmesi ve risk değerlendirmesi yapılmalı.</field>
+            <field name="state">active</field>
+        </record>
+
+        <!-- MD.6 — Uzman Görevlendirilmesi -->
+        <record id="obligation_expert_appointment" model="isg.obligation">
+            <field name="name">İSG Uzmanı Görevlendirilmeli</field>
+            <field name="legislation_id" ref="legislation_6331"/>
+            <field name="article_reference">Md. 6</field>
+            <field name="evidence_type">expert_appointment</field>
+            <field name="retention_days">730</field>
+            <field name="description">Her işyerinde risk düzeyine göre İSG uzmanı görevlendirilmesi gerekli.</field>
+            <field name="state">active</field>
+        </record>
+
+        <!-- MD.17 — Eğitim Verilmesi -->
+        <record id="obligation_training" model="isg.obligation">
+            <field name="name">Çalışanlara İSG Eğitimi Verilmeli</field>
+            <field name="legislation_id" ref="legislation_6331"/>
+            <field name="article_reference">Md. 17</field>
+            <field name="evidence_type">training_record</field>
+            <field name="retention_days">730</field>
+            <field name="is_periodic">True</field>
+            <field name="periodic_days">365</field>
+            <field name="description">Çalışanlara işe başlamada ve periyodik olarak İSG eğitimi verilmesi zorunludur.</field>
+            <field name="state">active</field>
+        </record>
+
+        <!-- MD.22 — İSG Kurulu Kurulması (50+ çalışan) -->
+        <record id="obligation_isg_board" model="isg.obligation">
+            <field name="name">İSG Kurulu Kurulmalı (50+ Çalışan)</field>
+            <field name="legislation_id" ref="legislation_6331"/>
+            <field name="article_reference">Md. 22</field>
+            <field name="evidence_type">other</field>
+            <field name="retention_days">730</field>
+            <field name="description">50 veya daha fazla çalışana sahip işyerlerinde İSG kurulu kurulmalı.</field>
+            <field name="state">active</field>
+        </record>
+
+    </data>
+</odoo>
