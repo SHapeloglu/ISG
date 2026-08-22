@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- 6331 Sayılı İSG Kanunu -->
+        <record id="legislation_6331" model="isg.legislation">
+            <field name="name">6331 Sayılı İş Sağlığı ve Güvenliği Kanunu</field>
+            <field name="legislation_type">law</field>
+            <field name="number">6331</field>
+            <field name="effective_date">2012-06-30</field>
+            <field name="amendment_date">2024-12-31</field>
+            <field name="source_url">https://www.csgb.gov.tr</field>
+            <field name="notes">Türkiye'nin temel İSG kanunu. Tüm işyerlerinin uyması zorunlu.</field>
+        </record>
+
+        <!-- İSG Hizmetleri Yönetmeliği -->
+        <record id="legislation_isg_services" model="isg.legislation">
+            <field name="name">İSG Hizmetleri Yönetmeliği</field>
+            <field name="legislation_type">regulation</field>
+            <field name="number">6331-İSG-HİZ</field>
+            <field name="effective_date">2012-12-29</field>
+            <field name="amendment_date">2024-06-15</field>
+            <field name="source_url">https://www.csgb.gov.tr</field>
+            <field name="notes">OSGB ve İSGB kuruluş şartları, uzman/hekim görev süreleri</field>
+        </record>
+
+        <!-- Risk Değerlendirmesi Yönetmeliği -->
+        <record id="legislation_risk_assessment" model="isg.legislation">
+            <field name="name">Risk Değerlendirmesi Yönetmeliği</field>
+            <field name="legislation_type">regulation</field>
+            <field name="number">6331-RD-YÖN</field>
+            <field name="effective_date">2012-12-29</field>
+            <field name="amendment_date">2023-10-01</field>
+            <field name="source_url">https://www.csgb.gov.tr</field>
+            <field name="notes">Risk değerlendirmesi aşamaları, yenileme koşulları, belgeleme</field>
+        </record>
+
+        <!-- Çalışan Eğitimi Yönetmeliği -->
+        <record id="legislation_training" model="isg.legislation">
+            <field name="name">Çalışan Eğitimi Yönetmeliği</field>
+            <field name="legislation_type">regulation</field>
+            <field name="number">6331-EĞT-YÖN</field>
+            <field name="effective_date">2012-12-29</field>
+            <field name="amendment_date">2026-04-02</field>
+            <field name="source_url">https://www.csgb.gov.tr</field>
+            <field name="notes">2 Nisan 2026 güncellemesi: işe başlama, tehlike sınıfına göre periyotlar</field>
+        </record>
+
+        <!-- ===== TEMEL YÜKÜMLÜLÜKLER ===== -->
+
+        <!-- Yükümlülük: Risk Değerlendirmesi -->
+        <record id="obligation_risk_assessment" model="isg.obligation">
+            <field name="name">Risk Değerlendirmesi Yapılması</field>
+            <field name="legislation_id" ref="legislation_risk_assessment"/>
+            <field name="article">md.10</field>
+            <field name="description">Her işyeri için risk değerlendirmesi yapılmalı, belgeli olmalı ve periyodik olarak yenilenmeli</field>
+            <field name="evidence_type">risk_assessment</field>
+            <field name="is_periodic">True</field>
+            <field name="periodic_days">730</field>
+            <field name="retention_days">2555</field>
+        </record>
+
+        <!-- Yükümlülük: Risk Değerlendirmesi Uygulanabilirlik (Tüm İşyerleri) -->
+        <record id="obligation_risk_assessment_applicability_all" model="isg.obligation.applicability">
+            <field name="obligation_id" ref="obligation_risk_assessment"/>
+            <field name="danger_class">low</field>
+            <field name="min_employee">1</field>
+            <field name="max_employee">999999</field>
+            <field name="sector_type">both</field>
+            <field name="description">Tüm az tehlikeli işyerleri için zorunlu</field>
+        </record>
+
+        <!-- Yükümlülük: İşe Başlama Eğitimi -->
+        <record id="obligation_induction_training" model="isg.obligation">
+            <field name="name">İşe Başlama Eğitimi</field>
+            <field name="legislation_id" ref="legislation_training"/>
+            <field name="article">md.4 (2 Nisan 2026)</field>
+            <field name="description">Her yeni çalışana işe başlamadan önce minimum 2 saat yüz yüze eğitim verilmeli</field>
+            <field name="evidence_type">training_record</field>
+            <field name="is_periodic">False</field>
+            <field name="retention_days">1825</field>
+        </record>
+
+        <!-- Yükümlülük: İşe Başlama Eğitimi Uygulanabilirlik -->
+        <record id="obligation_induction_training_applicability" model="isg.obligation.applicability">
+            <field name="obligation_id" ref="obligation_induction_training"/>
+            <field name="danger_class">low</field>
+            <field name="min_employee">1</field>
+            <field name="max_employee">999999</field>
+            <field name="sector_type">both</field>
+            <field name="description">Tüm işyerleri için zorunlu</field>
+        </record>
+
+        <!-- Yükümlülük: Uzman Görevlendirilmesi -->
+        <record id="obligation_expert_assignment" model="isg.obligation">
+            <field name="name">İSG Uzmanı Görevlendirilmesi</field>
+            <field name="legislation_id" ref="legislation_isg_services"/>
+            <field name="article">md.6</field>
+            <field name="description">İşyerine görev süresi hesaplanan İSG uzmanı görevlendirilmeli</field>
+            <field name="evidence_type">expert_assignment</field>
+            <field name="is_periodic">True</field>
+            <field name="periodic_days">365</field>
+            <field name="retention_days">1825</field>
+        </record>
+
+        <!-- Yükümlülük: Uzman Görevlendirilmesi Uygulanabilirlik -->
+        <record id="obligation_expert_assignment_applicability" model="isg.obligation.applicability">
+            <field name="obligation_id" ref="obligation_expert_assignment"/>
+            <field name="danger_class">low</field>
+            <field name="min_employee">1</field>
+            <field name="max_employee">999999</field>
+            <field name="sector_type">both</field>
+            <field name="description">Tüm işyerleri için zorunlu</field>
+        </record>
+
+        <!-- Yükümlülük: Hekim Görevlendirilmesi -->
+        <record id="obligation_physician_assignment" model="isg.obligation">
+            <field name="name">İş Hekimi Görevlendirilmesi</field>
+            <field name="legislation_id" ref="legislation_isg_services"/>
+            <field name="article">md.6</field>
+            <field name="description">İşyerine görev süresi hesaplanan İş Hekimi görevlendirilmeli</field>
+            <field name="evidence_type">physician_assignment</field>
+            <field name="is_periodic">True</field>
+            <field name="periodic_days">365</field>
+            <field name="retention_days">1825</field>
+        </record>
+
+        <!-- Yükümlülük: Hekim Görevlendirilmesi Uygulanabilirlik -->
+        <record id="obligation_physician_assignment_applicability" model="isg.obligation.applicability">
+            <field name="obligation_id" ref="obligation_physician_assignment"/>
+            <field name="danger_class">low</field>
+            <field name="min_employee">1</field>
+            <field name="max_employee">999999</field>
+            <field name="sector_type">both</field>
+            <field name="description">Tüm işyerleri için zorunlu</field>
+        </record>
+
+        <!-- Yükümlülük: İSG Kurulu Oluşturulması -->
+        <record id="obligation_isg_board" model="isg.obligation">
+            <field name="name">İSG Kurulu Oluşturulması</field>
+            <field name="legislation_id" ref="legislation_6331"/>
+            <field name="article">md.22</field>
+            <field name="description">50 ve üzeri çalışanı olan işyerlerinde İSG Kurulu oluşturulmalı ve düzenli toplantılar yapılmalı</field>
+            <field name="evidence_type">audit_checklist</field>
+            <field name="is_periodic">True</field>
+            <field name="periodic_days">30</field>
+            <field name="retention_days">1825</field>
+        </record>
+
+        <!-- Yükümlülük: İSG Kurulu Uygulanabilirlik (50+ çalışan) -->
+        <record id="obligation_isg_board_applicability" model="isg.obligation.applicability">
+            <field name="obligation_id" ref="obligation_isg_board"/>
+            <field name="danger_class">low</field>
+            <field name="min_employee">50</field>
+            <field name="max_employee">999999</field>
+            <field name="sector_type">both</field>
+            <field name="description">50+ çalışanı olan işyerleri için zorunlu</field>
+        </record>
+
+        <!-- Yükümlülük: Acil Durum Planı -->
+        <record id="obligation_emergency_plan" model="isg.obligation">
+            <field name="name">Acil Durum Planı ve Tatbikatı</field>
+            <field name="legislation_id" ref="legislation_6331"/>
+            <field name="article">md.11</field>
+            <field name="description">Acil durumlar için yazılı plan hazırlanmalı ve periyodik olarak tatbika tabi tutulmalı</field>
+            <field name="evidence_type">emergency_plan</field>
+            <field name="is_periodic">True</field>
+            <field name="periodic_days">365</field>
+            <field name="retention_days">1825</field>
+        </record>
+
+        <!-- Yükümlülük: Acil Durum Planı Uygulanabilirlik -->
+        <record id="obligation_emergency_plan_applicability" model="isg.obligation.applicability">
+            <field name="obligation_id" ref="obligation_emergency_plan"/>
+            <field name="danger_class">low</field>
+            <field name="min_employee">1</field>
+            <field name="max_employee">999999</field>
+            <field name="sector_type">both</field>
+            <field name="description">Tüm işyerleri için zorunlu</field>
+        </record>
+
+    </data>
+</odoo>

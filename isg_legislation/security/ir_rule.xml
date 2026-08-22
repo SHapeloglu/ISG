@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- isg.legislation Record Rules -->
+        <record id="isg_legislation_company_rule" model="ir.rule">
+            <field name="name">Legislation - Company Rule</field>
+            <field name="model_id" ref="model_isg_legislation"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">[('id', '!=', False)]</field>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <!-- isg.obligation Record Rules -->
+        <record id="isg_obligation_company_rule" model="ir.rule">
+            <field name="name">Obligation - Company Rule</field>
+            <field name="model_id" ref="model_isg_obligation"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">[('id', '!=', False)]</field>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <!-- isg.obligation.applicability Record Rules -->
+        <record id="isg_obligation_applicability_company_rule" model="ir.rule">
+            <field name="name">Obligation Applicability - Company Rule</field>
+            <field name="model_id" ref="model_isg_obligation_applicability"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">[('id', '!=', False)]</field>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+    </data>
+</odoo>

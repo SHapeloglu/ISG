@@ -1,87 +1,90 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <data noupdate="0">
+    <data>
 
-        <!-- APPLICABILITY FORM VIEW -->
-        <record id="view_isg_obligation_applicability_form" model="ir.ui.view">
-            <field name="name">isg.obligation.applicability.form</field>
-            <field name="model">isg.obligation.applicability</field>
-            <field name="arch" type="xml">
-                <form>
-                    <group>
-                        <field name="name"/>
-                        <field name="danger_class"/>
-                        <field name="min_employee_count"/>
-                        <field name="is_public_sector"/>
-                        <field name="sector_codes"/>
-                    </group>
-                    <field name="description" widget="html"/>
-                </form>
-            </field>
-        </record>
-
-        <!-- OBLIGATION LIST VIEW -->
-        <record id="view_isg_obligation_list" model="ir.ui.view">
+        <!-- isg.obligation List View -->
+        <record id="isg_obligation_list" model="ir.ui.view">
             <field name="name">isg.obligation.list</field>
             <field name="model">isg.obligation</field>
             <field name="arch" type="xml">
-                <list>
+                <list string="Yükümlülükler">
                     <field name="name"/>
                     <field name="legislation_id"/>
-                    <field name="article_reference"/>
+                    <field name="article"/>
                     <field name="evidence_type"/>
+                    <field name="is_periodic"/>
+                    <field name="periodic_days"/>
                     <field name="retention_days"/>
-                    <field name="state"/>
                 </list>
             </field>
         </record>
 
-        <!-- OBLIGATION FORM VIEW -->
-        <record id="view_isg_obligation_form" model="ir.ui.view">
+        <!-- isg.obligation Form View -->
+        <record id="isg_obligation_form" model="ir.ui.view">
             <field name="name">isg.obligation.form</field>
             <field name="model">isg.obligation</field>
             <field name="arch" type="xml">
-                <form>
+                <form string="Yükümlülük">
                     <sheet>
                         <group>
-                            <field name="name"/>
-                            <field name="legislation_id"/>
-                            <field name="article_reference"/>
+                            <group>
+                                <field name="name"/>
+                                <field name="legislation_id"/>
+                                <field name="article"/>
+                            </group>
+                            <group>
+                                <field name="evidence_type"/>
+                                <field name="is_periodic"/>
+                                <field name="periodic_days" invisible="is_periodic == False"/>
+                            </group>
                         </group>
                         <group>
-                            <field name="evidence_type"/>
                             <field name="retention_days"/>
-                            <field name="state"/>
                         </group>
                         <group>
-                            <field name="is_periodic"/>
-                            <field name="periodic_days" invisible="not is_periodic"/>
+                            <field name="description"/>
                         </group>
-                        <field name="description" widget="html"/>
-                        <notebook>
-                            <page string="Uygulanabilirlik Kuralları">
-                                <field name="applicability_ids" nolabel="1"/>
-                            </page>
-                        </notebook>
+                        <separator string="Uygulanabilirlik Kuralları"/>
+                        <field name="applicability_ids" nolabel="1">
+                            <list editable="bottom">
+                                <field name="danger_class"/>
+                                <field name="min_employee"/>
+                                <field name="max_employee"/>
+                                <field name="sector_type"/>
+                                <field name="nace_code"/>
+                            </list>
+                        </field>
                     </sheet>
                 </form>
             </field>
         </record>
 
-        <!-- OBLIGATION SEARCH VIEW -->
-        <record id="view_isg_obligation_search" model="ir.ui.view">
+        <!-- isg.obligation Search View -->
+        <record id="isg_obligation_search" model="ir.ui.view">
             <field name="name">isg.obligation.search</field>
             <field name="model">isg.obligation</field>
             <field name="arch" type="xml">
-                <search>
+                <search string="Yükümlülükler">
                     <field name="name"/>
                     <field name="legislation_id"/>
-                    <field name="evidence_type"/>
-                    <filter name="active" string="Aktif" domain="[('state', '=', 'active')]"/>
-                    <filter name="periodic" string="Periyodik" domain="[('is_periodic', '=', True)]"/>
+                    <field name="article"/>
+                    <separator/>
+                    <filter string="Periyodik" name="filter_periodic" domain="[('is_periodic', '=', True)]"/>
+                    <filter string="Tek Seferlik" name="filter_non_periodic" domain="[('is_periodic', '=', False)]"/>
                 </search>
             </field>
         </record>
+
+        <!-- isg.obligation Action -->
+        <record id="isg_obligation_action" model="ir.actions.act_window">
+            <field name="name">Yükümlülükler</field>
+            <field name="res_model">isg.obligation</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+        <!-- Menu -->
+        <menuitem id="menu_isg_obligation_list" name="Yükümlülükler" parent="menu_isg_legislation" 
+                  action="isg_obligation_action" sequence="20"/>
 
     </data>
 </odoo>
