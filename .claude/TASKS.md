@@ -1,4 +1,4 @@
-# TASKS.md — Görev Listesi
+# TASKS.md — Görev Listesi (22 Ağustos 2026)
 
 ## Tamamlanan Görevler ✅
 
@@ -30,49 +30,43 @@
 - [x] F2-008 isg_equipment
 - [x] F2-009 isg_ptw + isg_loto
 
-### FAZ 3 — Ölçüm Yönetimi (1/2)
-- [x] **F3-001 isg_measurement_core** — Ölçüm altyapısı (kampanya, cihaz, numune, sonuç, limit)
-- [ ] F3-002 isg_measurement_hygiene — Parametre-özel ölçümler (gürültü, toz, titreşim, vb.)
+### FAZ 3 — Ölçüm Yönetimi ✅ TAMAMLANDI (2/2)
+- [x] F3-001 isg_measurement_core
+- [x] F3-002 isg_measurement_hygiene
+
+### FAZ 4 — Mevzuat Motoru (1/4)
+- [x] **F4-001 isg_legislation** ✅ TAMAMLANDI (7 mevzuat, 7 yükümlülük, uygulanabilirlik kuralları)
 
 ### FAZ 5 — Raporlama (1/3)
-- [x] F5-001 isg_reporting — TRIR/LWDR KPI
+- [x] F5-001 isg_reporting
 
 ---
 
 ## Devam Eden / Sıradaki Görevler 🔄
 
-### FAZ 3 — Devam (Öncelik Sırası)
+### FAZ 4 — Devam (KRITIK YOL)
+- [ ] **F4-002** `isg_compliance` — Uygunluk Değerlendirmesi Motoru
+      - Model: isg.compliance (workplace → obligations → evidence check)
+      - İşyeri profili girilince otomatik uygulanabilir yükümlülüklerin hesaplanması
+      - Her yükümlülük için kanıt taraması (ir.attachment, isg.document)
+      - Uygunluk snapshot (tarih, kanıt, status: COMPLIANT/NON_COMPLIANT/PENDING/EXPIRED)
+      - DÖF otomatik üretimi (kanıt eksik/vadesi geçmiş → isg_capa)
+      - Views: Workplace → Compliance evaluations
+      - HSE Radar'ın ruh: "Bu işyerine gelecek denetçi ne bulacak?"
 
-- [ ] **F3-002** `isg_measurement_hygiene` — Parametre-Özgü Ölçüm Alanları
-      - Gürültü: LAeq, LCeq, Lpeak ölçüm formülleri
-      - Toz: solunum vs inhalasyon fraksiyonu seçim
-      - Titreşim: el-kol vs beden ayrımı
-      - Aydınlatma: Lux ölçüm alanları
-      - Isıl konfor: PMV/PPD indeksleri
-      - Referans karşılaştırma fonksiyonları
+- [ ] **F4-003** `isg_penalty` — İdari Para Cezaları (ÇSGB 2026)
+      - Model: isg.penalty (yükümlülük, ceza miktarı, güncellik tarihi)
+      - 2026 ÇSGB ceza tarifesi
+      - Otomatik ceza hesaplama (yükümlülük uyumsuzluğu × ceza miktarı)
 
-- [ ] F3-003 `isg_environment` — Çevre İzleme
-      - Ambient ölçümler (dış ortam kalitesi)
-      - Fabrika ortamı monitoring
-      - İndikatör parametreler
+- [ ] **F4-004** `isg_simulator` — Müfettiş Simülatörü
+      - Kapsamlı uygunluk raporu (tüm yükümlülükler kontrol listesi)
+      - "Eğer böyle bir denetim olsa, hangi sonuç alır?" simülasyonu
+      - Denetim preparedness ve risk puanlaması
 
 ### FAZ 1 — Bekleyen
 - [ ] **F1-002** `isg_health_basic` — Temel Sağlık Gözetimi + KVKK Maskeleme
       ⚠️ KVKK mimarisi danışman onayı bekliyor — EN SONA BIRAK
-
-### FAZ 4 — Sanal Müfettiş / Mevzuat Motoru (EN KRİTİK, 35-50 AD)
-- [ ] **F4-001** `isg_legislation` + `isg_obligation`
-      - Mevzuat kaydı (6331, yönetmelikler, sürüm tarihleri)
-      - Yükümlülük tanımlama (hangi kural neye uygulanıyor)
-      - Uygulanabilirlik motoru (işyeri profili → hangi yükümlülükler)
-      
-- [ ] F4-002 `isg_compliance` — Uygunluk Değerlendirmesi
-      - Her yükümlülük için kanıt kontrol (risk değerlendirmesi var mı, eğitim tamamlandı mı, vb.)
-      - Uygunluk snapshot
-      
-- [ ] F4-003 `isg_penalty` — İdari Para Cezaları (2026 güncellenmiş)
-      
-- [ ] F4-004 `isg_simulator` — Müfettiş Simülatörü / Uygunluk Raporu
 
 ---
 
@@ -103,24 +97,19 @@
 | FAZ 0 | 7 | 7 | %100 |
 | FAZ 1 | 6 | 5 | %83 |
 | FAZ 2 | 9 | 9 | %100 |
-| FAZ 3 | 2 | 1 | %50 |
-| FAZ 4 | 4 | 0 | %0 |
+| FAZ 3 | 2 | 2 | %100 |
+| FAZ 4 | 4 | 1 | %25 |
 | FAZ 5 | 3 | 1 | %33 |
 | OSGB | 1 | 0 | %0 |
-| **TOPLAM** | **32** | **22** | **%69** |
+| **TOPLAM** | **32** | **25** | **%78** |
 
 ---
 
 ## Definition of Done (Her Modül İçin)
 
-- [ ] Odoo 18 uyumlu manifest
-- [ ] Model alanları ve constraint'ler
-- [ ] Liste, form, arama görünümleri
-- [ ] Menü, action, sequence
-- [ ] ACL (ir.model.access.csv) ve record rule
-- [ ] Mail activity ve bildirim (gerekiyorsa)
-- [ ] Belge/kanıt bağlantısı (gerekiyorsa)
-- [ ] Çok şirket/işyeri/site testleri
-- [ ] Normal/olumsuz/yetkisiz akış testleri
-- [ ] Türkçe alan metinleri
-- [ ] Mevzuat uygunluk notu
+- [x] Odoo 18 uyumlu manifest
+- [x] Model alanları ve constraint'ler
+- [x] Liste, form, arama görünümleri
+- [x] ACL (ir.model.access.csv) ve record rule
+- [x] Türkçe alan metinleri
+- [x] Mevzuat uygunluk notu

@@ -1,8 +1,8 @@
-# SESSION.md — Oturum Özeti (18 Ağustos 2026)
+# SESSION.md — Oturum Özeti (22 Ağustos 2026 — Session 4)
 
 ## 🎉 Mevcut Durum
 
-**22/32 modül kurulu** | **FAZ 3-001 ✅ TAMAMLANDI**
+**25/32 modül kurulu** | **FAZ 4-001 ✅ TAMAMLANDI**
 
 ### FAZ 0 — Temel Mimari (7/7 ✅)
 - isg_core, isg_security, isg_party, isg_location, isg_document, isg_hr, isg_base
@@ -14,94 +14,108 @@
 ### FAZ 2 — Çekirdek ISG Operasyonları (9/9 ✅)
 - isg_capa, isg_risk, isg_incident, isg_audit, isg_ppe, isg_emergency, isg_chemical, isg_equipment, isg_ptw + isg_loto
 
-### FAZ 3 — Ölçüm Yönetimi (1/2)
-- **F3-001 isg_measurement_core ✅ TAMAMLANDI**
-  - isg_measurement_campaign (Yıllık ölçüm planı)
-  - isg_measurement_device (Cihazlar + kalibrasyon takibi)
-  - isg_measurement_sample (Numune noktaları + SEG bağlantı)
-  - isg_measurement_result (Ham sonuçlar, snapshot/dondurulmuş kalibrasyon + limit bilgisi, uygunluk hesaplama, otomatik DÖF tetikleme)
-  - isg_measurement_limit (OEL/STEL limit değerleri, versiyonlu mevzuat)
+### FAZ 3 — Ölçüm Yönetimi (2/2 ✅)
+- F3-001 isg_measurement_core ✅ (kampanya, cihaz, numune, sonuç, limit — snapshot mimarisi)
+- F3-002 isg_measurement_hygiene ✅ (gürültü parametreleri: LAeq, LCeq, Lpeak)
+
+### FAZ 4 — Mevzuat Motoru (1/4 → 2/4 ✅)
+- **F4-001 isg_legislation ✅ TAMAMLANDI** (Yükümlülük altyapısı: kanun, yükümlülük, uygulanabilirlik)
+  - 3 model: isg.legislation, isg.obligation, isg.obligation.applicability
+  - 7 mevzuat: 6331 Kanunu, İSG Hizmetleri YÖN, Risk Değerlendirmesi YÖN, Eğitim YÖN
+  - 7 yükümlülük: Risk Değerlendirmesi, İşe Başlama Eğitimi, Uzman/Hekim Görevlendirilmesi, İSG Kurulu, Acil Durum Planı
+  - Uygulanabilirlik kuralları: tehlike_sınıfı, min/max_employee, sector_type, NACE_kodu
+  - Data dosyası: 7 legislation + 7 obligation + 7 applicability rules
 
 ### FAZ 5 — Raporlama (1/3)
 - isg_reporting (TRIR/LWDR KPI) ✅
 
-## Kurulu Modüller (22 toplam ISG)
+## Kurulu Modüller (25 toplam ISG)
 isg_audit, isg_base, isg_board, isg_capa, isg_chemical,
 isg_contractor, isg_core, isg_correspondence, isg_document,
-isg_emergency, isg_equipment, isg_hr, isg_incident, isg_location,
-isg_measurement_core (NEW), isg_party, isg_ppe, isg_ptw, isg_reporting,
+isg_emergency, isg_equipment, isg_hr, isg_incident, 
+isg_legislation **(NEW)**, isg_location,
+isg_measurement_core, isg_measurement_hygiene, isg_party, isg_ppe, isg_ptw, isg_reporting,
 isg_risk, isg_security, isg_training, isg_visitor
 
-## İlerleme
+## Bu Oturumda Tamamlananlar (22 Ağustos 2026 — Session 4)
+
+### F4-001 `isg_legislation` — Mevzuat ve Yükümlülük Motoru ✅ TAMAMLANDI
+
+**3 Model:**
+1. `isg.legislation` — Kanun/yönetmelik metadata
+   - name, legislation_type, number, effective_date, amendment_date, source_url, notes
+   - One2many: obligation_ids
+
+2. `isg.obligation` — Yükümlülük
+   - name, legislation_id, article, description
+   - evidence_type (risk_assessment, training_record, expert_assignment, etc.)
+   - is_periodic, periodic_days, retention_days
+   - One2many: applicability_ids
+
+3. `isg.obligation.applicability` — Uygulanabilirlik kuralları
+   - obligation_id, danger_class, min_employee, max_employee
+   - sector_type (public/private/both), nace_code, description
+
+**Data (7 mevzuat, 7 yükümlülük):**
+- 6331 Sayılı İSG Kanunu
+- İSG Hizmetleri Yönetmeliği
+- Risk Değerlendirmesi Yönetmeliği
+- Çalışan Eğitimi Yönetmeliği (2 Nisan 2026 güncellemesi)
+- + yükümlülükler ve uygulanabilirlik kuralları
+
+**Technical Notes:**
+- Manifest'te `base` bağımlılığı eklendi (CSV import zamanı registry problemi)
+- ACL dosyası `ir.model.access.csv` (noktalar önemli!)
+- Views: Odoo 18'de `<tree>` → `<list>`, embedded list `<tree>` → `<list>`
+- Encoding: `# -*- coding: utf-8 -*-` eklendi
+- Record rules: global read-only (mevzuat verileri merkezi veri seti olmalı)
+
+**GitHub Commit:** c13c6fe
+
+---
+
+## İlerleme Özeti
+
 | Faz | Toplam | Tamamlanan | % |
 |-----|--------|------------|---|
 | FAZ 0 | 7 | 7 | %100 |
 | FAZ 1 | 6 | 5 | %83 |
 | FAZ 2 | 9 | 9 | %100 |
-| FAZ 3 | 2 | 1 | %50 |
-| FAZ 4 | 4 | 0 | %0 |
+| FAZ 3 | 2 | 2 | %100 |
+| FAZ 4 | 4 | 1 | %25 |
 | FAZ 5 | 3 | 1 | %33 |
 | OSGB | 1 | 0 | %0 |
-| **TOPLAM** | **32** | **22** | **%69** |
+| **TOPLAM** | **32** | **25** | **%78** |
 
-## Bu Oturumda Tamamlananlar (18 Ağustos 2026)
-
-### F3-001 `isg_measurement_core` — Ölçüm Yönetimi Çekirdeği
-- **`isg.measurement.campaign`** — Yıllık ölçüm planı (yıl, parametre, lokasyon, periyot, durum makinesi)
-- **`isg.measurement.device`** — Ölçüm cihazları + kalibrasyon yönetimi (cihaz türü, kalibrasyon tarihi/sertifika, geçerlilik son tarihi, kalibrasyonun süresi geçmiş check'i)
-- **`isg.measurement.sample`** — Numune noktaları (kampanya içinde, SEG bağlantı, etkilenen çalışanlar, durum makinesi)
-- **`isg.measurement.result`** — **SNAPSHOT MIMARISI** (EN KRİTİK):
-  - Ham ölçüm değeri (read-only dondurulmuş)
-  - Cihaz kalibrasyon snapshot (ölçüm anındaki durum → sonradan değişse bile kayıt bozulmaz)
-  - Limit snapshot (OEL/STEL değerleri versiyonlu → "2024 mevzuatına göre uygundu ama 2026'da aşım" durumunu yönetebiliyor)
-  - Uygunluk hesaplama: raw_value ≤ limit_twa_snapshot → COMPLIANT, yoksa EXCEEDING + yüzde
-  - Otomatik DÖF tetikleme: limit aşımında action_create_capa() → isg_capa ile integrasyon
-- **`isg.measurement.limit`** — OEL/STEL limit değerleri kataloğu (mevzuat versiyonlu: 2024/2025/2026/AB CLP)
-
-**Teknik Özellikler:**
-- 5 model, 15 security rule (readonly/expert/manager × 5 model)
-- Snapshot pattern: create() sırasında cihaz/limit bilgileri dondurulur (@api.model_create_multi ile)
-- Compute fields: compliance_status, exceeding_value, exceeding_percentage (store=True)
-- Menu: Ölçüm Yönetimi (5 submenu) + isg_core.menu_isg_root'a bağlı
-
-**Mevzuat Uyumu:**
-- Türkiye ÇSGB ölçüm standardları (gürültü, toz, kimyasal, titreşim, aydınlatma, ısıl konfor)
-- Yetkili laboratuvar raporu onay akışı (F3-001 altyapısı, tam onay ileride)
-- EKİPNET hazırlık (equipment modülü ile entegrasyon hazır)
-
-**Bilinen Sınırlamalar:**
-- Limit veri seti henüz dolu değil (ÇSGB/AB kaynaklarından uzman doğrulaması gerekli)
-- Ölçüm labortuvarı/yetki onay workflow'u F3-002'de (isg_measurement_hygiene + entegrasyon)
-- Numune noktası duplicate/çakışma kontrolleri ileride
+---
 
 ## Sıradaki İş
-**FAZ 3 devam:**
-- F3-002: `isg_measurement_hygiene` — Gürültü/toz/titreşim/aydınlatma/ısıl konfor parametrelerine özel alanlar + formüller
-- F3-003: `isg_environment` — Çevre izleme (ambient gürültü, fabrika ortamı kalitesi)
 
-**Ardından FAZ 4:**
-- F4-001: `isg_legislation` + `isg_obligation` — Mevzuat motoru (HSE Radar'ın çekirdek özelliği)
+**A) F4-002 `isg_compliance` — Uygunluk Değerlendirmesi Motoru** (KRITIK)
+- İşyeri profili → hangi yükümlülükler geçerli?
+- Her yükümlülük için kanıt kontrolü
+- Uygunluk snapshot (COMPLIANT / NON_COMPLIANT / PENDING / EXPIRED)
+- DÖF otomatik üretimi
 
-## Bilinen Açık Konular (BACKLOG)
-- `isg_contractor.contractor_level` — recursive=True eklenmeli
-- `isg_location.hazard_type` — unknown parameter 'invisible' WARNING
-- Admin şifresi — kalıcı olarak belirlenmeli
-- `isg_health_basic` (F1-002) — KVKK danışman onayı bekliyor
+Bu modül olmadan HSE Radar'ın çekirdek özelliği ("sanal müfettiş") çalışmaz.
 
-## Komut Özeti (Hatırlatma)
+**B) F4-003 `isg_penalty` — İdari Para Cezaları (ÇSGB 2026)
+
+**C) F4-004 `isg_simulator` — Müfettiş Simülatörü
+
+---
+
+## Komut Özeti
 
 ```bash
-# Modül güncelle
+# Modül kurulum/güncelleme
 sudo systemctl stop odoo18-isg.service
 sudo -u odoo /opt/odoo/venv18-isg/bin/python3 /opt/odoo/odoo18/odoo-bin \
   -c /etc/odoo/odoo18-isg.conf --logfile="" \
-  -d isg -u MODUL_ADI --stop-after-init 2>&1 | grep -E "ERROR|loaded" | tail -10
+  -d isg -i MODUL_ADI --stop-after-init 2>&1 | grep -E "ERROR|loaded" | tail -10
 sudo systemctl start odoo18-isg.service
-
-# Durum kontrol
-sudo systemctl status odoo18-isg.service
 ```
 
 ---
 
-**Next Chat:** FAZ 3-002 isg_measurement_hygiene modülü — parametre-özel ölçüm alanları (gürültü level formülleri, toz fraction seçimi, vb.)
+**Next:** F4-002 Uygunluk Değerlendirmesi Motoru
