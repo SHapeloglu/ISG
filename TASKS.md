@@ -34,6 +34,9 @@
 - [x] **F3-001 isg_measurement_core** — Ölçüm altyapısı (kampanya, cihaz, numune, sonuç, limit)
 - [x] **F3-002 isg_measurement_hygiene** — Gürültü parametreleri (LAeq, LCeq, Lpeak)
 
+### FAZ 4 — Mevzuat Motoru (1/4)
+- [x] **F4-001 isg_legislation** — Yükümlülük Altyapısı (kanun, yükümlülük, uygulanabilirlik)
+
 ### FAZ 5 — Raporlama (1/3)
 - [x] F5-001 isg_reporting — TRIR/LWDR KPI
 
@@ -41,8 +44,19 @@
 
 ## Devam Eden / Sıradaki Görevler 🔄
 
-### FAZ 3-002 — Devam (Opsiyonel)
+### FAZ 4 — Devam (KRITIK)
+- [ ] **F4-002** `isg_compliance` — Uygunluk Değerlendirmesi Motoru
+      - İşyeri profili → hangi yükümlülükler geçerli?
+      - Her yükümlülük için kanıt kontrol
+      - Uygunluk snapshot (COMPLIANT / NON_COMPLIANT / PENDING)
+      
+- [ ] **F4-003** `isg_penalty` — İdari Para Cezaları (ÇSGB 2026)
+      - Ceza tarifesi
+      - Otomatik ceza hesaplama
+      
+- [ ] **F4-004** `isg_simulator` — Müfettiş Simülatörü / Uygunluk Raporu
 
+### FAZ 3 — Opsiyonel Devam
 - [ ] **F3-002 Devam** `isg_measurement_hygiene` — Diğer Parametreleri Ekle
       - Toz: solunum vs inhalasyon fraksiyonu
       - Titreşim: el-kol vs beden ayrımı
@@ -53,20 +67,6 @@
 ### FAZ 1 — Bekleyen
 - [ ] **F1-002** `isg_health_basic` — Temel Sağlık Gözetimi + KVKK Maskeleme
       ⚠️ KVKK mimarisi danışman onayı bekliyor — EN SONA BIRAK
-
-### FAZ 4 — Sanal Müfettiş / Mevzuat Motoru (EN KRİTİK, 35-50 AD)
-- [ ] **F4-001** `isg_legislation` + `isg_obligation`
-      - Mevzuat kaydı (6331, yönetmelikler, sürüm tarihleri)
-      - Yükümlülük tanımlama (hangi kural neye uygulanıyor)
-      - Uygulanabilirlik motoru (işyeri profili → hangi yükümlülükler)
-      
-- [ ] F4-002 `isg_compliance` — Uygunluk Değerlendirmesi
-      - Her yükümlülük için kanıt kontrol
-      - Uygunluk snapshot
-      
-- [ ] F4-003 `isg_penalty` — İdari Para Cezaları (2026 güncellenmiş)
-      
-- [ ] F4-004 `isg_simulator` — Müfettiş Simülatörü / Uygunluk Raporu
 
 ---
 
@@ -98,10 +98,10 @@
 | FAZ 1 | 6 | 5 | %83 |
 | FAZ 2 | 9 | 9 | %100 |
 | FAZ 3 | 2 | 2 | %100 |
-| FAZ 4 | 4 | 0 | %0 |
+| FAZ 4 | 4 | 1 | %25 |
 | FAZ 5 | 3 | 1 | %33 |
 | OSGB | 1 | 0 | %0 |
-| **TOPLAM** | **32** | **23** | **%72** |
+| **TOPLAM** | **32** | **24** | **%75** |
 
 ---
 

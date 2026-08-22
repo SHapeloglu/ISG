@@ -1,10 +1,10 @@
-# BACKLOG.md — Teknik Borç ve Referans (18 Ağustos 2026)
+# BACKLOG.md — Teknik Borç ve Referans (22 Ağustos 2026)
 
 ## HSE Radar Paritesi Hedefi
 
 Hedefimiz HSE Radar'ın Türkiye ISG fonksiyonlarının %90+ kapsamını yapmak.
 
-**Şu anki kapsama: ~72%** (23/32 modül)
+**Şu anki kapsama: ~75%** (24/32 modül)
 
 ## Tamamlanan HSE Radar Fonksiyonları ✅
 
@@ -18,12 +18,14 @@ Hedefimiz HSE Radar'ın Türkiye ISG fonksiyonlarının %90+ kapsamını yapmak.
 - Ekipman Periyodik Kontrol (EKİPNET)
 - İş İzni (PTW) + LOTO
 - **Ölçüm Yönetimi — Çekirdek Altyapı + Gürültü Parametreleri** (F3-001 + F3-002)
+- **Mevzuat Motoru — Yükümlülük Altyapısı** (F4-001) ⭐ BAŞLANDI
 
-## Planlanmış Fonksiyonlar (FAZ 3-5)
+## Planlanmış Fonksiyonlar (FAZ 4-5)
 
-- Ölçüm Orkestrasyonu Detayları (Toz, Titreşim, Aydınlatma, Isıl Konfor — F3-002 devam)
-- Mevzuat Motoru (Yükümlülük, Uygunluk Değerlendirmesi — F4-001) ⭐ KRİTİK
-- OSGB Planlama (Uzman/Hekim Görevlendirmesi)
+- **Uygunluk Değerlendirmesi** (F4-002) — İşyeri profile göre otomatik yükümlülük hesaplama + kanıt kontrol
+- İdari Para Cezaları (F4-003) — ÇSGB 2026 güncellemesi
+- Müfettiş Simülatörü (F4-004) — "Müfettiş gelirse" raporu
+- Ölçüm Orkestrasyonu Detayları (F3-002 devam) — Toz, Titreşim, Aydınlatma, Isıl Konfor
 - Raporlama Detayları (PDF, Superset — F5-002/003)
 
 ---
@@ -51,6 +53,7 @@ Hedefimiz HSE Radar'ın Türkiye ISG fonksiyonlarının %90+ kapsamını yapmak.
 - [ ] OEL/STEL limit değerleri dolu değil (ÇSGB/AB kaynaklarından uzman doğrulama gerekli)
 - [ ] Kimyasal envanter örnek veri yok
 - [ ] Ekipman örnek veri yok
+- [ ] Mevzuat seed data (kanunlar, yönetmelikler) hazırlanmalı
 
 ### Sistem
 
@@ -60,7 +63,7 @@ Hedefimiz HSE Radar'ın Türkiye ISG fonksiyonlarının %90+ kapsamını yapmak.
 
 ---
 
-## Modül Detayları (23/32)
+## Modül Detayları (24/32)
 
 ### FAZ 0 — Temel Mimari (7/7 ✅)
 - isg_core, isg_security, isg_party, isg_location, isg_document, isg_hr, isg_base
@@ -76,16 +79,16 @@ Hedefimiz HSE Radar'ın Türkiye ISG fonksiyonlarının %90+ kapsamını yapmak.
 - **isg_measurement_core ✅** (campaign, device, sample, result, limit)
 - **isg_measurement_hygiene ✅** (gürültü parametreleri: LAeq, LCeq, Lpeak)
 
-### FAZ 4 — Mevzuat/Uygunluk Motoru (0/4)
-- isg_legislation + isg_obligation
-- isg_compliance
-- isg_penalty
-- isg_simulator
+### FAZ 4 — Mevzuat/Uygunluk Motoru (1/4)
+- **isg_legislation ✅** (yükümlülük altyapısı: kanun, yükümlülük, uygulanabilirlik)
+- isg_compliance (uygunluk değerlendirmesi — ⏳ planlandı)
+- isg_penalty (idari cezalar — ⏳ planlandı)
+- isg_simulator (müfettiş simülatörü — ⏳ planlandı)
 
 ### FAZ 5 — Raporlama (1/3)
 - **isg_reporting ✅** (TRIR/LWDR)
-- QWeb PDF şablonları
-- Superset entegrasyonu
+- QWeb PDF şablonları (⏳ planlandı)
+- Superset entegrasyonu (⏳ planlandı)
 
 ### OSGB Modülü
 - isg_osgb (Uzman/hekim planlama)
@@ -94,9 +97,11 @@ Hedefimiz HSE Radar'ın Türkiye ISG fonksiyonlarının %90+ kapsamını yapmak.
 
 ## Kritik Yolda Olan (Critical Path)
 
-1. ✅ **FAZ 3-002 isg_measurement_hygiene** — TAMAMLANDI (gürültü)
-2. ⏳ **FAZ 4-001 isg_legislation** — Tüm diğer modülleri "uygunluk" katmanıyla kapsayıp değer katar (35-50 AD)
-3. ⏳ **FAZ 1-002 isg_health_basic** — KVKK danışman onayı sonrası (çok hassas)
+1. ✅ **FAZ 3-002 isg_measurement_hygiene** — Gürültü parametreleri TAMAMLANDI
+2. ✅ **FAZ 4-001 isg_legislation** — Yükümlülük altyapısı BAŞLANDI
+3. ⏳ **FAZ 4-002 isg_compliance** — Uygunluk değerlendirmesi (KRITIK — bundan sonra HSE Radar DNA'sı aktif olur)
+4. ⏳ **FAZ 4-003 isg_penalty** — Ceza tarifesi
+5. ⏳ **FAZ 4-004 isg_simulator** — Müfettiş simülatörü
 
 ---
 
@@ -106,13 +111,14 @@ Hedefimiz HSE Radar'ın Türkiye ISG fonksiyonlarının %90+ kapsamını yapmak.
 - Snapshot fields (store=True) → veri tabanında disk kullanımı artabilir
 - Compute field dependencies → O(n) sorgu riski (optimize edilebilir)
 - View inheritance cascade (F3-002 gibi) — performansı minimal, inheritance depth kontrol
+- Mevzuat motoru (F4-002+) — recursion riski (applicability rules nested evaluation) — iterate over not recursive
 
 ---
 
 ## Dokümantasyon Durumu
 
-- SESSION.md ✅ güncel (F3-002 eklendi)
-- TASKS.md ✅ güncel (F3-002 tamamlandı)
-- CLAUDE.md ✅ güncel (F3-002 açıklanmaktadır)
-- ARCHITECTURE.md ✅ güncel (FAZ 3 %100, snapshot + dispatch mimarileri)
+- SESSION.md ✅ güncel (F4-001 eklendi)
+- TASKS.md ✅ güncel (F4-001 tamamlandı)
+- CLAUDE.md — user memory'de
+- ARCHITECTURE.md ✅ güncel (FAZ 4 eklendi, 3 mimari açıklandı)
 - BACKLOG.md ✅ güncel (bu dosya)

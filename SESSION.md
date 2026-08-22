@@ -1,8 +1,8 @@
-# SESSION.md — Oturum Özeti (18 Ağustos 2026 — Session 2)
+# SESSION.md — Oturum Özeti (22 Ağustos 2026 — Session 3)
 
 ## 🎉 Mevcut Durum
 
-**23/32 modül kurulu** | **FAZ 3-002 ✅ BAŞLANDI VE ÇALIŞIYOR**
+**24/32 modül kurulu** | **FAZ 4-001 ✅ BAŞLANDI**
 
 ### FAZ 0 — Temel Mimari (7/7 ✅)
 - isg_core, isg_security, isg_party, isg_location, isg_document, isg_hr, isg_base
@@ -14,49 +14,72 @@
 ### FAZ 2 — Çekirdek ISG Operasyonları (9/9 ✅)
 - isg_capa, isg_risk, isg_incident, isg_audit, isg_ppe, isg_emergency, isg_chemical, isg_equipment, isg_ptw + isg_loto
 
-### FAZ 3 — Ölçüm Yönetimi (2/2) — %100 ✅ TAMAMLANDI
+### FAZ 3 — Ölçüm Yönetimi (2/2 ✅)
 - **F3-001 isg_measurement_core** ✅ (kampanya, cihaz, numune, sonuç, limit — snapshot mimarisi)
 - **F3-002 isg_measurement_hygiene** ✅ (gürültü parametreleri: LAeq, LCeq, Lpeak)
+
+### FAZ 4 — Mevzuat Motoru (1/4)
+- **F4-001 isg_legislation** ✅ (Yükümlülük altyapısı: kanun, yükümlülük, uygulanabilirlik)
 
 ### FAZ 5 — Raporlama (1/3)
 - isg_reporting (TRIR/LWDR KPI) ✅
 
-## Kurulu Modüller (23 toplam ISG)
+## Kurulu Modüller (24 toplam ISG)
 isg_audit, isg_base, isg_board, isg_capa, isg_chemical,
 isg_contractor, isg_core, isg_correspondence, isg_document,
-isg_emergency, isg_equipment, isg_hr, isg_incident, isg_location,
-isg_measurement_core, **isg_measurement_hygiene (NEW)**, isg_party, isg_ppe, isg_ptw, isg_reporting,
+isg_emergency, isg_equipment, isg_hr, isg_incident, isg_legislation **(NEW)**, isg_location,
+isg_measurement_core, isg_measurement_hygiene, isg_party, isg_ppe, isg_ptw, isg_reporting,
 isg_risk, isg_security, isg_training, isg_visitor
 
-## Bu Oturumda Tamamlananlar (18 Ağustos 2026 — Session 2)
+## Bu Oturumda Tamamlananlar (22 Ağustos 2026 — Session 3)
 
-### F3-002 `isg_measurement_hygiene` — Hijyen Parametreleri Uzantısı
-- **Model:** `isg.measurement.result`'u inherit ederek gürültüye özel alanlar ekledi
-- **measurement_type seçim alanı:** Gürültü / Toz / Titreşim / Aydınlatma / Isıl Konfor (şimdilik Gürültü aktif)
-- **Gürültü (Noise) alanları:**
-  - `laeq_value` (dB) — A-ağırlıklı eşdeğer ses basınç seviyesi
-  - `lceq_value` (dB) — C-ağırlıklı eşdeğer ses basınç seviyesi
-  - `lpeak_value` (dB) — Tepe ses basınç seviyesi
-  - `lpeak_reference` (dB, default 140) — ÇSGB tepe limit
-- **View:** `isg_measurement_result_form_hygiene` — `invisible="measurement_type != 'noise'"` ile kontrol
-- **Özel DÖF açıklaması:** `action_create_capa()` gürültü ölçümleri için parametreye özel mesaj üretir
+### F4-001 `isg_legislation` — Mevzuat Motoru Başladı
+- **3 model tasarımı:**
+  1. `isg.legislation` — Kanun/yönetmelik metadata (ad, tür, no, yürürlük tarihi, kaynak URL)
+  2. `isg.obligation` — Yükümlülük (ad, kanıt türü, saklama süresi, periyotluk)
+  3. `isg.obligation.applicability` — Uygulanabilirlik kuralları (danger_class, min_employee, sektor, NACE)
 
-**Teknik Özellikler:**
-- 1 model (inherit), 1 view (extend)
-- XML view inheritance — Odoo 18 native
-- Parametre-türü dispatch pattern — toz/titreşim/aydınlatma/ısıl konfor için tekrarlanabilir
-- Mevzuat uyumu: ÇSGB Lpeak 140 dB default limiti
+- **Kanıt türleri (Evidence Types):**
+  - Risk Değerlendirmesi Raporu
+  - Eğitim Kaydı
+  - Uzman Atama Belgesi
+  - Hekim Atama Belgesi
+  - Acil Durum Planı
+  - Denetim Kontrolü
+  - Ekipman İnceleme Raporu
+  - Kimyasal Envanter
+  - İzinli Çalışma İzni
+  - Kaza Raporu
+  - Diğer
+
+- **View Architecture:**
+  - List views (Mevzuat listesi, Yükümlülükler listesi)
+  - Form views (detaylı edit)
+  - Search views (filtreleme)
+  - Menu structure: Mevzuat → Yükümlülükler (submenu)
+
+- **Security (3-level ACL):**
+  - readonly: sadece okunabilir
+  - expert: okuma + yazma (oluşturma yok)
+  - manager: tam kontrol (silme dahil)
 
 **Mevzuat Uyumu:**
-- Türkiye ÇSGB gürültü ölçüm standartları
-- LAeq TWA (8 saat ağırlıklı ortalama) — isg_measurement_core limit'e karşılaştırma
-- Lpeak STEL (15 dk kısa süreli) → 140 dB mevzuat limiti
-- OEL/STEL limit aşımında otomatik DÖF (limit aşımında severity=high/medium)
+- Türkiye 6331 Kanunu temel yapısı
+- Yönetmelik, Tebliğ, Yönerge, Rehber türleri
+- Periyodik yükümlülükler (eğitim = 365 gün, vb.)
+- NACE sektör kodları desteği
 
-**Bilinen Sınırlamalar:**
-- Toz / Titreşim / Aydınlatma / Isıl Konfor alanları ileride eklenecek (aynı pattern kullanarak)
-- Limit seçim otomasyonu ileride (measurement_type'a göre otomatik limit tıklanabilir)
-- Laboratuvar raporu onay workflow'u ileride (F3-002 sonrası)
+**Teknik Özellikler:**
+- `retention_days`: Kanıt saklama süresi (2 yıl = 730, 5 yıl = 1825)
+- `is_periodic` + `periodic_days`: Tekrarlanan görevler
+- `applicability_ids` One2many: Her yükümlülüğe birden fazla kural
+- `danger_class` seçim: Az Tehlikeli / Tehlikeli / Çok Tehlikeli
+
+**Sıradaki (F4-002+):**
+- İşyeri profili "uygulanabilir yükümlülükler" otomatik hesaplama motoru
+- Kanıt kontrolü ve uygunluk değerlendirmesi
+- İdari para cezaları (2026 ÇSGB güncellemesi)
+- Müfettiş simülatörü (HSE Radar'ın "danışman" haline getirme)
 
 ## İlerleme
 
@@ -66,23 +89,27 @@ isg_risk, isg_security, isg_training, isg_visitor
 | FAZ 1 | 6 | 5 | %83 |
 | FAZ 2 | 9 | 9 | %100 |
 | FAZ 3 | 2 | 2 | %100 |
-| FAZ 4 | 4 | 0 | %0 |
+| FAZ 4 | 4 | 1 | %25 |
 | FAZ 5 | 3 | 1 | %33 |
 | OSGB | 1 | 0 | %0 |
-| **TOPLAM** | **32** | **23** | **%72** |
+| **TOPLAM** | **32** | **24** | **%75** |
 
-## Sıradaki İş (Seçenekler)
+## Sıradaki İş
 
-**A) F3-002 Devam:** Toz / Titreşim / Aydınlatma / Isıl Konfor parametrelerini ekle (aynı pattern)
-- Her parametre 30 dk (örn: toz için solunum/inhalasyon fraksiyonu, titreşim için el-kol/beden seçim)
-- Hızlı ve tekrarlı
+**A) F4-002 `isg_compliance` — Uygunluk Değerlendirmesi**
+- Her yükümlülük için "kanıt bulunuyor mu?" kontrol motoru
+- İşyeri profile göre "hangi yükümlülükler geçerli?" otomatik hesaplama
+- Uygunluk snapshot (tarih, kanıt, uygun/uyumsuz)
 
-**B) F4-001 Atla:** Mevzuat Motoru'na geç (35-50 AD)
-- HSE Radar'ın gerçek DNA'sı — "uygunluk değerlendirmesi"
-- Daha ağır, daha kritik
-- Uzman onayı gerekli
+**B) F4-003 `isg_penalty` — İdari Para Cezaları**
+- ÇSGB 2026 güncellenmiş ceza tarifesi
+- Yükümlülük aşımında otomatik ceza hesapla
 
-**Önerim:** **A → B sırası**. Ölçüm modülü hava gibi davranıyorken tamamlarsak (5 parametre = ~3 gün), sonra FAZ 4 mevzuat motoruna hazırız ve HSE Radar'ın %90'ı biter.
+**C) F4-004 `isg_simulator` — Müfettiş Simülatörü**
+- HSE Radar'ın ruh: "Eğer böyle bir denetim olsa, hangi sonuç alır?"
+- Tüm yükümlülükler kontrol raporu
+
+**Önerim:** **A → B → C** sırası. Uygunluk motoru olmadan cezalar ve simülatör çalışmaz.
 
 ## Komut Özeti
 
@@ -97,4 +124,4 @@ sudo systemctl start odoo18-isg.service
 
 ---
 
-**Next:** F3-002 Devam (Toz/Titreşim/Aydınlatma/Isıl Konfor) mi yoksa FAZ 4 Mevzuat Motoru'na geçelim mi?
+**Next:** F4-002 Uygunluk Değerlendirmesi mi yoksa F3-002 Devam (Toz/Titreşim/Aydınlatma/Isıl Konfor) mi?

@@ -1,4 +1,4 @@
-# ARCHITECTURE.md — ISG Platform Mimarisi (18 Ağustos 2026)
+# ARCHITECTURE.md — ISG Platform Mimarisi (22 Ağustos 2026)
 
 ## Genel Bakış
 
@@ -36,8 +36,17 @@ FAZ 3 — Measurement (2/2 TAMAMLANDI, %100)
   * View invisible pattern: invisible="measurement_type != 'noise'"
   * Özel DÖF mesajlaşması (action_create_capa override)
 
-FAZ 4 — Legislation (0/4, %0)
-- Planlanan: isg_legislation, isg_obligation, isg_compliance, isg_penalty, isg_simulator
+FAZ 4 — Legislation (1/4, %25)
+- isg_legislation ✅
+  * isg.legislation: Kanun/yönetmelik metadata
+  * isg.obligation: Yükümlülük tanımı + kanıt türü + saklama süresi
+  * isg.obligation.applicability: Uygulanabilirlik kuralları (danger_class, min_employee, sektor)
+  * Mevzuat-odakli domain kuralları (NACE, işçi sayısı, kamu/özel, danger class)
+
+Planlanan:
+- isg_compliance: Uygunluk değerlendirmesi motoru
+- isg_penalty: İdari para cezaları (2026 ÇSGB)
+- isg_simulator: Müfettiş simülatörü
 
 FAZ 5 — Reporting (1/3, %33)
 - TAMAMLANDI: isg_reporting (TRIR/LWDR KPI)
@@ -47,11 +56,39 @@ OSGB — Uzman Planlama (0/1)
 
 ---
 
+## Kritik Mimariler
+
+### 1. Snapshot Mimarisi (F3-001)
+Ölçüm kaydedildiginde:
+1. Cihaz kalibrasyon bilgileri (tarih, sertifika, gecerlilik) DONDURULUR
+2. Limit degerleri (OEL/STEL) versiyonlu tutulur
+3. Ham sonuc asla degismez
+4. Uygunluk hesaplamasi snapshot limite göre yapilir
+5. Sonradan limit degisse bile eski olcum kaydı korunur
+
+### 2. Parametre Dispatch Mimarisi (F3-002)
+Ölçüm sonucu model'e inherit ile parametre-özel alanları eklenir:
+1. measurement_type seçim alanı (gürültü / toz / titreşim / aydınlatma / ısıl konfor)
+2. Her parametre türüne özel alanlar ekle (LAeq/LCeq/Lpeak for noise, etc)
+3. View'da invisible="measurement_type != 'TYPE'" ile kontrol
+4. Aynı pattern beş parametre için tekrarlanabilir
+5. action_create_capa() override ile parametreye özel DÖF açıklaması
+
+### 3. Mevzuat Motoru Mimarisi (F4-001+)
+İşyeri profili → Uygulanabilir Yükümlülükler → Uygunluk Değerlendirmesi
+1. isg.legislation: Kanun/yönetmelik ve maddeler
+2. isg.obligation: Yükümlülük tanımı + kanıt türü
+3. isg.obligation.applicability: "Bu yükümlülük kime uygulanır?" kuralları
+4. (F4-002) isg.compliance: "Bu işyerinin bu yükümlülüğü var mı?" kontrol
+5. (F4-004) Rapor: "Müfettiş gelerse, uyum oranı kaç olur?"
+
+---
+
 ## Sunucu Yapisinda
 
 Klasor: /opt/odoo/isg_addons/
 Database: isg (PostgreSQL)
-Modüller: 23 kurulu
+Modüller: 24 kurulu
 Service: sudo systemctl status odoo18-isg.service
 
 ---
@@ -66,26 +103,6 @@ Service: sudo systemctl status odoo18-isg.service
 
 ---
 
-## Snapshot Mimarisi (F3-001 Kritik Fikir)
-
-Ölcüm kaydedildiginde:
-1. Cihaz kalibrasyon bilgileri (tarih, sertifika, gecerlilik) DONDURULUR
-2. Limit degerleri (OEL/STEL) versiyonlu tutulur
-3. Ham sonuc asla degismez
-4. Uygunluk hesaplamasi snapshot limite göre yapilir
-5. Sonradan limit degisse bile eski olcum kaydı korunur
-
-## Parametre Dispatch Mimarisi (F3-002 Kririk Fikir)
-
-Ölçüm sonucu model'e inherit ile parametre-özel alanları eklenir:
-1. measurement_type seçim alanı (gürültü / toz / titreşim / aydınlatma / ısıl konfor)
-2. Her parametre türüne özel alanlar ekle (LAeq/LCeq/Lpeak for noise, etc)
-3. View'da invisible="measurement_type != 'TYPE'" ile kontrol
-4. Aynı pattern beş parametre için tekrarlanabilir
-5. action_create_capa() override ile parametreye özel DÖF açıklaması
-
----
-
-Son Güncelleme: 18 Ağustos 2026
-Sürüm: 3.1 (23/32 modül, FAZ 3 %100)
+Son Güncelleme: 22 Ağustos 2026
+Sürüm: 4.0 (24/32 modül, FAZ 4 başladı, %75 ilerleme)
 GitHub: https://github.com/SHapeloglu/ISG
