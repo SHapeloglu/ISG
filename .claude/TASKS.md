@@ -1,4 +1,4 @@
-# TASKS.md — Görev Listesi (22 Ağustos 2026)
+# TASKS.md — Görev Listesi (23 Ağustos 2026)
 
 ## Tamamlanan Görevler ✅
 
@@ -34,8 +34,9 @@
 - [x] F3-001 isg_measurement_core
 - [x] F3-002 isg_measurement_hygiene
 
-### FAZ 4 — Mevzuat Motoru (1/4)
-- [x] **F4-001 isg_legislation** ✅ TAMAMLANDI (7 mevzuat, 7 yükümlülük, uygulanabilirlik kuralları)
+### FAZ 4 — Mevzuat Motoru (2/4)
+- [x] **F4-001 isg_legislation** ✅ TAMAMLANDI (7 mevzuat, 7 yükümlülük)
+- [x] **F4-002 isg_compliance** ✅ TAMAMLANDI (Uygunluk değerlendirmesi + otomatik DÖF)
 
 ### FAZ 5 — Raporlama (1/3)
 - [x] F5-001 isg_reporting
@@ -45,18 +46,9 @@
 ## Devam Eden / Sıradaki Görevler 🔄
 
 ### FAZ 4 — Devam (KRITIK YOL)
-- [ ] **F4-002** `isg_compliance` — Uygunluk Değerlendirmesi Motoru
-      - Model: isg.compliance (workplace → obligations → evidence check)
-      - İşyeri profili girilince otomatik uygulanabilir yükümlülüklerin hesaplanması
-      - Her yükümlülük için kanıt taraması (ir.attachment, isg.document)
-      - Uygunluk snapshot (tarih, kanıt, status: COMPLIANT/NON_COMPLIANT/PENDING/EXPIRED)
-      - DÖF otomatik üretimi (kanıt eksik/vadesi geçmiş → isg_capa)
-      - Views: Workplace → Compliance evaluations
-      - HSE Radar'ın ruh: "Bu işyerine gelecek denetçi ne bulacak?"
-
 - [ ] **F4-003** `isg_penalty` — İdari Para Cezaları (ÇSGB 2026)
       - Model: isg.penalty (yükümlülük, ceza miktarı, güncellik tarihi)
-      - 2026 ÇSGB ceza tarifesi
+      - 2026 ÇSGB ceza tarifesi veri seti
       - Otomatik ceza hesaplama (yükümlülük uyumsuzluğu × ceza miktarı)
 
 - [ ] **F4-004** `isg_simulator` — Müfettiş Simülatörü
@@ -76,17 +68,6 @@
 - [ ] `isg_location.hazard_type` — unknown parameter 'invisible' WARNING
 - [ ] Admin şifresi — kalıcı olarak belirlenmeli
 - [ ] `isg_core` ACL — no group WARNING
-- [ ] `html4css1.css` Permission denied WARNING (işlevsel değil)
-
----
-
-## E1 Altyapı Kararları
-- [ ] EX-001 `isg_assurance` iskeleti
-- [ ] EX-002 Kanıt hash servisi
-- [ ] EX-003 `isg_competency` iskeleti
-- [ ] EX-004 Entegrasyon outbox/inbox
-- [ ] EX-005 Dış UUID
-- [ ] EX-006 `isg_moc` iskeleti
 
 ---
 
@@ -98,10 +79,10 @@
 | FAZ 1 | 6 | 5 | %83 |
 | FAZ 2 | 9 | 9 | %100 |
 | FAZ 3 | 2 | 2 | %100 |
-| FAZ 4 | 4 | 1 | %25 |
+| FAZ 4 | 4 | 2 | %50 |
 | FAZ 5 | 3 | 1 | %33 |
 | OSGB | 1 | 0 | %0 |
-| **TOPLAM** | **32** | **25** | **%78** |
+| **TOPLAM** | **32** | **26** | **%81** |
 
 ---
 

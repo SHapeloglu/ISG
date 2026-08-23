@@ -1,19 +1,19 @@
-# CLAUDE.md — Yeni Chat Bağlamı (22 Ağustos 2026 — Session 4)
+# CLAUDE.md — Yeni Chat Bağlamı (23 Ağustos 2026 — Session 5)
 
 ## Proje Özeti
 
 Contabo VPS: Odoo 18 tabanlı Türkiye İSG platformu
 - **Hedef:** HSE Radar %90+ eşdeğerlik
-- **Durum:** 25/32 modül (%78) | FAZ 4-001 ✅ TAMAMLANDI
+- **Durum:** 26/32 modül (%81) | FAZ 4-002 ✅ TAMAMLANDI
 - **Domain:** isg.powerbi.com.tr
 
-## Kurulu Modüller (25/32)
+## Kurulu Modüller (26/32)
 
 FAZ 0: 7/7 ✅ - isg_core, isg_security, isg_party, isg_location, isg_document, isg_hr, isg_base
 FAZ 1: 5/6 - isg_contractor, isg_training, isg_visitor, isg_board, isg_correspondence (F1-002 KVKK bekliyor)
 FAZ 2: 9/9 ✅ - isg_capa, isg_risk, isg_incident, isg_audit, isg_ppe, isg_emergency, isg_chemical, isg_equipment, isg_ptw
 FAZ 3: 2/2 ✅ - isg_measurement_core, isg_measurement_hygiene
-FAZ 4: 1/4 - isg_legislation ✅ (NEW!)
+FAZ 4: 2/4 - isg_legislation ✅, isg_compliance ✅ (NEW!)
 FAZ 5: 1/3 - isg_reporting
 
 ## Dosya Yolları
@@ -56,6 +56,30 @@ Encoding: # -*- coding: utf-8 -*-
 - Manifest'te `base` bağımlılığı gerekebilir (CSV import zamanı)
 - `unique=True` → WARNING
 - `fields.DateTime` yoktur → `fields.Datetime`
+- CSV dosyaları heredoc içinde çok satırlı olmaz — tee komutu karışabilir
+
+## Kritik Mimariler
+
+### Snapshot Mimarisi (F3-001)
+- Ölçüm kaydedildiginde cihaz kalibrasyon, limit değerleri DONDURULUR
+- Ham sonuc asla degismez
+- Uygunluk hesaplamasi snapshot limite göre yapilir
+
+### Mevzuat Altyapısı (F4-001)
+- isg.legislation: Kanun/yönetmelik metadata
+- isg.obligation: Yükümlülük tanımı + kanıt türü + saklama süresi
+- isg.obligation.applicability: Uygulanabilirlik kuralları (danger_class, min_employee, sector_type, NACE)
+
+### Uygunluk Değerlendirmesi Motoru (F4-002) — YENI!
+İşyeri profili → Otomatik yükümlülük hesaplama → Kanıt kontrolü → Uygunluk snapshot
+
+1. İşyeri profili girilir (NACE, danger_class, employee_count)
+2. isg.obligation.applicability kurallarına göre geçerli yükümlülükler otomatik hesaplanır
+3. Her yükümlülük için kanıt taraması yapılır
+4. Uygunluk snapshot: COMPLIANT / NON_COMPLIANT / PENDING / EXPIRED
+5. Kanıt eksik → DÖF otomatik oluştur
+
+**Bu HSE Radar'ın ruh: "Müfettiş gelirse ne bulacak?"**
 
 ## Bilinen Sorunlar
 
@@ -64,29 +88,25 @@ Encoding: # -*- coding: utf-8 -*-
 - Admin şifresi NULL (kalıcı şifre gerekli)
 - isg_health_basic KVKK maskeleme (danışman onayı bekliyor)
 
-## Son Tamamlananlar (22 Ağustos 2026 — Session 4)
+## Son Tamamlananlar (23 Ağustos 2026 — Session 5)
 
-✅ **F4-001 isg_legislation** — Mevzuat ve Yükümlülük Motoru
-  - 3 model: isg.legislation, isg.obligation, isg.obligation.applicability
-  - 7 mevzuat kaydı (6331, YÖN'ler, vs)
-  - 7 yükümlülük tanımı (Risk, Eğitim, Uzman/Hekim, İSG Kurulu, Acil Durum, vs)
-  - Uygulanabilirlik kuralları: danger_class, min/max_employee, sector_type, NACE_kodu
-  - List, Form, Search views
+✅ **F4-002 isg_compliance** — Uygunluk Değerlendirmesi Motoru
+  - 2 model: isg.compliance, isg.compliance.evidence
+  - _compute_applicable_obligations: İşyeri profiline göre otomatik yükümlülük hesaplama
+  - action_evaluate_compliance: Değerlendirme yapıp otomatik DÖF üretimi
+  - 4 durum: uygun/eksik/beklemede/vadesi_geçmiş
   - ACL: readonly/expert/manager
-  - Record rules: global read-only (mevzuat merkezi veri seti)
+  - Record rules: company_id bazında
+  - Views: list (badge widget), form, search (durum filtreleri)
 
-## Sıradaki: FAZ 4-002 (KRITIK)
+## Sıradaki: FAZ 4-003 (KURMAŞ)
 
-⭐ **F4-002 `isg_compliance`** — Uygunluk Değerlendirmesi Motoru
+⭐ **F4-003 `isg_penalty`** — İdari Para Cezaları
 
-İşyeri profili verilince:
-1. Hangi yükümlülükler geçerli? (uygulanabilirlik kurallarına göre)
-2. Her yükümlülük için kanıt bulunuyor mu? (ir.attachment, isg.document)
-3. Kanıt geçerli mi? (saklama süresi, imza, vs)
-4. Sonuç: COMPLIANT / NON_COMPLIANT / PENDING / EXPIRED
-5. Eksik/vadesi geçmiş kanıt → DÖF otomatik oluştur
-
-**Bu modül HSE Radar'ın çekirdek özelliği — "sanal müfettiş" fonksiyonunun alt yapısı**
+ÇSGB 2026 ceza tarifesi:
+- Model: isg.penalty (yükümlülük → ceza miktarı)
+- Otomatik ceza hesaplama (uyumsuzluk × tutar)
+- Views: penalty tarifleri, uyumsuzluk → ceza matrisi
 
 ## Git
 

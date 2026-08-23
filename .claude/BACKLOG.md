@@ -1,10 +1,10 @@
-# BACKLOG.md — Teknik Borç ve Referans (22 Ağustos 2026)
+# BACKLOG.md — Teknik Borç ve Referans (23 Ağustos 2026)
 
 ## HSE Radar Paritesi Hedefi
 
 Hedefimiz HSE Radar'ın Türkiye ISG fonksiyonlarının %90+ kapsamını yapmak.
 
-**Şu anki kapsama: ~78%** (25/32 modül)
+**Şu anki kapsama: ~81%** (26/32 modül)
 
 ## Tamamlanan HSE Radar Fonksiyonları ✅
 
@@ -19,11 +19,11 @@ Hedefimiz HSE Radar'ın Türkiye ISG fonksiyonlarının %90+ kapsamını yapmak.
 - İş İzni (PTW) + LOTO
 - Ölçüm Yönetimi — Çekirdek Altyapı + Gürültü Parametreleri (F3-001 + F3-002)
 - **Mevzuat Motoru — Yükümlülük Altyapısı** (F4-001) ✅ TAMAMLANDI
+- **Uygunluk Değerlendirmesi** (F4-002) ✅ TAMAMLANDI — İşyeri profile göre otomatik yükümlülük hesaplama + kanıt kontrol (HSE Radar DNA!)
 
 ## Planlanmış Fonksiyonlar (FAZ 4-5)
 
-- **Uygunluk Değerlendirmesi** (F4-002) ⭐ KRITIK — İşyeri profile göre otomatik yükümlülük hesaplama + kanıt kontrol (HSE Radar DNA)
-- İdari Para Cezaları (F4-003) — ÇSGB 2026 güncellemesi
+- **İdari Para Cezaları** (F4-003) ⭐ SONRAKI — ÇSGB 2026 güncellemesi
 - Müfettiş Simülatörü (F4-004) — "Müfettiş gelirse" raporu
 - Ölçüm Orkestrasyonu Detayları (F3-002 devam) — Toz, Titreşim, Aydınlatma, Isıl Konfor
 - Raporlama Detayları (PDF, Superset — F5-002/003)
@@ -47,14 +47,14 @@ Hedefimiz HSE Radar'ın Türkiye ISG fonksiyonlarının %90+ kapsamını yapmak.
   - `isg_audit_line` (audit bulguları)
   - `isg_ppe_issue` (KKD problemleri)
   - `isg_chemical_inventory` (stok takibi)
-  - `isg_obligation` (mevzuat kuralları — F4-002 girilince gerekli)
 
 ### Veri Seti
 
 - [ ] OEL/STEL limit değerleri dolu değil (ÇSGB/AB kaynaklarından uzman doğrulama gerekli)
 - [ ] Kimyasal envanter örnek veri yok
 - [ ] Ekipman örnek veri yok
-- [ ] **Mevzuat seed data (kanunlar, yönetmelikler) başladı** — 7 mevzuat, 7 yükümlülük eklendi. Daha fazla eklenebilir.
+- [ ] Ceza tarifeleri veri seti (F4-003'te eklenecek)
+- [x] **Mevzuat seed data** (7 mevzuat, 7 yükümlülük) ✅
 
 ### Sistem
 
@@ -64,7 +64,7 @@ Hedefimiz HSE Radar'ın Türkiye ISG fonksiyonlarının %90+ kapsamını yapmak.
 
 ---
 
-## Modül Detayları (25/32)
+## Modül Detayları (26/32)
 
 ### FAZ 0 — Temel Mimari (7/7 ✅)
 - isg_core, isg_security, isg_party, isg_location, isg_document, isg_hr, isg_base
@@ -80,10 +80,10 @@ Hedefimiz HSE Radar'ın Türkiye ISG fonksiyonlarının %90+ kapsamını yapmak.
 - **isg_measurement_core ✅** (campaign, device, sample, result, limit)
 - **isg_measurement_hygiene ✅** (gürültü parametreleri: LAeq, LCeq, Lpeak)
 
-### FAZ 4 — Mevzuat/Uygunluk Motoru (1/4)
+### FAZ 4 — Mevzuat/Uygunluk Motoru (2/4)
 - **isg_legislation ✅** (yükümlülük altyapısı: kanun, yükümlülük, uygulanabilirlik)
-- isg_compliance (uygunluk değerlendirmesi — ⏳ KRITIK, sonraki modül)
-- isg_penalty (idari cezalar — ⏳ planlandı)
+- **isg_compliance ✅** (uygunluk değerlendirmesi — HSE Radar DNA)
+- isg_penalty (idari cezalar — ⏳ SONRAKI)
 - isg_simulator (müfettiş simülatörü — ⏳ planlandı)
 
 ### FAZ 5 — Raporlama (1/3)
@@ -99,8 +99,8 @@ Hedefimiz HSE Radar'ın Türkiye ISG fonksiyonlarının %90+ kapsamını yapmak.
 ## Kritik Yolda Olan (Critical Path)
 
 1. ✅ **FAZ 4-001 isg_legislation** — Yükümlülük altyapısı TAMAMLANDI
-2. ⏳ **FAZ 4-002 isg_compliance** — Uygunluk değerlendirmesi (KRITIK — bundan sonra HSE Radar DNA'sı aktif olur)
-3. ⏳ **FAZ 4-003 isg_penalty** — Ceza tarifesi
+2. ✅ **FAZ 4-002 isg_compliance** — Uygunluk değerlendirmesi TAMAMLANDI
+3. ⏳ **FAZ 4-003 isg_penalty** — Ceza tarifesi (SONRAKI)
 4. ⏳ **FAZ 4-004 isg_simulator** — Müfettiş simülatörü
 
 **100% Hedefine ulaşınca 50 kayıtlık entegrasyon testi yapılacak** (workplace → obligation → compliance → penalty → simulator zinciri)
@@ -120,8 +120,8 @@ Hedefimiz HSE Radar'ın Türkiye ISG fonksiyonlarının %90+ kapsamını yapmak.
 
 ## Dokümantasyon Durumu
 
-- SESSION.md ✅ güncel (F4-001 TAMAMLANDI)
-- TASKS.md ✅ güncel (F4-001 tamamlandı, F4-002 planlama eklendi)
-- CLAUDE.md ✅ güncel (FAZ 4-001 eklendi, Odoo 18 uyarıları eklendi)
-- ARCHITECTURE.md ✅ güncel (Mevzuat altyapısı ve uygunluk mimarisi eklendi)
+- SESSION.md ✅ güncel (F4-002 TAMAMLANDI)
+- TASKS.md ✅ güncel (F4-002 tamamlandı, F4-003 planlama eklendi)
+- CLAUDE.md ✅ güncel (FAZ 4-002 eklendi)
+- ARCHITECTURE.md ✅ güncel (Uygunluk değerlendirmesi motoru eklendi)
 - BACKLOG.md ✅ güncel (bu dosya)

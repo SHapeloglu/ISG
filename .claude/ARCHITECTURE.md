@@ -1,10 +1,10 @@
-# ARCHITECTURE.md — ISG Platform Mimarisi (22 Ağustos 2026)
+# ARCHITECTURE.md — ISG Platform Mimarisi (23 Ağustos 2026)
 
 ## Genel Bakış
 
 ISG Platform, Odoo 18 üzerine kurulu, Türkiye'nin 6331 Kanunu ve ilgili yönetmeliklere uyumlu, kurumsal ISG yönetim sistemidir.
 
-**Platform:** Odoo 18.0 | **DB:** PostgreSQL | **VPS:** Contabo | **Version:** GitHub SHapeloglu/ISG | **25/32 Modül (%78)**
+**Platform:** Odoo 18.0 | **DB:** PostgreSQL | **VPS:** Contabo | **Version:** GitHub SHapeloglu/ISG | **26/32 Modül (%81)**
 
 ---
 
@@ -24,12 +24,17 @@ ISG Platform, Odoo 18 üzerine kurulu, Türkiye'nin 6331 Kanunu ve ilgili yönet
 - isg_measurement_core ✅
 - isg_measurement_hygiene ✅
 
-### FAZ 4 — Legislation (1/4)
+### FAZ 4 — Legislation (2/4)
 - **isg_legislation ✅**
   * isg.legislation: Kanun/yönetmelik metadata
   * isg.obligation: Yükümlülük tanımı + kanıt türü + saklama süresi
   * isg.obligation.applicability: Uygulanabilirlik kuralları (danger_class, min_employee, sector_type, NACE)
-- Planlanan: isg_compliance, isg_penalty, isg_simulator
+- **isg_compliance ✅** (NEW!)
+  * isg.compliance: Uygunluk değerlendirmesi snapshot'ları
+  * isg.compliance.evidence: Kanıt kaydı (geçerlilik süresi)
+  * _compute_applicable_obligations: İşyeri profiline göre otomatik yükümlülük hesaplama
+  * action_evaluate_compliance: Değerlendirme yapıp otomatik DÖF üretimi
+- Planlanan: isg_penalty, isg_simulator
 
 ### FAZ 5 — Reporting (1/3)
 - isg_reporting ✅ (TRIR/LWDR KPI)
@@ -55,9 +60,8 @@ ISG Platform, Odoo 18 üzerine kurulu, Türkiye'nin 6331 Kanunu ve ilgili yönet
 2. Her parametre türüne özel alanlar ekle (LAeq/LCeq/Lpeak for noise, etc)
 3. View'da invisible="measurement_type != 'TYPE'" ile kontrol
 4. Aynı pattern beş parametre için tekrarlanabilir
-5. action_create_capa() override ile parametreye özel DÖF açıklaması
 
-### 3. Mevzuat Altyapısı (F4-001) — NEW!
+### 3. Mevzuat Altyapısı (F4-001)
 Türkiye İSG mevzuatının merkezi kaydı:
 
 1. **isg.legislation**: Kanun/yönetmelik metadata
@@ -77,23 +81,20 @@ Türkiye İSG mevzuatının merkezi kaydı:
    - sector_type (public/private/both), nace_code, description
    - "Bu yükümlülük kime uygulanır?" kuralları
 
-**Veri Tabanı (7 mevzuat, 7 yükümlülük):**
-- 6331 Sayılı İSG Kanunu
-- İSG Hizmetleri Yönetmeliği
-- Risk Değerlendirmesi Yönetmeliği
-- Çalışan Eğitimi Yönetmeliği (2 Nisan 2026 güncellemesi)
-- + 3 temel yükümlülük türü ve uygulanabilirlik kuralları
-
-### 4. Uygunluk Değerlendirmesi Motoru (F4-002 — PLANLANAN)
+### 4. Uygunluk Değerlendirmesi Motoru (F4-002) — NEW!
 İşyeri profili → Otomatik yükümlülük hesaplama → Kanıt kontrolü → Uygunluk snapshot
 
 1. İşyeri profili girilir (NACE, danger_class, employee_count, sector_type)
 2. isg.obligation.applicability kurallarına göre geçerli yükümlülükler otomatik hesaplanır
-3. Her yükümlülük için kanıt taraması yapılır (ir.attachment, isg.document)
+3. Her yükümlülük için kanıt taraması yapılır (isg.compliance.evidence)
 4. Uygunluk snapshot: COMPLIANT / NON_COMPLIANT / PENDING / EXPIRED
 5. Kanıt eksik → DÖF otomatik oluştur
 
-**Bu mimarinin sorgu kompleksitesi O(n) olmaması için indexed yapmak gerekir.**
+**Models:**
+- `isg.compliance`: workplace, obligation, evaluation_date (donmuş), status, evidence_id, due_date, capa_id
+- `isg.compliance.evidence`: obligation, workplace, evidence_type, document_id, source_model/res_id, valid_from, valid_until, is_valid (compute)
+
+**Önemli:** valid_until otomatik hesaplanır (valid_from + obligation.retention_days)
 
 ---
 
@@ -101,7 +102,7 @@ Türkiye İSG mevzuatının merkezi kaydı:
 
 Klasör: /opt/odoo/isg_addons/
 Database: isg (PostgreSQL)
-Modüller: 25 kurulu
+Modüller: 26 kurulu
 Service: sudo systemctl status odoo18-isg.service
 
 ---
@@ -116,6 +117,6 @@ Service: sudo systemctl status odoo18-isg.service
 
 ---
 
-Son Güncelleme: 22 Ağustos 2026
-Sürüm: 5.0 (25/32 modül, FAZ 4-001 tamamlandı, %78 ilerleme)
+Son Güncelleme: 23 Ağustos 2026
+Sürüm: 6.0 (26/32 modül, FAZ 4-002 tamamlandı, %81 ilerleme)
 GitHub: https://github.com/SHapeloglu/ISG
