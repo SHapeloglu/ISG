@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <!-- isg.compliance List View -->
+        <record id="view_isg_compliance_list" model="ir.ui.view">
+            <field name="name">isg.compliance.list</field>
+            <field name="model">isg.compliance</field>
+            <field name="arch" type="xml">
+                <list string="Uygunluk Değerlendirmeleri">
+                    <field name="workplace_id" />
+                    <field name="obligation_id" />
+                    <field name="evaluation_date" />
+                    <field name="status" widget="badge" decoration-success="status == 'uygun'" decoration-warning="status == 'beklemede'" decoration-danger="status in ['eksik', 'vadesi_geçmiş']" />
+                    <field name="evidence_id" />
+                    <field name="due_date" />
+                </list>
+            </field>
+        </record>
+
+        <!-- isg.compliance Form View -->
+        <record id="view_isg_compliance_form" model="ir.ui.view">
+            <field name="name">isg.compliance.form</field>
+            <field name="model">isg.compliance</field>
+            <field name="arch" type="xml">
+                <form string="Uygunluk Değerlendirmesi">
+                    <header>
+                        <button name="action_evaluate_compliance" string="Değerlendirmeyi Yenile" type="object" class="oe_highlight" />
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="workplace_id" />
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="obligation_id" />
+                                <field name="evaluation_date" />
+                                <field name="status" />
+                            </group>
+                            <group>
+                                <field name="evidence_id" />
+                                <field name="due_date" />
+                                <field name="evaluator_id" />
+                            </group>
+                        </group>
+                        <group>
+                            <field name="capa_id" />
+                        </group>
+                        <notebook>
+                            <page string="Notlar">
+                                <field name="notes" nolabel="1" />
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- isg.compliance Search View -->
+        <record id="view_isg_compliance_search" model="ir.ui.view">
+            <field name="name">isg.compliance.search</field>
+            <field name="model">isg.compliance</field>
+            <field name="arch" type="xml">
+                <search string="Uygunluk Değerlendirmeleri">
+                    <field name="workplace_id" />
+                    <field name="obligation_id" />
+                    <field name="status" />
+                    <field name="evaluator_id" />
+                    <separator />
+                    <filter name="filter_uygun" string="Uygun" domain="[('status', '=', 'uygun')]" />
+                    <filter name="filter_eksik" string="Eksik" domain="[('status', '=', 'eksik')]" />
+                    <filter name="filter_beklemede" string="Beklemede" domain="[('status', '=', 'beklemede')]" />
+                    <filter name="filter_vadesi_geçmiş" string="Vadesi Geçmiş" domain="[('status', '=', 'vadesi_geçmiş')]" />
+                    <separator />
+                    <filter name="filter_today" string="Bugün Değerlendirilen" domain="[('evaluation_date', '>=', context_today().strftime('%Y-%m-%d'))]" />
+                    <group expand="0" string="Grupla">
+                        <filter string="İşyeri" name="group_workplace" domain="[]" context="{'group_by': 'workplace_id'}" />
+                        <filter string="Yükümlülük" name="group_obligation" domain="[]" context="{'group_by': 'obligation_id'}" />
+                        <filter string="Durum" name="group_status" domain="[]" context="{'group_by': 'status'}" />
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Action -->
+        <record id="action_isg_compliance" model="ir.actions.act_window">
+            <field name="name">Uygunluk Değerlendirmeleri</field>
+            <field name="res_model">isg.compliance</field>
+            <field name="view_mode">list,form</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+        </record>
+
+        <!-- Menu -->
+        <menuitem id="menu_isg_compliance" name="Uygunluk Değerlendirmesi" parent="isg_legislation.menu_isg_legislation" action="action_isg_compliance" sequence="10" />
+
+    </data>
+</odoo>

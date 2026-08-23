@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- 
+        Demo/seed data will be added here after isg_legislation
+        and test workplaces are set up. For now, this file is 
+        a placeholder to satisfy manifest references.
+        -->
+    </data>
+</odoo>

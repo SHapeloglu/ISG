@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- isg.compliance record rules -->
+        <record id="rule_isg_compliance_global_readonly" model="ir.rule">
+            <field name="name">isg.compliance - global readonly</field>
+            <field name="model_id" ref="model_isg_compliance" />
+            <field name="groups" eval="[(4, ref('isg_security.group_isg_readonly'))]" />
+            <field name="perm_read">1</field>
+            <field name="perm_write">0</field>
+            <field name="perm_create">0</field>
+            <field name="perm_unlink">0</field>
+            <field name="domain_force">[(1, '=', 1)]</field>
+        </record>
+
+        <record id="rule_isg_compliance_expert_company" model="ir.rule">
+            <field name="name">isg.compliance - expert (company)</field>
+            <field name="model_id" ref="model_isg_compliance" />
+            <field name="groups" eval="[(4, ref('isg_security.group_isg_expert'))]" />
+            <field name="perm_read">1</field>
+            <field name="perm_write">1</field>
+            <field name="perm_create">1</field>
+            <field name="perm_unlink">0</field>
+            <field name="domain_force">[('workplace_id.company_id', 'child_of', [user.company_id.id])]</field>
+        </record>
+
+        <record id="rule_isg_compliance_manager_company" model="ir.rule">
+            <field name="name">isg.compliance - manager (company)</field>
+            <field name="model_id" ref="model_isg_compliance" />
+            <field name="groups" eval="[(4, ref('isg_security.group_isg_manager'))]" />
+            <field name="perm_read">1</field>
+            <field name="perm_write">1</field>
+            <field name="perm_create">1</field>
+            <field name="perm_unlink">1</field>
+            <field name="domain_force">[('workplace_id.company_id', 'child_of', [user.company_id.id])]</field>
+        </record>
+
+        <!-- isg.compliance.evidence record rules -->
+        <record id="rule_isg_compliance_evidence_global_readonly" model="ir.rule">
+            <field name="name">isg.compliance.evidence - global readonly</field>
+            <field name="model_id" ref="model_isg_compliance_evidence" />
+            <field name="groups" eval="[(4, ref('isg_security.group_isg_readonly'))]" />
+            <field name="perm_read">1</field>
+            <field name="perm_write">0</field>
+            <field name="perm_create">0</field>
+            <field name="perm_unlink">0</field>
+            <field name="domain_force">[(1, '=', 1)]</field>
+        </record>
+
+        <record id="rule_isg_compliance_evidence_expert_company" model="ir.rule">
+            <field name="name">isg.compliance.evidence - expert (company)</field>
+            <field name="model_id" ref="model_isg_compliance_evidence" />
+            <field name="groups" eval="[(4, ref('isg_security.group_isg_expert'))]" />
+            <field name="perm_read">1</field>
+            <field name="perm_write">1</field>
+            <field name="perm_create">1</field>
+            <field name="perm_unlink">0</field>
+            <field name="domain_force">[('workplace_id.company_id', 'child_of', [user.company_id.id])]</field>
+        </record>
+
+        <record id="rule_isg_compliance_evidence_manager_company" model="ir.rule">
+            <field name="name">isg.compliance.evidence - manager (company)</field>
+            <field name="model_id" ref="model_isg_compliance_evidence" />
+            <field name="groups" eval="[(4, ref('isg_security.group_isg_manager'))]" />
+            <field name="perm_read">1</field>
+            <field name="perm_write">1</field>
+            <field name="perm_create">1</field>
+            <field name="perm_unlink">1</field>
+            <field name="domain_force">[('workplace_id.company_id', 'child_of', [user.company_id.id])]</field>
+        </record>
+
+    </data>
+</odoo>

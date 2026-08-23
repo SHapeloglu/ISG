@@ -1,0 +1,7 @@
+id,name,model_id/id,group_id/id,perm_read,perm_write,perm_create,perm_unlink
+access_isg_compliance_readonly,isg.compliance - readonly,model_isg_compliance,isg_security.group_isg_readonly,1,0,0,0
+access_isg_compliance_expert,isg.compliance - expert,model_isg_compliance,isg_security.group_isg_expert,1,1,1,0
+access_isg_compliance_manager,isg.compliance - manager,model_isg_compliance,isg_security.group_isg_manager,1,1,1,1
+access_isg_compliance_evidence_readonly,isg.compliance.evidence - readonly,model_isg_compliance_evidence,isg_security.group_isg_readonly,1,0,0,0
+access_isg_compliance_evidence_expert,isg.compliance.evidence - expert,model_isg_compliance_evidence,isg_security.group_isg_expert,1,1,1,0
+access_isg_compliance_evidence_manager,isg.compliance.evidence - manager,model_isg_compliance_evidence,isg_security.group_isg_manager,1,1,1,1
