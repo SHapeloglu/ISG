@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_isg_penalty_list" model="ir.ui.view">
+        <field name="name">isg.penalty.list</field>
+        <field name="model">isg.penalty</field>
+        <field name="arch" type="xml">
+            <list decoration-danger="status=='finalized'" decoration-muted="status=='paid'">
+                <field name="name"/>
+                <field name="workplace_id"/>
+                <field name="tariff_id"/>
+                <field name="calculated_amount"/>
+                <field name="is_repeat_violation"/>
+                <field name="status" widget="badge"/>
+                <field name="notification_date"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_isg_penalty_form" model="ir.ui.view">
+        <field name="name">isg.penalty.form</field>
+        <field name="model">isg.penalty</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="status" widget="statusbar" statusbar_visible="draft,notified,finalized,paid"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="compliance_id"/>
+                            <field name="workplace_id" readonly="1"/>
+                            <field name="obligation_id" readonly="1"/>
+                            <field name="tariff_id"/>
+                        </group>
+                        <group>
+                            <field name="employee_count"/>
+                            <field name="is_repeat_violation"/>
+                            <field name="calculated_amount"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="notification_date"/>
+                            <field name="payment_due_date"/>
+                        </group>
+                        <group>
+                            <field name="evaluator_id"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="notes"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_isg_penalty_search" model="ir.ui.view">
+        <field name="name">isg.penalty.search</field>
+        <field name="model">isg.penalty</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="workplace_id"/>
+                <field name="tariff_id"/>
+                <filter string="Taslak" name="draft" domain="[('status','=','draft')]"/>
+                <filter string="Kesinleşti" name="finalized" domain="[('status','=','finalized')]"/>
+                <group expand="0" string="Grupla">
+                    <filter string="İşyeri" name="group_workplace" context="{'group_by':'workplace_id'}"/>
+                    <filter string="Durum" name="group_status" context="{'group_by':'status'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_isg_penalty" model="ir.actions.act_window">
+        <field name="name">Ceza Kayıtları</field>
+        <field name="res_model">isg.penalty</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_isg_penalty_root" name="İdari Cezalar" parent="isg_core.menu_isg_root" sequence="70"/>
+    <menuitem id="menu_isg_penalty" name="Ceza Kayıtları" parent="menu_isg_penalty_root" action="action_isg_penalty" sequence="10"/>
+    <menuitem id="menu_isg_penalty_tariff" name="Ceza Tarifesi" parent="menu_isg_penalty_root" action="action_isg_penalty_tariff" sequence="20"/>
+</odoo>

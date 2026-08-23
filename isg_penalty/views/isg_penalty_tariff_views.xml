@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_isg_penalty_tariff_list" model="ir.ui.view">
+        <field name="name">isg.penalty.tariff.list</field>
+        <field name="model">isg.penalty.tariff</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="article"/>
+                <field name="name"/>
+                <field name="evidence_type"/>
+                <field name="amount_2026"/>
+                <field name="amount_per_employee"/>
+                <field name="effective_date"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_isg_penalty_tariff_form" model="ir.ui.view">
+        <field name="name">isg.penalty.tariff.form</field>
+        <field name="model">isg.penalty.tariff</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="article"/>
+                            <field name="evidence_type"/>
+                        </group>
+                        <group>
+                            <field name="amount_2026"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="amount_per_employee"/>
+                            <field name="repeat_multiplier"/>
+                            <field name="effective_date"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="description"/>
+                        <field name="notes"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_isg_penalty_tariff_search" model="ir.ui.view">
+        <field name="name">isg.penalty.tariff.search</field>
+        <field name="model">isg.penalty.tariff</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="article"/>
+                <field name="name"/>
+                <field name="evidence_type"/>
+                <filter string="Aktif" name="active" domain="[('active','=',True)]"/>
+                <group expand="0" string="Grupla">
+                    <filter string="Yükümlülük Türü" name="group_evidence" context="{'group_by':'evidence_type'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_isg_penalty_tariff" model="ir.actions.act_window">
+        <field name="name">Ceza Tarifesi</field>
+        <field name="res_model">isg.penalty.tariff</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

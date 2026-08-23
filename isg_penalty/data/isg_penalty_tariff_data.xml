@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- ÇSGB 2026 Ceza Tarifesi - Temel Tutarlar (Uzman Onayı Bekleniyor) -->
+        <record id="tariff_risk_assessment" model="isg.penalty.tariff">
+            <field name="name">Risk Değerlendirmesi Eksikliği (İlk Tespit)</field>
+            <field name="article">26/1-ç</field>
+            <field name="description">Risk değerlendirmesi yapılmamak veya güncellenmemek (ilk tespit)</field>
+            <field name="evidence_type">risk_assessment</field>
+            <field name="amount_2026">133329</field>
+            <field name="amount_per_employee">False</field>
+            <field name="repeat_multiplier">1.0</field>
+            <field name="effective_date">2026-01-01</field>
+            <field name="notes">Taslak veri - ÇSGB 2026 temel tutarı, tehlike sınıfı katsayıları exclude. Uzman onayı bekleniyor.</field>
+            <field name="active">True</field>
+        </record>
+
+        <record id="tariff_expert_assignment" model="isg.penalty.tariff">
+            <field name="name">İSG Uzmanı Görevlendirmemesi (Aylık)</field>
+            <field name="article">26/1-b</field>
+            <field name="description">İş güvenliği uzmanı görevlendirilmemesi (her ay tekrar)</field>
+            <field name="evidence_type">expert_assignment</field>
+            <field name="amount_2026">333789</field>
+            <field name="amount_per_employee">False</field>
+            <field name="repeat_multiplier">1.0</field>
+            <field name="effective_date">2026-01-01</field>
+            <field name="notes">Taslak veri - ÇSGB 2026 aylık ceza tutarı. Aykırılık devam ettiği sürece her ay uygulanır. Uzman onayı bekleniyor.</field>
+            <field name="active">True</field>
+        </record>
+
+        <record id="tariff_physician_assignment" model="isg.penalty.tariff">
+            <field name="name">İşyeri Hekimi Görevlendirmemesi (Aylık)</field>
+            <field name="article">26/1-b</field>
+            <field name="description">İşyeri hekimi görevlendirilmemesi (her ay tekrar)</field>
+            <field name="evidence_type">physician_assignment</field>
+            <field name="amount_2026">333789</field>
+            <field name="amount_per_employee">False</field>
+            <field name="repeat_multiplier">1.0</field>
+            <field name="effective_date">2026-01-01</field>
+            <field name="notes">Taslak veri - ÇSGB 2026 aylık ceza tutarı. Aykırılık devam ettiği sürece her ay uygulanır. Uzman onayı bekleniyor.</field>
+            <field name="active">True</field>
+        </record>
+
+        <record id="tariff_training_record" model="isg.penalty.tariff">
+            <field name="name">İSG Eğitimi Eksikliği (Çalışan Başına)</field>
+            <field name="article">26/1-ğ</field>
+            <field name="description">İş sağlığı ve güvenliği eğitimi verilmemesi</field>
+            <field name="evidence_type">training_record</field>
+            <field name="amount_2026">8980</field>
+            <field name="amount_per_employee">True</field>
+            <field name="repeat_multiplier">1.0</field>
+            <field name="effective_date">2026-01-01</field>
+            <field name="notes">Taslak veri - ÇSGB 2026 temel tutarı. Çalışan başına ayrı ayrı uygulanır. Uzman onayı bekleniyor.</field>
+            <field name="active">True</field>
+        </record>
+
+        <record id="tariff_health_surveillance" model="isg.penalty.tariff">
+            <field name="name">Sağlık Gözetimi Eksikliği (Çalışan Başına)</field>
+            <field name="article">26/1-f</field>
+            <field name="description">Sağlık gözetimi yaptırılmamak (işe giriş/periyodik muayene)</field>
+            <field name="evidence_type">physician_assignment</field>
+            <field name="amount_2026">22194</field>
+            <field name="amount_per_employee">True</field>
+            <field name="repeat_multiplier">1.0</field>
+            <field name="effective_date">2026-01-01</field>
+            <field name="notes">Taslak veri - ÇSGB 2026 temel tutarı. Çalışan başına ayrı ayrı uygulanır. Uzman onayı bekleniyor.</field>
+            <field name="active">True</field>
+        </record>
+    </data>
+</odoo>

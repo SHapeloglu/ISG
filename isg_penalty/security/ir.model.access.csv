@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_isg_penalty_tariff_readonly,isg.penalty.tariff.readonly,model_isg_penalty_tariff,isg_security.group_isg_readonly,1,0,0,0
+access_isg_penalty_tariff_expert,isg.penalty.tariff.expert,model_isg_penalty_tariff,isg_security.group_isg_expert,1,1,0,0
+access_isg_penalty_tariff_manager,isg.penalty.tariff.manager,model_isg_penalty_tariff,isg_security.group_isg_manager,1,1,1,1
+access_isg_penalty_readonly,isg.penalty.readonly,model_isg_penalty,isg_security.group_isg_readonly,1,0,0,0
+access_isg_penalty_expert,isg.penalty.expert,model_isg_penalty,isg_security.group_isg_expert,1,1,1,0
+access_isg_penalty_manager,isg.penalty.manager,model_isg_penalty,isg_security.group_isg_manager,1,1,1,1
