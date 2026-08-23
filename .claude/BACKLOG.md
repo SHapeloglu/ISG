@@ -1,127 +1,69 @@
-# BACKLOG.md — Teknik Borç ve Referans (23 Ağustos 2026)
+# ISG Platform — Backlog
 
-## HSE Radar Paritesi Hedefi
+Proje Durumu: 27/32 modül (%84)
 
-Hedefimiz HSE Radar'ın Türkiye ISG fonksiyonlarının %90+ kapsamını yapmak.
+## Tamamlanan Modüller (27)
 
-**Şu anki kapsama: ~81%** (26/32 modül)
+FAZ 0-2 (16): isg_core, isg_security, isg_party, isg_location, isg_contractor,
+  isg_board, isg_correspondence, isg_visitor, isg_capa, isg_risk, isg_incident,
+  isg_audit, isg_emergency, isg_ppe, isg_chemical, isg_equipment, isg_ptw
 
-## Tamamlanan HSE Radar Fonksiyonları ✅
+FAZ 3 (2): isg_measurement_core, isg_measurement_hygiene
 
-- Risk Değerlendirmesi (L Matrisi + Fine-Kinney)
-- İş Kazası / Ramak Kala Takibi
-- Denetim & Bulgu Kaydı
-- KKD Yönetimi (Zimmet, Envanter)
-- Acil Durum Planı (Tatbikat)
-- Kurumsal Yönetişim (Kurul, Eğitim, Yazışma, Ziyaretçi)
-- Kimyasal Envanter + SDS
-- Ekipman Periyodik Kontrol (EKİPNET)
-- İş İzni (PTW) + LOTO
-- Ölçüm Yönetimi — Çekirdek Altyapı + Gürültü Parametreleri (F3-001 + F3-002)
-- **Mevzuat Motoru — Yükümlülük Altyapısı** (F4-001) ✅ TAMAMLANDI
-- **Uygunluk Değerlendirmesi** (F4-002) ✅ TAMAMLANDI — İşyeri profile göre otomatik yükümlülük hesaplama + kanıt kontrol (HSE Radar DNA!)
+FAZ 4 (3): isg_legislation, isg_compliance, isg_penalty
 
-## Planlanmış Fonksiyonlar (FAZ 4-5)
+FAZ 5 (1): isg_reporting
 
-- **İdari Para Cezaları** (F4-003) ⭐ SONRAKI — ÇSGB 2026 güncellemesi
-- Müfettiş Simülatörü (F4-004) — "Müfettiş gelirse" raporu
-- Ölçüm Orkestrasyonu Detayları (F3-002 devam) — Toz, Titreşim, Aydınlatma, Isıl Konfor
-- Raporlama Detayları (PDF, Superset — F5-002/003)
+## Sıradaki Modüller (5)
 
----
+1. F4-004 isg_simulator — Müfettiş Simülasyonu
+   - Priority: Yüksek (HSE Radar parity %90 için)
+   - Estimate: 1-2 hafta
+   - Scope: Workplace profili → uygunluk özeti → ceza simülasyonu
 
-## Bilinen Teknik Borçlar 🐛
+2. OSGB Modülü — Ortak Sağlık Güvenlik Birimi
+   - Priority: Yüksek
+   - Estimate: 2-3 hafta
+   - Scope: Uzman/hekim görevlendirme, sözleşme yönetimi
 
-### Model Seviyesi
+3. isg_health_basic — Sağlık Veri Yönetimi (F1-002)
+   - Priority: Orta (KVKK onayı bekleme)
+   - Estimate: 3-4 hafta (legal review sonrasında)
+   - Scope: Sağlık taraması, periyodik muayene, KVKK maskeleme
 
-- [ ] `isg_contractor.contractor_level` — `recursive=True` eklenmeli (self-referential)
-- [ ] `isg_location.hazard_type` — model seviyesinde `invisible` parametresi (view'da olmalı)
-- [ ] `isg_visitor.ppe_notes` — model seviyesinde `invisible` parametresi
-- [ ] `isg_measurement_result.exceeding_percentage` — compute field, store=True gerekli (✅ yapıldı F3-001'de)
+4. EKİPNET Entegrasyonu
+   - Priority: Düşük
+   - Estimate: 4-6 hafta
+   - Scope: Resmi iş ekipmanlı bilgi sistemi API
 
-### Security / ACL
+5. Entegrasyon Testleri (50-kayıt bulk test)
+   - Priority: Yüksek (QA)
+   - Estimate: 1-2 hafta
+   - Scope: Modüller arası veri akışı, bug fix
 
-- [ ] `isg_core` modeline "no group" WARNING var
-- [ ] Record rule eksikleri:
-  - `isg_risk_line` (risk.hazard kayıtları)
-  - `isg_audit_line` (audit bulguları)
-  - `isg_ppe_issue` (KKD problemleri)
-  - `isg_chemical_inventory` (stok takibi)
+## Deferred (Ertelenen)
 
-### Veri Seti
+- SSH GitHub Setup (erteleme nedeni: HTTPS çalışıyor)
+- Advanced Raporlama (Superset BI entegrasyonu)
+- Mobile App (later phase)
 
-- [ ] OEL/STEL limit değerleri dolu değil (ÇSGB/AB kaynaklarından uzman doğrulama gerekli)
-- [ ] Kimyasal envanter örnek veri yok
-- [ ] Ekipman örnek veri yok
-- [ ] Ceza tarifeleri veri seti (F4-003'te eklenecek)
-- [x] **Mevzuat seed data** (7 mevzuat, 7 yükümlülük) ✅
+## Known Issues
 
-### Sistem
+- KVKK sağlık veri maskeleme: Dış hukuk danışmanı onayı bekleniyor
+- EKİPNET API dokümantasyonu: Resmi kaynak yetersiz
+- Tekrar ihlal çarpanı: Şu an basit (2.0), tarih-temelli kontrol gerekli
 
-- [ ] Admin şifresi NULL — kalıcı şifre belirlenmeli
-- [ ] `html4css1.css` Permission denied WARNING (işlevsel değil, bilgi amaçlı)
-- [ ] SSH key kurulumu deferred (şu an HTTPS auth kullanıyoruz)
+## HSE Radar Parity Hedefi
 
----
+Mevcut: %84 (27/32 modül)
+Hedef: %90+ (F4-004 isg_simulator + OSGB ile)
 
-## Modül Detayları (26/32)
-
-### FAZ 0 — Temel Mimari (7/7 ✅)
-- isg_core, isg_security, isg_party, isg_location, isg_document, isg_hr, isg_base
-
-### FAZ 1 — Kurumsal Yönetişim (5/6)
-- isg_contractor, isg_training, isg_visitor, isg_board, isg_correspondence
-- **Bekleyen:** isg_health_basic (KVKK maskeleme) — EN SONA
-
-### FAZ 2 — Çekirdek ISG Operasyonları (9/9 ✅)
-- isg_capa, isg_risk, isg_incident, isg_audit, isg_ppe, isg_emergency, isg_chemical, isg_equipment, isg_ptw
-
-### FAZ 3 — Ölçüm Yönetimi (2/2 ✅)
-- **isg_measurement_core ✅** (campaign, device, sample, result, limit)
-- **isg_measurement_hygiene ✅** (gürültü parametreleri: LAeq, LCeq, Lpeak)
-
-### FAZ 4 — Mevzuat/Uygunluk Motoru (2/4)
-- **isg_legislation ✅** (yükümlülük altyapısı: kanun, yükümlülük, uygulanabilirlik)
-- **isg_compliance ✅** (uygunluk değerlendirmesi — HSE Radar DNA)
-- isg_penalty (idari cezalar — ⏳ SONRAKI)
-- isg_simulator (müfettiş simülatörü — ⏳ planlandı)
-
-### FAZ 5 — Raporlama (1/3)
-- **isg_reporting ✅** (TRIR/LWDR)
-- QWeb PDF şablonları (⏳ planlandı)
-- Superset entegrasyonu (⏳ planlandı)
-
-### OSGB Modülü
-- isg_osgb (Uzman/hekim planlama)
-
----
-
-## Kritik Yolda Olan (Critical Path)
-
-1. ✅ **FAZ 4-001 isg_legislation** — Yükümlülük altyapısı TAMAMLANDI
-2. ✅ **FAZ 4-002 isg_compliance** — Uygunluk değerlendirmesi TAMAMLANDI
-3. ⏳ **FAZ 4-003 isg_penalty** — Ceza tarifesi (SONRAKI)
-4. ⏳ **FAZ 4-004 isg_simulator** — Müfettiş simülatörü
-
-**100% Hedefine ulaşınca 50 kayıtlık entegrasyon testi yapılacak** (workplace → obligation → compliance → penalty → simulator zinciri)
-
----
-
-## Performans Notları
-
-- Record rule çokluğu (15 per modül) → test ortamında sorguları monitor etmek gerekebilir
-- Snapshot fields (store=True) → veri tabanında disk kullanımı artabilir
-- Compute field dependencies → O(n) sorgu riski (optimize edilebilir)
-- View inheritance cascade (F3-002 gibi) — performansı minimal, inheritance depth kontrol
-- **Mevzuat motoru (F4-002+)** — applicability rules nested evaluation → iterate over not recursive
-- isg.obligation.applicability rules 1000+ kayda çıkırsa indexed olmalı
-
----
-
-## Dokümantasyon Durumu
-
-- SESSION.md ✅ güncel (F4-002 TAMAMLANDI)
-- TASKS.md ✅ güncel (F4-002 tamamlandı, F4-003 planlama eklendi)
-- CLAUDE.md ✅ güncel (FAZ 4-002 eklendi)
-- ARCHITECTURE.md ✅ güncel (Uygunluk değerlendirmesi motoru eklendi)
-- BACKLOG.md ✅ güncel (bu dosya)
+Feature Coverage:
+- Risk: ✅
+- Kaza: ✅
+- Eğitim: ✅
+- Ölçüm: ✅
+- Mevzuat: ✅
+- Ceza: ✅
+- Simülasyon: ⏳ (sırada)
+- Odoo Entegrasyonu: ✨ (avantaj)
