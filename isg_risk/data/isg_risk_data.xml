@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Risk Değerlendirmesi Sequence: ISG-RDĞ-YYYY-NNNN -->
+        <record id="seq_isg_risk_assessment" model="ir.sequence">
+            <field name="name">ISG Risk Değerlendirmesi Numarası</field>
+            <field name="code">isg.risk.assessment</field>
+            <field name="prefix">ISG-RDĞ-%(y)s-</field>
+            <field name="number_next">1</field>
+            <field name="number_increment">1</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <!-- Risk Matrisi Önceden Tanımlanmış Veriler (5×5 Matris) -->
+        <!-- Row 1: Olasılık = Çok Düşük (1) -->
+        <record id="risk_matrix_1_1" model="isg.risk.matrix">
+            <field name="probability">1</field>
+            <field name="severity">1</field>
+            <field name="description">Minimum risk seviyesi</field>
+        </record>
+        <record id="risk_matrix_1_2" model="isg.risk.matrix">
+            <field name="probability">1</field>
+            <field name="severity">2</field>
+        </record>
+        <record id="risk_matrix_1_3" model="isg.risk.matrix">
+            <field name="probability">1</field>
+            <field name="severity">3</field>
+        </record>
+        <record id="risk_matrix_1_4" model="isg.risk.matrix">
+            <field name="probability">1</field>
+            <field name="severity">4</field>
+        </record>
+        <record id="risk_matrix_1_5" model="isg.risk.matrix">
+            <field name="probability">1</field>
+            <field name="severity">5</field>
+        </record>
+
+        <!-- Row 2: Olasılık = Düşük (2) -->
+        <record id="risk_matrix_2_1" model="isg.risk.matrix">
+            <field name="probability">2</field>
+            <field name="severity">1</field>
+        </record>
+        <record id="risk_matrix_2_2" model="isg.risk.matrix">
+            <field name="probability">2</field>
+            <field name="severity">2</field>
+        </record>
+        <record id="risk_matrix_2_3" model="isg.risk.matrix">
+            <field name="probability">2</field>
+            <field name="severity">3</field>
+        </record>
+        <record id="risk_matrix_2_4" model="isg.risk.matrix">
+            <field name="probability">2</field>
+            <field name="severity">4</field>
+        </record>
+        <record id="risk_matrix_2_5" model="isg.risk.matrix">
+            <field name="probability">2</field>
+            <field name="severity">5</field>
+        </record>
+
+        <!-- Row 3: Olasılık = Orta (3) -->
+        <record id="risk_matrix_3_1" model="isg.risk.matrix">
+            <field name="probability">3</field>
+            <field name="severity">1</field>
+        </record>
+        <record id="risk_matrix_3_2" model="isg.risk.matrix">
+            <field name="probability">3</field>
+            <field name="severity">2</field>
+        </record>
+        <record id="risk_matrix_3_3" model="isg.risk.matrix">
+            <field name="probability">3</field>
+            <field name="severity">3</field>
+        </record>
+        <record id="risk_matrix_3_4" model="isg.risk.matrix">
+            <field name="probability">3</field>
+            <field name="severity">4</field>
+        </record>
+        <record id="risk_matrix_3_5" model="isg.risk.matrix">
+            <field name="probability">3</field>
+            <field name="severity">5</field>
+        </record>
+
+        <!-- Row 4: Olasılık = Yüksek (4) -->
+        <record id="risk_matrix_4_1" model="isg.risk.matrix">
+            <field name="probability">4</field>
+            <field name="severity">1</field>
+        </record>
+        <record id="risk_matrix_4_2" model="isg.risk.matrix">
+            <field name="probability">4</field>
+            <field name="severity">2</field>
+        </record>
+        <record id="risk_matrix_4_3" model="isg.risk.matrix">
+            <field name="probability">4</field>
+            <field name="severity">3</field>
+        </record>
+        <record id="risk_matrix_4_4" model="isg.risk.matrix">
+            <field name="probability">4</field>
+            <field name="severity">4</field>
+        </record>
+        <record id="risk_matrix_4_5" model="isg.risk.matrix">
+            <field name="probability">4</field>
+            <field name="severity">5</field>
+        </record>
+
+        <!-- Row 5: Olasılık = Çok Yüksek (5) -->
+        <record id="risk_matrix_5_1" model="isg.risk.matrix">
+            <field name="probability">5</field>
+            <field name="severity">1</field>
+        </record>
+        <record id="risk_matrix_5_2" model="isg.risk.matrix">
+            <field name="probability">5</field>
+            <field name="severity">2</field>
+        </record>
+        <record id="risk_matrix_5_3" model="isg.risk.matrix">
+            <field name="probability">5</field>
+            <field name="severity">3</field>
+        </record>
+        <record id="risk_matrix_5_4" model="isg.risk.matrix">
+            <field name="probability">5</field>
+            <field name="severity">4</field>
+        </record>
+        <record id="risk_matrix_5_5" model="isg.risk.matrix">
+            <field name="probability">5</field>
+            <field name="severity">5</field>
+            <field name="description">Maksimum risk seviyesi - Acil iyileştirme gerekli</field>
+        </record>
+
+        <!-- Örnek Tehlikeler Kataloğu -->
+        <record id="hazard_electrical" model="isg.risk.hazard">
+            <field name="name">Elektrik Teması</field>
+            <field name="category">electrical</field>
+            <field name="description">Canlı elektrik taşıyıcılarına, doğrudan veya dolaylı temas</field>
+            <field name="possible_consequences">Elektrik çarpması, yanık, ölüm</field>
+        </record>
+
+        <record id="hazard_fall" model="isg.risk.hazard">
+            <field name="name">Yüksekten Düşme</field>
+            <field name="category">safety</field>
+            <field name="description">2 metreden fazla yükseklikten kişinin düşmesi</field>
+            <field name="possible_consequences">Kemik kırıkları, iç hasarlar, ölüm</field>
+        </record>
+
+        <record id="hazard_chemical_exposure" model="isg.risk.hazard">
+            <field name="name">Kimyasal Maruziyet</field>
+            <field name="category">chemical</field>
+            <field name="description">Tehlikeli kimyasal maddelere solunum yoluyla, cilt teması veya yutma yoluyla maruziyet</field>
+            <field name="possible_consequences">Toksik etki, dermatit, respiratuar hastalıklar, kanser</field>
+        </record>
+
+        <record id="hazard_noise" model="isg.risk.hazard">
+            <field name="name">Gürültü</field>
+            <field name="category">noise</field>
+            <field name="description">80 dB(A) üzeri ses seviyeleri</field>
+            <field name="possible_consequences">İşitme kaybı, tinnitus, uyku bozukluğu</field>
+        </record>
+
+        <record id="hazard_vibration" model="isg.risk.hazard">
+            <field name="name">Titreşim Maruziyet</field>
+            <field name="category">vibration</field>
+            <field name="description">Bütün vücut veya el-kol titreşimine uzun süreli maruziyet</field>
+            <field name="possible_consequences">Kas-iskelet sistemi rahatsızlıkları, vasküler sorunlar</field>
+        </record>
+
+        <record id="hazard_ergonomic" model="isg.risk.hazard">
+            <field name="name">Ergonomik Risk</field>
+            <field name="category">ergonomic</field>
+            <field name="description">Uygunsuz postür, tekrarlı hareketler, ağır yük taşıma</field>
+            <field name="possible_consequences">Bel ve boyun ağrıları, tendinit, her yerekte sendromu</field>
+        </record>
+
+    </data>
+</odoo>

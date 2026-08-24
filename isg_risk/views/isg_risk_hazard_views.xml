@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- LIST VIEW -->
+    <record id="view_isg_risk_hazard_list" model="ir.ui.view">
+        <field name="name">isg.risk.hazard.list</field>
+        <field name="model">isg.risk.hazard</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name" readonly="1"/>
+                <field name="category" readonly="1" widget="badge"/>
+                <field name="active" widget="boolean" readonly="1"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- FORM VIEW -->
+    <record id="view_isg_risk_hazard_form" model="ir.ui.view">
+        <field name="name">isg.risk.hazard.form</field>
+        <field name="model">isg.risk.hazard</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="category" widget="selection"/>
+                            <field name="active" widget="boolean"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Açıklama" name="description">
+                            <field name="description" nolabel="1"/>
+                        </page>
+                        <page string="Sonuçlar" name="consequences">
+                            <field name="possible_consequences" nolabel="1"/>
+                        </page>
+                        <page string="Etkilenen Gruplar" name="affected">
+                            <field name="affected_groups" nolabel="1" widget="many2many_tags"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- SEARCH VIEW -->
+    <record id="view_isg_risk_hazard_search" model="ir.ui.view">
+        <field name="name">isg.risk.hazard.search</field>
+        <field name="model">isg.risk.hazard</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name" string="Tehlike Adı"/>
+                <field name="category" string="Kategori"/>
+                <separator/>
+                <filter name="physical" string="Fiziksel" domain="[('category', '=', 'physical')]"/>
+                <filter name="chemical" string="Kimyasal" domain="[('category', '=', 'chemical')]"/>
+                <filter name="electrical" string="Elektrik" domain="[('category', '=', 'electrical')]"/>
+                <filter name="ergonomic" string="Ergonomik" domain="[('category', '=', 'ergonomic')]"/>
+                <filter name="active" string="Aktif" domain="[('active', '=', True)]"/>
+                <group string="Grupla" name="grouping">
+                    <filter name="group_category" string="Kategori" context="{'group_by': 'category'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- ACTION -->
+    <record id="action_isg_risk_hazard" model="ir.actions.act_window">
+        <field name="name">Tehlike Kataloğu</field>
+        <field name="res_model">isg.risk.hazard</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Tehlike kataloğu boş.</p>
+            <p>İşyerinde tespit edilen tehlikeleri kataloglandırın.</p>
+        </field>
+    </record>
+</odoo>

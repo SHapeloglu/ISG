@@ -1,7 +1,16 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_isg_risk_assessment_readonly,isg.risk.assessment readonly,isg_risk.model_isg_risk_assessment,isg_security.group_isg_readonly,1,0,0,0
-access_isg_risk_assessment_expert,isg.risk.assessment expert,isg_risk.model_isg_risk_assessment,isg_security.group_isg_expert,1,1,1,0
-access_isg_risk_assessment_manager,isg.risk.assessment manager,isg_risk.model_isg_risk_assessment,isg_security.group_isg_manager,1,1,1,1
-access_isg_risk_line_readonly,isg.risk.line readonly,isg_risk.model_isg_risk_line,isg_security.group_isg_readonly,1,0,0,0
-access_isg_risk_line_expert,isg.risk.line expert,isg_risk.model_isg_risk_line,isg_security.group_isg_expert,1,1,1,0
-access_isg_risk_line_manager,isg.risk.line manager,isg_risk.model_isg_risk_line,isg_security.group_isg_manager,1,1,1,1
+access_isg_risk_matrix_readonly,isg.risk.matrix readonly,model_isg_risk_matrix,isg_security.group_isg_readonly,1,0,0,0
+access_isg_risk_matrix_expert,isg.risk.matrix expert,model_isg_risk_matrix,isg_security.group_isg_expert,1,1,1,0
+access_isg_risk_matrix_manager,isg.risk.matrix manager,model_isg_risk_matrix,isg_security.group_isg_manager,1,1,1,1
+access_isg_risk_hazard_readonly,isg.risk.hazard readonly,model_isg_risk_hazard,isg_security.group_isg_readonly,1,0,0,0
+access_isg_risk_hazard_expert,isg.risk.hazard expert,model_isg_risk_hazard,isg_security.group_isg_expert,1,1,1,0
+access_isg_risk_hazard_manager,isg.risk.hazard manager,model_isg_risk_hazard,isg_security.group_isg_manager,1,1,1,1
+access_isg_risk_assessment_readonly,isg.risk.assessment readonly,model_isg_risk_assessment,isg_security.group_isg_readonly,1,0,0,0
+access_isg_risk_assessment_expert,isg.risk.assessment expert,model_isg_risk_assessment,isg_security.group_isg_expert,1,1,1,0
+access_isg_risk_assessment_manager,isg.risk.assessment manager,model_isg_risk_assessment,isg_security.group_isg_manager,1,1,1,1
+access_isg_risk_assessment_line_readonly,isg.risk.assessment.line readonly,model_isg_risk_assessment_line,isg_security.group_isg_readonly,1,0,0,0
+access_isg_risk_assessment_line_expert,isg.risk.assessment.line expert,model_isg_risk_assessment_line,isg_security.group_isg_expert,1,1,1,0
+access_isg_risk_assessment_line_manager,isg.risk.assessment.line manager,model_isg_risk_assessment_line,isg_security.group_isg_manager,1,1,1,1
+access_isg_risk_control_readonly,isg.risk.control readonly,model_isg_risk_control,isg_security.group_isg_readonly,1,0,0,0
+access_isg_risk_control_expert,isg.risk.control expert,model_isg_risk_control,isg_security.group_isg_expert,1,1,1,0
+access_isg_risk_control_manager,isg.risk.control manager,model_isg_risk_control,isg_security.group_isg_manager,1,1,1,1
