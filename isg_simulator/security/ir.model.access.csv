@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_isg_simulator_run_readonly,isg.simulator.run readonly,model_isg_simulator_run,isg_security.group_isg_readonly,1,0,0,0
+access_isg_simulator_run_expert,isg.simulator.run expert,model_isg_simulator_run,isg_security.group_isg_expert,1,1,1,0
+access_isg_simulator_run_manager,isg.simulator.run manager,model_isg_simulator_run,isg_security.group_isg_manager,1,1,1,1
+access_isg_simulator_finding_readonly,isg.simulator.finding readonly,model_isg_simulator_finding,isg_security.group_isg_readonly,1,0,0,0
+access_isg_simulator_finding_expert,isg.simulator.finding expert,model_isg_simulator_finding,isg_security.group_isg_expert,1,1,0,0
+access_isg_simulator_finding_manager,isg.simulator.finding manager,model_isg_simulator_finding,isg_security.group_isg_manager,1,1,1,1

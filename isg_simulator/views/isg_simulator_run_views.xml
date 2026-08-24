@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- LIST VIEW -->
+    <record id="view_isg_simulator_run_list" model="ir.ui.view">
+        <field name="name">isg.simulator.run.list</field>
+        <field name="model">isg.simulator.run</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="sequence" readonly="1"/>
+                <field name="workplace_id" readonly="1"/>
+                <field name="run_date" readonly="1"/>
+                <field name="compliance_rate" readonly="1"/>
+                <field name="total_penalty_amount" sum="Toplam Ceza" readonly="1"/>
+                <field name="risk_level" widget="badge" readonly="1"/>
+                <field name="state" widget="badge" readonly="1"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- FORM VIEW -->
+    <record id="view_isg_simulator_run_form" model="ir.ui.view">
+        <field name="name">isg.simulator.run.form</field>
+        <field name="model">isg.simulator.run</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_run_simulation" type="object" string="Simülasyon Çalıştır" class="oe_highlight" invisible="state != 'draft'"/>
+                    <field name="state" widget="statusbar" options="{'clickable': False}"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="sequence" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="workplace_id" invisible="state == 'completed'"/>
+                            <field name="run_date" readonly="1"/>
+                            <field name="evaluator_id" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="compliance_rate" readonly="1"/>
+                            <field name="risk_level" widget="badge" readonly="1"/>
+                            <field name="total_penalty_amount" readonly="1"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Bulgular" name="findings">
+                            <field name="finding_ids" readonly="1" nolabel="1">
+                                <list readonly="1">
+                                    <field name="obligation_id" readonly="1"/>
+                                    <field name="compliance_status" readonly="1" widget="badge"/>
+                                    <field name="severity" readonly="1" widget="badge"/>
+                                    <field name="estimated_penalty_amount" readonly="1" sum="Toplam"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Notlar" name="notes">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- SEARCH VIEW -->
+    <record id="view_isg_simulator_run_search" model="ir.ui.view">
+        <field name="name">isg.simulator.run.search</field>
+        <field name="model">isg.simulator.run</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="sequence" string="Simülasyon No"/>
+                <field name="workplace_id" string="İşyeri"/>
+                <field name="run_date" string="Tarih"/>
+                <separator/>
+                <filter name="completed" string="Tamamlandı" domain="[('state', '=', 'completed')]"/>
+                <filter name="draft" string="Taslak" domain="[('state', '=', 'draft')]"/>
+                <separator/>
+                <filter name="risk_high" string="Yüksek Risk" domain="[('risk_level', '=', 'high')]"/>
+                <filter name="risk_medium" string="Orta Risk" domain="[('risk_level', '=', 'medium')]"/>
+                <filter name="risk_low" string="Düşük Risk" domain="[('risk_level', '=', 'low')]"/>
+                <group string="Grupla" name="grouping">
+                    <filter name="group_workplace" string="İşyeri" context="{'group_by': 'workplace_id'}"/>
+                    <filter name="group_date" string="Tarih" context="{'group_by': 'run_date'}"/>
+                    <filter name="group_risk" string="Risk Seviyesi" context="{'group_by': 'risk_level'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- ACTION -->
+    <record id="action_isg_simulator_run" model="ir.actions.act_window">
+        <field name="name">Simülasyon Çalıştırmaları</field>
+        <field name="res_model">isg.simulator.run</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Müfettiş simülasyonu çalıştırma kaydı yok.
+            </p>
+            <p>
+                İşyeri profiline göre uygunluk değerlendirmesi ve tahmini cezaları görmek için
+                simülasyon çalıştırın.
+            </p>
+        </field>
+    </record>
+
+    <!-- MENU -->
+    <menuitem
+        id="menu_isg_simulator"
+        name="Simülasyon"
+        parent="isg_core.menu_isg_root"
+        sequence="90"
+        action="action_isg_simulator_run"/>
+</odoo>
