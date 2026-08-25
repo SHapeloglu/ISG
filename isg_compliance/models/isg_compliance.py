@@ -150,3 +150,41 @@ class ISGCompliance(models.Model):
                 'type': 'success',
             }
         }
+
+    def action_create_penalty(self):
+        """
+        Uygunsuzluk kaydından ceza önerisi oluştur.
+        Obligation'ın evidence_type'ına göre uygun tarife alanır.
+        """
+        if self.status == 'uygun':
+            raise UserError('Uygun bir kaydın için ceza oluşturulamaz.')
+
+        # Evidence type'ından uygun tarifesi bul
+        tariff = self.env['isg.penalty.tariff'].search([
+            ('evidence_type', '=', self.obligation_id.evidence_type),
+            ('active', '=', True)
+        ], limit=1)
+
+        if not tariff:
+            raise UserError(
+                f"'{self.obligation_id.evidence_type}' türü için ceza tarifesi tanımlanmamış. "
+                "Lütfen 'Ceza Tarifesi' menüsünde bir tarife ekleyiniz."
+            )
+
+        # Penalty kaydı oluştur
+        penalty_vals = {
+            'compliance_id': self.id,
+            'tariff_id': tariff.id,
+            'employee_count': self.workplace_id.employee_count,
+            'is_repeat_violation': False,
+        }
+        penalty = self.env['isg.penalty'].create(penalty_vals)
+
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Ceza Kaydı',
+            'res_model': 'isg.penalty',
+            'res_id': penalty.id,
+            'view_mode': 'form',
+            'target': 'current',
+        }

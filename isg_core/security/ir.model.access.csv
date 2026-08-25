@@ -3,3 +3,5 @@ access_isg_workplace_user,isg.workplace user,model_isg_workplace,,1,0,0,0
 access_isg_workplace_manager,isg.workplace manager,model_isg_workplace,base.group_system,1,1,1,1
 access_isg_site_user,isg.site user,model_isg_site,,1,0,0,0
 access_isg_site_manager,isg.site manager,model_isg_site,base.group_system,1,1,1,1
+access_isg_rate_table_user,isg.rate.table user,model_isg_rate_table,,1,0,0,0
+access_isg_rate_table_manager,isg.rate.table manager,model_isg_rate_table,base.group_system,1,1,1,1

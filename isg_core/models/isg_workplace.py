@@ -86,19 +86,15 @@ class IsgWorkplace(models.Model):
                 raise ValidationError('Çalışan sayısı negatif olamaz.')
 
     # ── Uzman/Hekim Süre Hesabı (6331 s.K. md.6) ───────────
+    # NOT: Katsayılar artık isg.rate.table modelinden okunuyor (versiyonlu).
+    # Eskiden burada hardcoded dict vardı; isg_osgb da aynı tabloyu kullanacağı
+    # için tek kaynağa taşındı (bkz. BACKLOG.md B-1).
     @api.depends('danger_class', 'employee_count')
     def _compute_required_expert_minutes(self):
-        """
-        6331 s.K. md.6 — Aylık gereken uzman çalışma süresi (dakika):
-        Az tehlikeli : çalışan × 10 dk
-        Tehlikeli    : çalışan × 20 dk
-        Çok tehlikeli: çalışan × 40 dk
-        """
-        katsayi = {'low': 10, 'medium': 20, 'high': 40}
+        RateTable = self.env['isg.rate.table']
         for rec in self:
-            rec.required_expert_minutes = (
-                rec.employee_count * katsayi.get(rec.danger_class, 0)
-            )
+            rate = RateTable.get_rate(rec.danger_class, 'expert')
+            rec.required_expert_minutes = rec.employee_count * rate
 
     required_expert_minutes = fields.Integer(
         string='Gereken Uzman Süresi (dk/ay)',
@@ -108,17 +104,10 @@ class IsgWorkplace(models.Model):
 
     @api.depends('danger_class', 'employee_count')
     def _compute_required_physician_minutes(self):
-        """
-        6331 s.K. md.6 — Aylık gereken hekim çalışma süresi (dakika):
-        Az tehlikeli : çalışan × 4 dk
-        Tehlikeli    : çalışan × 6 dk
-        Çok tehlikeli: çalışan × 15 dk
-        """
-        katsayi = {'low': 4, 'medium': 6, 'high': 15}
+        RateTable = self.env['isg.rate.table']
         for rec in self:
-            rec.required_physician_minutes = (
-                rec.employee_count * katsayi.get(rec.danger_class, 0)
-            )
+            rate = RateTable.get_rate(rec.danger_class, 'physician')
+            rec.required_physician_minutes = rec.employee_count * rate
 
     required_physician_minutes = fields.Integer(
         string='Gereken Hekim Süresi (dk/ay)',

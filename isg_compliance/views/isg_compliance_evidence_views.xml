@@ -92,7 +92,7 @@
         </record>
 
         <!-- Menu -->
-        <menuitem id="menu_isg_compliance_evidence" name="Kanıt Kaydı" parent="isg_legislation.menu_isg_legislation" action="action_isg_compliance_evidence" sequence="20" />
+        <menuitem id="menu_isg_compliance_evidence" name="Kanıt Kaydı" parent="isg_core.menu_isg_root" action="action_isg_compliance_evidence" sequence="20" />
 
     </data>
 </odoo>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <!-- Uzman (Expert) Katsayıları — 6331 s.K. md.6 -->
+        <record id="rate_expert_low" model="isg.rate.table">
+            <field name="danger_class">low</field>
+            <field name="role">expert</field>
+            <field name="minutes_per_employee">10</field>
+            <field name="valid_from">2025-01-01</field>
+            <field name="active">True</field>
+            <field name="note">6331 s.K. md.6 — Az Tehlikeli, 2025 güncel</field>
+        </record>
+        <record id="rate_expert_medium" model="isg.rate.table">
+            <field name="danger_class">medium</field>
+            <field name="role">expert</field>
+            <field name="minutes_per_employee">20</field>
+            <field name="valid_from">2025-01-01</field>
+            <field name="active">True</field>
+            <field name="note">6331 s.K. md.6 — Tehlikeli, 2025 güncel</field>
+        </record>
+        <record id="rate_expert_high" model="isg.rate.table">
+            <field name="danger_class">high</field>
+            <field name="role">expert</field>
+            <field name="minutes_per_employee">40</field>
+            <field name="valid_from">2025-01-01</field>
+            <field name="active">True</field>
+            <field name="note">6331 s.K. md.6 — Çok Tehlikeli, 2025 güncel</field>
+        </record>
+        <!-- Hekim (Physician) Katsayıları — 6331 s.K. md.6 -->
+        <record id="rate_physician_low" model="isg.rate.table">
+            <field name="danger_class">low</field>
+            <field name="role">physician</field>
+            <field name="minutes_per_employee">4</field>
+            <field name="valid_from">2025-01-01</field>
+            <field name="active">True</field>
+            <field name="note">6331 s.K. md.6 — Az Tehlikeli, 2025 güncel</field>
+        </record>
+        <record id="rate_physician_medium" model="isg.rate.table">
+            <field name="danger_class">medium</field>
+            <field name="role">physician</field>
+            <field name="minutes_per_employee">6</field>
+            <field name="valid_from">2025-01-01</field>
+            <field name="active">True</field>
+            <field name="note">6331 s.K. md.6 — Tehlikeli, 2025 güncel</field>
+        </record>
+        <record id="rate_physician_high" model="isg.rate.table">
+            <field name="danger_class">high</field>
+            <field name="role">physician</field>
+            <field name="minutes_per_employee">15</field>
+            <field name="valid_from">2025-01-01</field>
+            <field name="active">True</field>
+            <field name="note">6331 s.K. md.6 — Çok Tehlikeli, 2025 güncel</field>
+        </record>
+    </data>
+</odoo>

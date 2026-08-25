@@ -40,7 +40,7 @@ class IsgContractor(models.Model):
         'isg.contractor', 'parent_contractor_id', string='Alt Taşeronlar',
     )
     contractor_level = fields.Integer(
-        string='Zincir Seviyesi', compute='_compute_contractor_level', store=True,
+        string='Zincir Seviyesi', compute='_compute_contractor_level', store=True, recursive=True,
     )
 
     # --- Sözleşme ---

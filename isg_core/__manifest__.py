@@ -13,6 +13,7 @@
     'depends': ['base', 'mail'],
     'data': [
         'security/ir.model.access.csv',
+        'data/isg_rate_table_data.xml',
         'views/isg_workplace_views.xml',
         'views/isg_site_views.xml',
         'views/menu.xml',
