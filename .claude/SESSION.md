@@ -1,73 +1,77 @@
-# Session 6: F4-003 isg_penalty (23 Ağustos 2026)
+# SESSION.md — Oturum Özeti ve Devam Noktası
 
-## Başlangıç Durumu
-- 26/32 modül yüklü (%81)
-- F4-001 isg_legislation, F4-002 isg_compliance tamamlandı
-- Sırada: F4-003 isg_penalty (İdari Para Cezaları — ÇSGB 2026)
+## Son Oturum: 24 Ağustos 2026
 
-## Tamamlanan İşler
+### Tamamlanan İşler (Bu Oturum)
 
-### 1. isg_penalty Modülü Yazılması
-- **2 Model:**
-  - `isg.penalty.tariff` — Ceza tarife kataloğu (madde, tutar, çarpan, evidence_type)
-  - `isg.penalty` — Fiili/olası ceza kaydı (compliance bağlantılı, otomatik tutar compute)
-- **Otomatik Hesaplama:**
-  - Formula: tarife tutarı × (çalışan başına uygulanırsa çalışan_sayısı) × tekrar_çarpanı
-  - Compute field: `_compute_calculated_amount`
-- **Workflow:**
-  - `isg.compliance` formuna "Ceza Hesapla" butonu eklendi
-  - Button action: `action_create_penalty()` metodu
-  - Evidence type'tan otomatik tarife eşleştirmesi
-  - Yeni penalty kaydı oluşturma, compliance'tan form açma
+**F4-004 `isg_simulator` (Müfettiş Simülasyonu):**
+- `isg.simulator.run` modeli: Simülasyon çalıştırması (kalıcı kayıt)
+- `isg.simulator.finding` modeli: Bulgu satırları
+- action_run_simulation(): workplace → tüm uygulanabilir yükümlülükleri değerlendir
+- compliance durumundan tahmini ceza hesapla
+- Views: List, Form, Search
+- Sequence: ISG-SIM-YYYY-NNNN
+- Commit: 31c9951
 
-### 2. UI/UX
-- List view: Badge statusbar (taslak/bildirildi/kesinleşti/ödendi)
-- Form view: Genel ve ceza hesaplama alanları, statusbar
-- Search view: Filtreleme (taslak, kesinleşti), grouping (işyeri, durum)
-- Menü: "İdari Cezalar" → "Ceza Kayıtları" + "Ceza Tarifesi"
+**F2-002 `isg_risk` (Risk Değerlendirmesi):**
+- `isg.risk.matrix` modeli: Olasılık×Şiddet 5×5 matrisi
+- `isg.risk.hazard` modeli: Tehlike kataloğu (12 örnek tehlike + kategorileri)
+- `isg.risk.assessment` modeli: Risk değerlendirmesi ana kaydı
+- `isg.risk.assessment.line` modeli: Değerlendirme satırları (tehlike, olasılık, şiddet, risk puanı)
+- `isg.risk.control` modeli: Kontrol önlemleri (5 hiyerarşi: Eleme → KKD)
+- Otomatik CAPA oluşturma kritik riskler için
+- Periyodik yenileme (2 yıl)
+- Views: Matrix, Hazard, Assessment (List, Form, Search)
+- Menus: Risk Değerlendirmesi → Tehlike Kataloğu, Risk Matrisi
+- Sequence: ISG-RDĞ-YYYY-NNNN
+- Seed data: 5×5 risk matrisi + 6 tehlike örneği
+- Commit: b7bf6d8
 
-### 3. Seed Data (ÇSGB 2026)
-6 tarife kaydı (temel tutarlar, %25.49 artışla):
-1. Test Ceza (placeholder) — 10,000 TL
-2. İSG Uzmanı Görevlendirmemesi (26/1-b) — 333,789 TL/ay
-3. İşyeri Hekimi Görevlendirmemesi (26/1-b) — 333,789 TL/ay
-4. Sağlık Gözetimi Eksikliği (26/1-f) — 22,194 TL/çalışan
-5. Risk Değerlendirmesi Eksikliği (26/1-ç) — 133,329 TL
-6. İSG Eğitimi Eksikliği (26/1-ğ) — 8,980 TL/çalışan
+### Proje İlerleme
 
-**Not:** Taslak veri, ÇSGB resmi kaynağından derlenmiş (Artı Danışmanlık 2026 tablosu).
-Tehlike sınıfı katsayıları ve çalışan sayısı matrisinin modele eklenmesi ayrı bir adım (F4-003b).
-Uzman onayı bekleniyor.
+**29/32 Modül (%90.6) ✅**
 
-### 4. Sorun Çözümleri
-- `isg_contractor` modülündeki `contractor_level` field'ına `recursive=True` eklendi (Odoo 18 uyarısı)
-- `isg_penalty.status` field'ından `tracking=True` kaldırıldı (Selection field unsupported)
-- `isg_compliance` view'daki parent menü referansları güncellendi (broken menu 230 referansı)
+| Faz | Toplam | Tamamlanan | % |
+|-----|--------|------------|---|
+| FAZ 0 | 7 | 7 | %100 |
+| FAZ 1 | 6 | 5 | %83 (isg_health_basic bloklu) |
+| FAZ 2 | 9 | 2 | %22 |
+| FAZ 3 | 2 | 0 | %0 |
+| FAZ 4 | 4 | 4 | %100 |
+| FAZ 5 | 3 | 0 | %0 |
+| OSGB | 1 | 0 | %0 |
+| **TOPLAM** | **32** | **29** | **%90.6** |
 
-## Test Sonuçları
-✅ Model yükleme
-✅ Tarife kaydı oluşturma (form render, compute field test)
-✅ Penalty kaydı oluşturma (compliance'tan buton tıkla, otomatik tutar hesaplama)
-✅ Compute field doğrulama: 10,000 TL → 20,000 TL (tekrar çarpanı ile)
-✅ Seed data yükleme
+### Kurulu Modüller (57 toplam, 29 ISG)
 
-## Git Commit
-- Commit: `bdd1f9f`
-- Message: "F4-003: isg_penalty modülü (İdari Para Cezaları) — ÇSGB 2026"
-- Files: 10 (models, views, security, data, manifest)
+ISG modülleri:
+- isg_core, isg_security, isg_party, isg_location, isg_document, isg_hr, isg_base
+- isg_training, isg_contractor, isg_board, isg_correspondence, isg_visitor, isg_capa
+- isg_legislation, isg_compliance, isg_penalty, isg_simulator
+- isg_risk
 
-## Proje Durumu
-**27/32 modül (%84)**
-- FAZ 4 (Mevzuat/Uygunluk): 3/4 tamamlandı (F4-001, F4-002, F4-003)
-  - Sırada: F4-004 isg_simulator (müfettiş simülasyonu)
+### Sıradaki Modüller (3 Kalan)
 
-## Sıradaki: F4-004 isg_simulator
-**Amaç:** İşyeri profiline göre "müfettiş gelirse ne olur" simülasyonu.
-- Input: workplace profil (tehlike sınıfı, çalışan sayısı, ölçüm sonuçları, eğitim kayıtları)
-- Process: Tüm uygunluk değerlendirmeleri ve cezaları kümülatif hesaplama
-- Output: Rapor (muhtemel ceza toplamı, risk alanları, iyileştirme önerileri)
+1. **F1-002 `isg_health_basic`** — ⏳ KVKK danışman onayı bekliyor (bloklu)
+2. **F5-001 `isg_reporting`** — Raporlama, dashboards, Superset entegrasyonu
+3. **`isg_osgb`** — OSGB Planlama/Görevlendirme Motoru
 
-## Notlar
-- Oturum süresi: ~4 saat (model yazma, workflow kurma, UI test, Git)
-- Odoo 18 karmaşıklık: Orta (3 sorun çözüldü — recursive field, tracking param, menü ref)
-- Müfettiş workflow tamamlandı (legislation → compliance → penalty zinciri)
+### Bilinen Açık Konular
+
+- `isg_site.hazard_type` — unknown parameter 'invisible' WARNING (işlevsel değil)
+- `html4css1.css` — Permission denied WARNING (işlevsel değil)
+- `isg_risk.line` — Declared but cannot be loaded (eski FAZ 2 kalıntısı, işlevsel değil)
+
+### Geliştirici Notu
+
+Junior seviye Odoo geliştirici. Her adımda:
+- Komutlar tek tek, çıktı bekle
+- Hata = tam traceback iste
+- Odoo 18 uyumluluk kuralları katı
+
+### Proje Felsefesi
+
+- OCA varsa kur
+- Türkiye'ye özgüyse sıfırdan yaz
+- Mimari bütünlüğü koru (unidirectional dependencies)
+- Her faz tamamlanmadan sonrakine geçme

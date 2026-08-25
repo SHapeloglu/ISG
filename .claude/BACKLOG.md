@@ -1,69 +1,86 @@
-# ISG Platform — Backlog
+# BACKLOG.md — Gelecek Geliştirmeler ve Iyileştirmeler
 
-Proje Durumu: 27/32 modül (%84)
+Kısa Vadeli (Sonraki Oturum)
 
-## Tamamlanan Modüller (27)
+1. isg_osgb Modülü Başlat
+   - OSGB profili ve uzman/hekim kadrosu
+   - İşyeri-Uzman atama
+   - Süre uygunluk kontrolü (6331 md.6)
+   - Kapasite planlama
+   - İSG-KATİP hazırlık
 
-FAZ 0-2 (16): isg_core, isg_security, isg_party, isg_location, isg_contractor,
-  isg_board, isg_correspondence, isg_visitor, isg_capa, isg_risk, isg_incident,
-  isg_audit, isg_emergency, isg_ppe, isg_chemical, isg_equipment, isg_ptw
+2. F5-001 isg_reporting
+   - QWeb PDF şablonları
+   - Superset entegrasyonu
+   - Compliance/Risk/Penalty dashboards
+   - HSE Radar kabul testi
 
-FAZ 3 (2): isg_measurement_core, isg_measurement_hygiene
+3. Entegrasyon Testi
+   - 50-record/modül bulk test
+   - Compliance chain: legislation → compliance → penalty → simulator
+   - Risk chain: hazard → assessment → control → CAPA
 
-FAZ 4 (3): isg_legislation, isg_compliance, isg_penalty
+Orta Vadeli (Gelecek Faseler)
 
-FAZ 5 (1): isg_reporting
+FAZ 2 Tamamlama
+- F2-003 isg_incident (İş kazası bildirimi)
+- F2-004 isg_audit (Denetim ve kontrol listeleri)
+- F2-005 isg_ppe (KKD yönetimi)
+- F2-006 isg_emergency (Acil durum planı)
+- F2-007 isg_chemical (Kimyasal envanter)
+- F2-008 isg_equipment (Ekipman ve periyodik kontrol)
+- F2-009 isg_ptw + isg_loto (İş izni ve LOTO)
 
-## Sıradaki Modüller (5)
+FAZ 3 — Ölçüm ve Çevre
+- F3-001 isg_measurement_core + isg_measurement_hygiene
+- F3-002 isg_environment
 
-1. F4-004 isg_simulator — Müfettiş Simülasyonu
-   - Priority: Yüksek (HSE Radar parity %90 için)
-   - Estimate: 1-2 hafta
-   - Scope: Workplace profili → uygunluk özeti → ceza simülasyonu
+F1-002 isg_health_basic (Bloklu)
+- KVKK danışman onayı bekleniyor
+- Sağlık verisi maskeleme mimarisi
+- Rıza yönetimi
 
-2. OSGB Modülü — Ortak Sağlık Güvenlik Birimi
-   - Priority: Yüksek
-   - Estimate: 2-3 hafta
-   - Scope: Uzman/hekim görevlendirme, sözleşme yönetimi
+Uzun Vadeli (Üretim Hazırlığı)
 
-3. isg_health_basic — Sağlık Veri Yönetimi (F1-002)
-   - Priority: Orta (KVKK onayı bekleme)
-   - Estimate: 3-4 hafta (legal review sonrasında)
-   - Scope: Sağlık taraması, periyodik muayene, KVKK maskeleme
+1. Superset Entegrasyonu
+   - Raporlama dashboards kurulumu
+   - Real-time data pipeline
+   - Mobile dashboards
 
-4. EKİPNET Entegrasyonu
-   - Priority: Düşük
-   - Estimate: 4-6 hafta
-   - Scope: Resmi iş ekipmanlı bilgi sistemi API
+2. E3 Sistem Entegrasyonu
+   - SGK bildirimleri (TTKB)
+   - EKİPNET entegrasyonu
+   - İSG-KATİP entegrasyonu
 
-5. Entegrasyon Testleri (50-kayıt bulk test)
-   - Priority: Yüksek (QA)
-   - Estimate: 1-2 hafta
-   - Scope: Modüller arası veri akışı, bug fix
+3. Mobil Uygulama
+   - Flutter uygulaması
+   - Field risk assessment
+   - Incident reporting
 
-## Deferred (Ertelenen)
+4. Kullanıcı Dokümantasyonu
+   - Kullanım kılavuzları
+   - Video eğitim serileri
+   - Eğitim materyalleri
 
-- SSH GitHub Setup (erteleme nedeni: HTTPS çalışıyor)
-- Advanced Raporlama (Superset BI entegrasyonu)
-- Mobile App (later phase)
+5. Üretim Dağıtımı
+   - Docker containerization
+   - Cloud deployment (AWS/Azure)
+   - High availability setup
+   - Backup strategy
 
-## Known Issues
+Bilinen Sorunlar (Açık Konular)
 
-- KVKK sağlık veri maskeleme: Dış hukuk danışmanı onayı bekleniyor
-- EKİPNET API dokümantasyonu: Resmi kaynak yetersiz
-- Tekrar ihlal çarpanı: Şu an basit (2.0), tarih-temelli kontrol gerekli
+Teknik Uyarılar
+- isg_site.hazard_type: unknown parameter 'invisible' (işlevsel değil)
+- html4css1.css: Permission denied (CSS rendering uyarısı)
+- isg_risk.line: Model declared but cannot be loaded (FAZ 2 kalıntısı)
 
-## HSE Radar Parity Hedefi
+Ileride Ele Alınacak
+- SSH key setup (HTTPS -> SSH git authentication)
+- Database backup automation
+- Monitoring ve alerting sistemi
 
-Mevcut: %84 (27/32 modül)
-Hedef: %90+ (F4-004 isg_simulator + OSGB ile)
-
-Feature Coverage:
-- Risk: ✅
-- Kaza: ✅
-- Eğitim: ✅
-- Ölçüm: ✅
-- Mevzuat: ✅
-- Ceza: ✅
-- Simülasyon: ⏳ (sırada)
-- Odoo Entegrasyonu: ✨ (avantaj)
+Performans Optimizasyonları
+- Compute field indexing
+- Search view cache
+- Report query optimization

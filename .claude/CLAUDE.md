@@ -1,74 +1,85 @@
-# Claude — İSG Platform Session Notları
+# CLAUDE.md — Yeni Chat Bağlamı
 
-## Session 6 (23 Ağustos 2026) — isg_penalty Tamamlandı
+Proje Özeti
+Contabo VPS üzerinde Odoo 18 tabanlı Türkiye İSG (İş Sağlığı ve Güvenliği) platformu geliştiriyoruz. Hedef: HSE Radar ile %90+ işlevsel eşdeğerlik + Odoo ERP avantajı.
 
-### Önemli Kararlar
-1. **isg_compliance'tan önce isg_penalty yazmama kararı geri alındı**
-   - Başlangıçta "F4-003 compliance'a başlamalı" dedim
-   - Kullanıcı uploadladı belgeleri → F4-002 zaten tamamlanmış görüldü
-   - Doğru karar: isg_penalty'ye geçmek
+Geliştirici Profili
+- Odoo'da 3+ modül deneyimi, junior seviye
+- Python/Odoo öğreniyor
+- Her adımı birlikte, step by step
+- Anlamadığı yerlerde soruyor
+- Sunucuya SSH ile bağlanıp terminal komutları çalıştırıyor
 
-2. **Compute Field Test Stratejisi**
-   - Placeholder veriyle başlamak (10,000 TL)
-   - Formülü doğrulamak (× çalışan, × çarpan)
-   - Sonra gerçek ÇSGB tutarlarına geçmek
-   - ✅ Çalışmıştır
+Çalışma Kuralları
 
-3. **Seed Data Yaklaşımı**
-   - "Uzman onayı bekleniyor" notu ile taslak veri
-   - ÇSGB 2026 güncel kaynaklardan (Artı Danışmanlık tablosu)
-   - Gerçek-yapısı sabittir, sadece tutarlar değişir yıl yıl
-   - ✅ Production-ready
+Terminal Komutları
+- Komutları tek tek ver, art arda değil
+- Her komutun çıktısını bekle
+- `| tail -N` ile kısa tut
+- Log için her zaman `--logfile=""`
+- Permission denied → `sudo chown -R odoo:odoo /opt/odoo/isg_addons/MODUL/`
 
-### Learned Patterns
+Modül Geliştirme Standardı
+- Her modül: __manifest__.py, __init__.py, models/, views/, security/, data/
+- `sudo -u odoo tee ... << 'EOF'` ile dosya yaz
+- Her modülü systemctl stop/start arasında kur
+- Sequence prefix: ISG-XXX-YYYY-NNNN formatı
 
-**Odoo 18 Uyarıları:**
-1. Selection field'da `tracking=True` çalışmıyor → kaldır
-2. Recursive compute field'lar → `recursive=True` gerekli
-3. Many2one `ondelete='cascade'` vs `'restrict'` → dikkat et
+Odoo 18 Uyumluluk Kuralları (KRİTİK)
+1. ACL dosyası: ir.model.access.csv (nokta, alt çizgi değil)
+2. Views: <list> (eski <tree> değil)
+3. Embedded lists: <list editable="bottom">
+4. states= ve attrs= YASAK → invisible= kullan
+5. fields.DateTime (T büyük), tracking=True selection'da yok
+6. unique=True Char'da WARNING → kaldır
+7. One2many: inverse_name doğru olmalı
+8. Menu: action tanımı kullan/referans et
 
-**Workflow Design:**
-- isg_compliance → isg_penalty bağlantısı "buton aksiyon" ile (otomatik değil)
-- Neden: Müfettiş kararı, sistem otomatik kesemez; simülasyon/öngörü sistemi
-- Evidence type eşleştirmesi tarife seçiminde kritik
+Proje Stratejisi
 
-**Menü Referans Sorunları:**
-- isg_compliance view'ında parent="isg_legislation.menu_isg_legislation" broken
-- Nedeni: Menü ID'si silinmiş ama external ID kalıyor
-- Çözüm: Parent'ı isg_core.menu_isg_root'a değiştir, sequence'ı kontrol et
+Geliştirme Yaklaşımı (3 Hat)
+1. OCA/hazır → kur
+2. Başka dilden → port et
+3. Sıfırdan Türkiye'ye özgü → yazarız
 
-### Yaklaşan Zorluk: isg_simulator
+Sıfırdan Yazılacak Kritik Alanlar
+1. Mevzuat/yükümlülük motoru (F4-001 ✅)
+2. OSGB planlama (sırada)
+3. KVKK/sağlık gizliliği (F1-002 bloklu)
+4. Çok katmanlı güvenlik sınırı (✅)
+5. Simülatör (F4-004 ✅)
 
-F4-004 isg_simulator yazarken:
-- Workplace profili (tehlike sınıfı, çalışan sayısı) + çalışan sayısı matrisini apply et
-- Tehlike sınıfı katsayıları (10'dan az: %0, 10-49: %25–50, 50+: %100–200)
-- Çalışan başına cezalarda çalışan sayısı × tutar
-- Aylık cezalarda ay sayısı × tutar (eksiklik ne kadar sürdüğüne bağlı)
-- Kümülatif hesaplama: tüm uygunsuzluklar + tüm cezalar = toplam risk skoru
+Mevzuat Kritik Notlar
 
-Tavsiye: Tekrar çarpanı (repeat_multiplier) şu an basit (2.0), ama gerçek sistemde:
-- Eğer aynı ihlal son 1 yıl içinde 2+ kez tespit edilirse çarpan uygulan
-- Sistem olarak: tarih-temelli kontrol (compliance created_date ile karşılaştırma)
+Değişiklik | Tarih | Etkilenen Modül
+2 Nisan 2026 Eğitim Yönetmeliği | 2026-04-02 | isg_training ✅
+İş Ekipmanları Yönetmeliği EK-II | 2025-12 | F2-008 isg_equipment
+İdari para cezaları %49 artış | 2026 | isg_penalty ✅
+Risk Değerlendirmesi periyodu | 2 yıl | isg_risk ✅
+Uz/hekim süre güncellemesi | 2025 | isg_osgb (sırada)
 
-### Genel İzlenimler
+Dosya Yolları
 
-**HSE Radar'a Karşı Avantajlar:**
-- Odoo ERP entegrasyonu (muhasebe, HR, satın alma bağlantıları)
-- Kustomize edilebilir tarife/hesaplama motorları
-- Open-source (denetim, güvenlik, compliance)
-- Türkçe, yerel mevzuat uygunluğu
+/opt/odoo/isg_addons/          # ISG modülleri
+/opt/odoo/venv18-isg/          # ISG Python venv
+/etc/odoo/odoo18-isg.conf      # ISG config
+/opt/odoo/isg_addons/.claude/  # Dokümantasyon
+/var/log/odoo/odoo18-isg.log   # ISG log
 
-**Kalan Riskler:**
-- KVKK sağlık veri maskeleme (dış hukuk danışmanı bekleme)
-- EKİPNET entegrasyonu (resmi API dokümantasyonu)
-- Tehlike sınıfı matrisleri (her şirkette özel olabilir, standart yok)
-- Muhasebe bağlantısı (ceza ödemesi vs. gider kaydı detaylandırma)
+Proje İlerleme: 29/32 (%90.6)
 
-### Next Session Hazırlıkları
+FAZ 0: 7/7 (100%) - Temel Mimari
+FAZ 1: 5/6 (83%) - Kurumsal Yönetişim (isg_health_basic bloklu)
+FAZ 2: 2/9 (22%) - Çekirdek İSG (isg_capa, isg_risk)
+FAZ 3: 0/2 (0%) - Ölçüm
+FAZ 4: 4/4 (100%) - Sanal Müfettiş (isg_legislation → simulator)
+FAZ 5: 0/3 (0%) - Raporlama
+OSGB: 0/1 (0%)
 
-**F4-004 isg_simulator başlamadan:**
-1. Workplace model'deki `danger_class` (tehlike sınıfı) field'ının var mı kontrol et
-2. Varsa: az_tehlikeli / tehlikeli / cok_tehlikeli selection'ı var mı?
-3. Yoksa: önce isg_core'da tehlike sınıfı field'ı ekle
-4. Simulator logic: her uygunluk → bağlı obligation → en yüksek ceza tarifesi bulup × katsayı
-5. Rapor template: PDF (isg_reporting stili)
+Kurulu Modüller: 57 toplam (29 ISG)
+
+Sıradaki 3 Modül
+
+1. isg_osgb - OSGB Planlama/Görevlendirme (Tavsiye)
+2. F5-001 - Raporlama & Dashboards
+3. F1-002 - Health Module (KVKK danışman onayı bekliyor)
