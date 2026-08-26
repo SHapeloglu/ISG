@@ -1,45 +1,44 @@
 # SESSION.md — Oturum Özeti ve Devam Noktası
 
-## Son Oturum: 25 Ağustos 2026
+## Son Oturum: 26 Ağustos 2026
 
 ### Tamamlanan İşler (Bu Oturum)
 
-**B-1 `isg.rate.table` Modeli (isg_core içinde):** ✅ TAMAMLANDI
-- İSG Uzman/Hekim süre katsayılarını (danger_class × role → dakika) versiyonlu, ortak tabloya taşındı
-- Model: `isg.rate.table` (danger_class, role, minutes_per_employee, valid_from, active)
-- get_rate() metodu: verilen tarihte geçerli katsayıyı döndürür
-- Seed data (XML): 6 kayıt (2025-01-01 geçerlilik tarihi ile)
-  - Uzman: 10/20/40 dk (az/medium/high)
-  - Hekim: 4/6/15 dk (az/medium/high)
-- isg_workplace.py güncellenmiş: compute metodları tablodan katsayı okuyor
-- ACL: isg_rate_table user/manager kayıtları eklendi
-- Commit: B-1 (25 Ağustos 2026)
+**B-1: isg.rate.table Modeli** ✅
+- Uzman/hekim süre katsayılarını versiyonlu, ortak tabloya taşındı (isg_core)
+- Commit: 009da0e
+
+**B-2/B-3/B-6/B-7: MEV Retrofit Sprint** ✅
+- **B-2** `isg_contractor.document_type` — İşyerine Özgü Risk Bilgilendirmesi belge türü eklendi
+- **B-3** `isg_visitor` — risk_briefing_ack + risk_briefing_date + risk_briefing_attachment_ids alanları eklendi
+- **B-6** `isg_document` — signature_type (Islak/E-imza) + cert_serial metadata alanları eklendi
+- **B-7** `isg_risk.assessment` — renewal_trigger (Periyodik/Kaza/Ekipman/Taşınma/Yeni Teknoloji) alanı eklendi
+- Commit: 3b51b4e
+
+**Toplam bu oturum: 5 görev tamamlandı (B-1, B-2, B-3, B-6, B-7)**
 
 ### Proje İlerleme
 
-**29/32 Modül (%90.6) — İlaveten B-1 tamamlandı**
+**29/32 Modül (%90.6) + MEV görevleri**
 
 ### Kurulu Modüller (57 toplam, 29 ISG)
 
-Mevcut + B-1 tarafından etkilenen:
-- isg_core (isg_rate_table eklendi)
+Tüm ISG modülleri aktif ve güncellenmiş.
 
 ### Sıradaki Görevler
 
-1. **B-2: isg_contractor** — İşyerine Özgü Risk Bilgilendirmesi belge türü (~0.5 gün)
-2. **B-3: isg_visitor** — risk_briefing alanları (~0.5 gün)
-3. **isg_osgb** — OSGB Planlama/Görevlendirme (isg_rate_table'dan okuyacak)
+1. **İSG_OSGB** — OSGB Planlama/Görevlendirme Motoru
+   - B-1 (isg.rate.table) ön koşulu tamamlandı ✓
+   - Sırada: Sonraki oturum
 
-Alternatif: Öncelik karşılaştırması için BACKLOG.md'e bakın.
-
-### Belgeleri Güncelle ve Push Et
-
-```bash
-git add -A
-git commit -m "B-1: isg.rate.table modeli tamamlandı (uzman/hekim süre katsayıları)"
-git push origin master
-```
+2. **Kalan MEV görevleri** (B-4, B-8, B-9, B-10):
+   - B-4: isg_board — toplantı sıklığı retrofit (~1 gün)
+   - B-8: isg_penalty — tarife versiyonlama (~0.5-1 gün)
+   - B-9: isg_core — danger_class history (~0.5-1 gün)
+   - B-10: isg_training — 2 Nisan 2026 tam uyum (~2-3 gün, kritik)
+   - İleride paralel veya F5-001'le birlikte yapılabilir
 
 ### Geliştirici Notu
 
-B-1, isg_osgb'nin ön koşulu — isg_osgb başlamadan önce yapılması gerekiyordu. Tamamlandı.
+2 gün MEV sprint başarıyla tamamlandı. Sistem stabil, tüm modüller çalışıyor.
+İsg_osgb tasarımı yapılmaya hazır.
