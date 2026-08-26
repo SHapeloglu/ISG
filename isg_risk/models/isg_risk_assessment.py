@@ -51,6 +51,20 @@ class IsgRiskAssessment(models.Model):
         readonly=False
     )
 
+    # ─── Yenileme Tetikleyicisi (Risk Değerlendirmesi Yönetmeliği) ───
+    renewal_trigger = fields.Selection(
+        [
+            ('periodic', 'Periyodik (2 yıl)'),
+            ('accident', 'İş Kazası'),
+            ('equipment_change', 'Ekipman Değişikliği'),
+            ('relocation', 'Taşınma / Yer Değişikliği'),
+            ('new_technology', 'Yeni Teknoloji / Makine'),
+        ],
+        string='Yenileme Tetikleyicisi',
+        tracking=True,
+        help='Bu değerlendirmeyi başlatan neden (Risk Değerlendirmesi Yönetmeliği md.7)',
+    )
+
     team_leader_id = fields.Many2one(
         'res.users',
         string='Ekip Lideri',
@@ -137,11 +151,11 @@ class IsgRiskAssessment(models.Model):
         for record in self:
             lines = record.assessment_line_ids
             record.total_hazards = len(lines)
-            
+
             # Risk seviyeleri sayısı
             record.critical_risks = len(lines.filtered(lambda l: l.risk_level == 'critical'))
             record.high_risks = len(lines.filtered(lambda l: l.risk_level == 'high'))
-            
+
             # Ortalama risk puanı
             if lines:
                 record.average_risk_score = sum(l.risk_score for l in lines) / len(lines)
@@ -164,7 +178,7 @@ class IsgRiskAssessment(models.Model):
         self.ensure_one()
         if self.state != 'draft':
             raise models.ValidationError('Sadece taslak değerlendirmeler tamamlanabilir.')
-        
+
         # Kritik riskler için otomatik CAPA oluştur
         critical_lines = self.assessment_line_ids.filtered(lambda l: l.risk_level == 'critical')
         for line in critical_lines:
@@ -174,7 +188,7 @@ class IsgRiskAssessment(models.Model):
                 'description': f'Risk Puanı: {line.risk_score}, Tehlike: {line.hazard_id.description}',
                 'state': 'open',
             })
-        
+
         self.state = 'completed'
 
     def action_approve_assessment(self):

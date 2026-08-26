@@ -1,14 +1,11 @@
 # -*- coding: utf-8 -*-
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError
-
-
 class IsgContractorDocument(models.Model):
     _name = 'isg.contractor.document'
     _description = 'Alt İşveren Belge Matrisi'
     _inherit = ['mail.thread']
     _order = 'document_type, expiry_date'
-
     contractor_id = fields.Many2one(
         'isg.contractor', string='Alt İşveren',
         required=True, ondelete='cascade',
@@ -32,6 +29,7 @@ class IsgContractorDocument(models.Model):
             ('ppe_list', 'KKD Listesi'),
             ('training_records', 'Eğitim Kayıtları'),
             ('insurance', 'İş Kazası Sigortası'),
+            ('isg_risk_briefing', 'İşyerine Özgü Risk Bilgilendirmesi'),
             ('other', 'Diğer'),
         ],
         string='Belge Türü', required=True, tracking=True,
@@ -60,7 +58,6 @@ class IsgContractorDocument(models.Model):
         'ir.attachment', string='Dosyalar',
     )
     notes = fields.Text(string='Notlar')
-
     @api.depends('expiry_date')
     def _compute_is_expired(self):
         today = fields.Date.today()
@@ -71,13 +68,11 @@ class IsgContractorDocument(models.Model):
                     rec.state = 'expired'
             else:
                 rec.is_expired = False
-
     def action_submit(self):
         self.write({
             'state': 'submitted',
             'submission_date': fields.Date.today(),
         })
-
     def action_approve(self):
         for rec in self:
             if not rec.isg_document_id and not rec.attachment_ids:
@@ -86,6 +81,5 @@ class IsgContractorDocument(models.Model):
                     'alanlarından en az biri doldurulmalıdır.'
                 ))
         self.write({'state': 'approved'})
-
     def action_reject(self):
         self.write({'state': 'rejected'})

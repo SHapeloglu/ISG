@@ -62,10 +62,22 @@ class IsgDocument(models.Model):
     )
 
     # --- E-imza (5070 s.K.) ---
+    signature_type = fields.Selection(
+        selection=[
+            ('wet_ink', 'Islak İmza'),
+            ('electronic', 'Elektronik İmza'),
+        ],
+        string='İmza Türü', tracking=True,
+        help='5070 sayılı Elektronik İmza Kanunu kapsamında imza türü.',
+    )
     signed_by_id = fields.Many2one(
         'res.users', string='İmzalayan', readonly=True,
     )
     signed_date = fields.Datetime(string='İmza Tarihi', readonly=True)
+    cert_serial = fields.Char(
+        string='Sertifika Seri No', readonly=True,
+        help='Elektronik imzada kullanılan sertifika seri numarası (TÜRKKEP/e-Güven).',
+    )
     signature_reference = fields.Char(
         string='E-İmza Referans No', readonly=True,
         help='5070 sayılı Elektronik İmza Kanunu kapsamında imza referansı.',
@@ -165,8 +177,10 @@ class IsgDocument(models.Model):
             'version': self.version + 1,
             'parent_document_id': self.id,
             'state': 'draft',
+            'signature_type': False,
             'signed_by_id': False,
             'signed_date': False,
+            'cert_serial': False,
             'signature_reference': False,
             'attachment_id': False,
         })

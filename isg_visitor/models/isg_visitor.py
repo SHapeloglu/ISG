@@ -1,14 +1,11 @@
 # -*- coding: utf-8 -*-
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError
-
-
 class IsgVisitor(models.Model):
     _name = 'isg.visitor'
     _description = 'İSG Ziyaretçi Kaydı'
     _inherit = ['mail.thread']
     _order = 'entry_datetime desc'
-
     name = fields.Char(
         string='Ziyaretçi No', required=True, copy=False,
         default=lambda self: self.env['ir.sequence'].next_by_code('isg.visitor'),
@@ -61,6 +58,17 @@ class IsgVisitor(models.Model):
     induction_done = fields.Boolean(
         string='Güvenlik Brifing Verildi', default=False, tracking=True,
     )
+    # ─── Risk Bilgilendirmesi (2 Nisan 2026 Yönetmeliği) ─────
+    risk_briefing_ack = fields.Boolean(
+        string='İşyerine Özgü Risk Bilgilendirmesi Verildi',
+        default=False, tracking=True,
+    )
+    risk_briefing_date = fields.Date(
+        string='Risk Bilgilendirmesi Tarihi', tracking=True,
+    )
+    risk_briefing_attachment_ids = fields.Many2many(
+        'ir.attachment', string='Risk Bilgilendirmesi Tutanakları',
+    )
     site_id = fields.Many2one(
         'isg.site', string='Gidilen Alan',
         domain="[('workplace_id', '=', workplace_id)]",
@@ -70,7 +78,6 @@ class IsgVisitor(models.Model):
         string='Ziyaret Süresi (Saat)',
         compute='_compute_duration', store=True,
     )
-
     @api.depends('entry_datetime', 'exit_datetime')
     def _compute_duration(self):
         for rec in self:
@@ -79,7 +86,6 @@ class IsgVisitor(models.Model):
                 rec.duration_hours = delta.total_seconds() / 3600
             else:
                 rec.duration_hours = 0.0
-
     @api.constrains('entry_datetime', 'exit_datetime')
     def _check_exit_after_entry(self):
         for rec in self:
@@ -88,7 +94,6 @@ class IsgVisitor(models.Model):
                     raise ValidationError(
                         'Çıkış zamanı giriş zamanından önce olamaz.'
                     )
-
     def action_exit(self):
         self.write({
             'state': 'exited',
