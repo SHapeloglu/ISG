@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_isg_osgb_form" model="ir.ui.view">
+        <field name="name">isg.osgb.form</field>
+        <field name="model">isg.osgb</field>
+        <field name="arch" type="xml">
+            <form><sheet><group><field name="name"/></group></sheet></form>
+        </field>
+    </record>
+</odoo>

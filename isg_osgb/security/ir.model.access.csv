@@ -1,0 +1,13 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_isg_osgb_readonly,isg.osgb readonly,model_isg_osgb,isg_security.group_isg_readonly,1,0,0,0
+access_isg_osgb_expert,isg.osgb expert,model_isg_osgb,isg_security.group_isg_expert,1,1,1,0
+access_isg_osgb_manager,isg.osgb manager,model_isg_osgb,isg_security.group_isg_manager,1,1,1,1
+access_isg_osgb_expert_readonly,isg.osgb.expert readonly,model_isg_osgb_expert,isg_security.group_isg_readonly,1,0,0,0
+access_isg_osgb_expert_expert,isg.osgb.expert expert,model_isg_osgb_expert,isg_security.group_isg_expert,1,1,1,0
+access_isg_osgb_expert_manager,isg.osgb.expert manager,model_isg_osgb_expert,isg_security.group_isg_manager,1,1,1,1
+access_isg_osgb_physician_readonly,isg.osgb.physician readonly,model_isg_osgb_physician,isg_security.group_isg_readonly,1,0,0,0
+access_isg_osgb_physician_expert,isg.osgb.physician expert,model_isg_osgb_physician,isg_security.group_isg_expert,1,1,1,0
+access_isg_osgb_physician_manager,isg.osgb.physician manager,model_isg_osgb_physician,isg_security.group_isg_manager,1,1,1,1
+access_isg_osgb_assignment_readonly,isg.osgb.assignment readonly,model_isg_osgb_assignment,isg_security.group_isg_readonly,1,0,0,0
+access_isg_osgb_assignment_expert,isg.osgb.assignment expert,model_isg_osgb_assignment,isg_security.group_isg_expert,1,1,1,0
+access_isg_osgb_assignment_manager,isg.osgb.assignment manager,model_isg_osgb_assignment,isg_security.group_isg_manager,1,1,1,1

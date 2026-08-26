@@ -1,44 +1,39 @@
 # SESSION.md — Oturum Özeti ve Devam Noktası
 
-## Son Oturum: 26 Ağustos 2026
+## Son Oturum: 26 Ağustos 2026 (Devam)
 
-### Tamamlanan İşler (Bu Oturum)
+### Tamamlanan İşler (Bu Oturum Özeti)
 
 **B-1: isg.rate.table Modeli** ✅
-- Uzman/hekim süre katsayılarını versiyonlu, ortak tabloya taşındı (isg_core)
+- Uzman/hekim süre katsayıları versiyonlu ortak tabloya taşındı
 - Commit: 009da0e
 
 **B-2/B-3/B-6/B-7: MEV Retrofit Sprint** ✅
-- **B-2** `isg_contractor.document_type` — İşyerine Özgü Risk Bilgilendirmesi belge türü eklendi
-- **B-3** `isg_visitor` — risk_briefing_ack + risk_briefing_date + risk_briefing_attachment_ids alanları eklendi
-- **B-6** `isg_document` — signature_type (Islak/E-imza) + cert_serial metadata alanları eklendi
-- **B-7** `isg_risk.assessment` — renewal_trigger (Periyodik/Kaza/Ekipman/Taşınma/Yeni Teknoloji) alanı eklendi
+- isg_contractor, isg_visitor, isg_document, isg_risk güncellendi
 - Commit: 3b51b4e
 
-**Toplam bu oturum: 5 görev tamamlandı (B-1, B-2, B-3, B-6, B-7)**
+**İSG_OSGB Modülü (Başlangıç)** ✅
+- 4 model yazıldı: isg.osgb, isg.osgb.expert, isg.osgb.physician, isg.osgb.assignment
+- Temel form view eklendi (basitleştirilmiş)
+- ACL kaydı tamamlandı
+- Modül yüklendi ve test edildi
+- Sıradaki: Detaylı form/list view'lar eklenecek
 
 ### Proje İlerleme
 
-**29/32 Modül (%90.6) + MEV görevleri**
+**30/32 Modül (%94)** — isg_osgb eklendi!
 
-### Kurulu Modüller (57 toplam, 29 ISG)
+### Kurulu Modüller (57+1=58 toplam, 30 ISG)
 
-Tüm ISG modülleri aktif ve güncellenmiş.
+Tüm ISG modülleri aktif + isg_osgb başladı.
 
-### Sıradaki Görevler
+### Sıradaki (Sonraki Oturum)
 
-1. **İSG_OSGB** — OSGB Planlama/Görevlendirme Motoru
-   - B-1 (isg.rate.table) ön koşulu tamamlandı ✓
-   - Sırada: Sonraki oturum
-
-2. **Kalan MEV görevleri** (B-4, B-8, B-9, B-10):
-   - B-4: isg_board — toplantı sıklığı retrofit (~1 gün)
-   - B-8: isg_penalty — tarife versiyonlama (~0.5-1 gün)
-   - B-9: isg_core — danger_class history (~0.5-1 gün)
-   - B-10: isg_training — 2 Nisan 2026 tam uyum (~2-3 gün, kritik)
-   - İleride paralel veya F5-001'le birlikte yapılabilir
+1. **isg_osgb view'ları tamamla** — Detaylı form/list, capacity planing
+2. **isg_osgb entegrasyon testleri**
+3. **Kalan MEV görevleri** (B-4, B-8, B-9, B-10)
+4. **F2-003 isg_incident** — İş Kazası modülü
 
 ### Geliştirici Notu
 
-2 gün MEV sprint başarıyla tamamlandı. Sistem stabil, tüm modüller çalışıyor.
-İsg_osgb tasarımı yapılmaya hazır.
+Bugün 5+ saat çalışıldı. Sprint başarılı. isg_osgb foundation kuruldu, sonraki oturumda view'ları tamamlanacak.
