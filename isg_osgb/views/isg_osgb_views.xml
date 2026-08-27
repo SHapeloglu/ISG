@@ -1,10 +1,275 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <!-- ========== isg.osgb FORM ========== -->
     <record id="view_isg_osgb_form" model="ir.ui.view">
         <field name="name">isg.osgb.form</field>
         <field name="model">isg.osgb</field>
         <field name="arch" type="xml">
-            <form><sheet><group><field name="name"/></group></sheet></form>
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="OSGB Adı"/></h1>
+                    </div>
+                    <group>
+                        <group string="Temel Bilgiler">
+                            <field name="company_id" required="1"/>
+                            <field name="active"/>
+                        </group>
+                        <group string="Yetki Belgesi (Bakanlık)">
+                            <field name="ministry_certificate_no"/>
+                            <field name="ministry_certificate_date"/>
+                            <field name="ministry_certificate_expiry"/>
+                        </group>
+                    </group>
+                    <group string="İletişim">
+                        <field name="address"/>
+                        <field name="phone"/>
+                        <field name="email"/>
+                        <field name="website"/>
+                    </group>
+                    <notebook>
+                        <page string="İSG Uzmanları" name="experts">
+                            <group>
+                                <field name="expert_count" readonly="1" widget="integer"/>
+                            </group>
+                            <field name="expert_ids" nolabel="1">
+                                <list editable="bottom">
+                                    <field name="name" required="1"/>
+                                    <field name="expert_class" required="1"/>
+                                    <field name="registration_date"/>
+                                    <field name="active"/>
+                                    <field name="notes"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="İşyeri Hekimleri" name="physicians">
+                            <group>
+                                <field name="physician_count" readonly="1" widget="integer"/>
+                            </group>
+                            <field name="physician_ids" nolabel="1">
+                                <list editable="bottom">
+                                    <field name="name" required="1"/>
+                                    <field name="medical_license_no"/>
+                                    <field name="registration_date"/>
+                                    <field name="active"/>
+                                    <field name="notes"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="İşyeri Atamaları" name="assignments">
+                            <group>
+                                <field name="assignment_count" readonly="1" widget="integer"/>
+                            </group>
+                            <field name="assignment_ids" nolabel="1">
+                                <list editable="bottom">
+                                    <field name="workplace_id" required="1"/>
+                                    <field name="role" required="1"/>
+                                    <field name="expert_id"/>
+                                    <field name="assignment_date"/>
+                                    <field name="monthly_required_minutes" readonly="1"/>
+                                    <field name="monthly_actual_minutes"/>
+                                    <field name="compliance_status" readonly="1" widget="badge"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Notlar" name="notes">
+                            <field name="notes" nolabel="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
         </field>
     </record>
+
+    <!-- ========== isg.osgb LIST ========== -->
+    <record id="view_isg_osgb_list" model="ir.ui.view">
+        <field name="name">isg.osgb.list</field>
+        <field name="model">isg.osgb</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="company_id"/>
+                <field name="ministry_certificate_no"/>
+                <field name="expert_count"/>
+                <field name="physician_count"/>
+                <field name="assignment_count"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ========== isg.osgb.expert FORM ========== -->
+    <record id="view_isg_osgb_expert_form" model="ir.ui.view">
+        <field name="name">isg.osgb.expert.form</field>
+        <field name="model">isg.osgb.expert</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="Adı Soyadı"/></h1>
+                    </div>
+                    <group>
+                        <group string="Temel Bilgiler">
+                            <field name="osgb_id" required="1"/>
+                            <field name="expert_class" required="1"/>
+                        </group>
+                        <group string="Kayıt">
+                            <field name="registration_date"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <field name="notes" string="Notlar" nolabel="1"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ========== isg.osgb.expert LIST ========== -->
+    <record id="view_isg_osgb_expert_list" model="ir.ui.view">
+        <field name="name">isg.osgb.expert.list</field>
+        <field name="model">isg.osgb.expert</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="osgb_id"/>
+                <field name="name"/>
+                <field name="expert_class"/>
+                <field name="registration_date"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ========== isg.osgb.physician FORM ========== -->
+    <record id="view_isg_osgb_physician_form" model="ir.ui.view">
+        <field name="name">isg.osgb.physician.form</field>
+        <field name="model">isg.osgb.physician</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="Adı Soyadı"/></h1>
+                    </div>
+                    <group>
+                        <group string="Temel Bilgiler">
+                            <field name="osgb_id" required="1"/>
+                            <field name="medical_license_no"/>
+                        </group>
+                        <group string="Kayıt">
+                            <field name="registration_date"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <field name="notes" string="Notlar" nolabel="1"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ========== isg.osgb.physician LIST ========== -->
+    <record id="view_isg_osgb_physician_list" model="ir.ui.view">
+        <field name="name">isg.osgb.physician.list</field>
+        <field name="model">isg.osgb.physician</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="osgb_id"/>
+                <field name="name"/>
+                <field name="medical_license_no"/>
+                <field name="registration_date"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ========== isg.osgb.assignment FORM ========== -->
+    <record id="view_isg_osgb_assignment_form" model="ir.ui.view">
+        <field name="name">isg.osgb.assignment.form</field>
+        <field name="model">isg.osgb.assignment</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="workplace_id" required="1" placeholder="İşyeri"/></h1>
+                    </div>
+                    <group>
+                        <group string="Atama Bilgileri">
+                            <field name="osgb_id" required="1"/>
+                            <field name="role" required="1"/>
+                            <field name="expert_id"/>
+                            <field name="assignment_date" required="1"/>
+                            <field name="termination_date"/>
+                            <field name="contract_no"/>
+                        </group>
+                        <group string="Aylık Süre Uygunluğu">
+                            <field name="monthly_visit_days"/>
+                            <field name="monthly_required_minutes" readonly="1" widget="integer"/>
+                            <field name="monthly_actual_minutes"/>
+                            <field name="compliance_status" readonly="1" widget="badge"/>
+                        </group>
+                    </group>
+                    <group string="İSG-KATİP Bildirimi">
+                        <field name="katip_notification_sent"/>
+                        <field name="katip_notification_date"/>
+                    </group>
+                    <field name="notes" string="Notlar" nolabel="1"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ========== isg.osgb.assignment LIST ========== -->
+    <record id="view_isg_osgb_assignment_list" model="ir.ui.view">
+        <field name="name">isg.osgb.assignment.list</field>
+        <field name="model">isg.osgb.assignment</field>
+        <field name="arch" type="xml">
+            <list decoration-danger="compliance_status == 'non_compliant'" decoration-warning="compliance_status == 'warning'">
+                <field name="osgb_id"/>
+                <field name="workplace_id"/>
+                <field name="role"/>
+                <field name="expert_id"/>
+                <field name="assignment_date"/>
+                <field name="termination_date"/>
+                <field name="monthly_required_minutes" readonly="1"/>
+                <field name="monthly_actual_minutes"/>
+                <field name="compliance_status" readonly="1" widget="badge"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ========== ACTIONS ========== -->
+    <record id="action_isg_osgb" model="ir.actions.act_window">
+        <field name="name">OSGB Kuruluşları</field>
+        <field name="res_model">isg.osgb</field>
+        <field name="view_mode">list,form</field>
+        <field name="help">OSGB kuruluşlarını ve uzman/hekim atamalarını yönetin.</field>
+    </record>
+
+    <record id="action_isg_osgb_expert" model="ir.actions.act_window">
+        <field name="name">İSG Uzmanları</field>
+        <field name="res_model">isg.osgb.expert</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="action_isg_osgb_physician" model="ir.actions.act_window">
+        <field name="name">İşyeri Hekimleri</field>
+        <field name="res_model">isg.osgb.physician</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="action_isg_osgb_assignment" model="ir.actions.act_window">
+        <field name="name">İşyeri Atamaları</field>
+        <field name="res_model">isg.osgb.assignment</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- ========== MENUS ========== -->
+    <menuitem id="menu_isg_osgb_root" name="OSGB Yönetimi" sequence="100"/>
+    <menuitem id="menu_isg_osgb_osgb" name="OSGB Kuruluşları" parent="menu_isg_osgb_root" action="action_isg_osgb" sequence="10"/>
+    <menuitem id="menu_isg_osgb_expert" name="İSG Uzmanları" parent="menu_isg_osgb_root" action="action_isg_osgb_expert" sequence="20"/>
+    <menuitem id="menu_isg_osgb_physician" name="İşyeri Hekimleri" parent="menu_isg_osgb_root" action="action_isg_osgb_physician" sequence="30"/>
+    <menuitem id="menu_isg_osgb_assignment" name="İşyeri Atamaları" parent="menu_isg_osgb_root" action="action_isg_osgb_assignment" sequence="40"/>
 </odoo>
