@@ -1,248 +1,245 @@
+# -*- coding: utf-8 -*-
 from odoo import models, fields, api
-from odoo.exceptions import UserError
-from dateutil.relativedelta import relativedelta
-
+from datetime import datetime, timedelta
 
 class IsgIncident(models.Model):
     _name = 'isg.incident'
-    _description = 'İş Kazası / Ramak Kala'
-    _inherit = ['mail.thread', 'mail.activity.mixin']
+    _description = 'İş Kazası / Ramak Kala / Meslek Hastalığı'
+    _inherit = ['mail.thread', 'mail.activity.mixin', 'isg.uuid.mixin']
     _order = 'incident_date desc, id desc'
 
+    # --- Temel Bilgiler ---
     name = fields.Char(
-        string='Referans No',
-        readonly=True,
-        copy=False,
-        default='Yeni',
+        string='Kaza No', readonly=True, tracking=True,
     )
+    company_id = fields.Many2one(
+        'res.company', string='Şirket', required=True,
+        default=lambda self: self.env.company, tracking=True,
+    )
+    workplace_id = fields.Many2one(
+        'isg.workplace', string='İşyeri', required=True, ondelete='restrict',
+        tracking=True,
+    )
+    site_id = fields.Many2one(
+        'isg.site', string='Fiziksel Lokasyon',
+    )
+
+    # --- Kaza Tarihi/Saati ---
+    incident_date = fields.Datetime(
+        string='Kaza Tarihi/Saati', required=True,
+        default=lambda self: fields.Datetime.now(), tracking=True,
+    )
+
+    # --- Kaza Türü ---
     incident_type = fields.Selection([
         ('accident', 'İş Kazası'),
         ('near_miss', 'Ramak Kala'),
         ('occupational_disease', 'Meslek Hastalığı'),
-    ], string='Olay Türü', required=True, default='accident', tracking=True)
+    ], string='Kaza Türü', required=True, default='accident', tracking=True,
+    )
 
-    company_id = fields.Many2one(
-        'res.company',
-        string='Şirket',
-        required=True,
-        default=lambda self: self.env.company,
-        tracking=True,
+    # --- Şiddet ---
+    severity = fields.Selection([
+        ('minor', 'Hafif (İlk Yardım)'),
+        ('serious', 'Ciddi (Hastanelik)'),
+        ('fatal', 'Ölümcül'),
+    ], string='Şiddet', required=True, default='minor', tracking=True,
     )
-    workplace_id = fields.Many2one(
-        'isg.workplace',
-        string='İSG İşyeri',
-        required=True,
-        tracking=True,
-    )
-    site_id = fields.Many2one(
-        'isg.site',
-        string='Fiziksel Lokasyon',
-        domain="[('workplace_id', '=', workplace_id)]",
-        tracking=True,
-    )
-    incident_date = fields.Date(
-        string='Olay Tarihi',
-        required=True,
-        default=fields.Date.today,
-        tracking=True,
-    )
-    incident_time = fields.Float(
-        string='Olay Saati',
-        digits=(2, 2),
-        help='Saat:Dakika formatında (örn. 14.30)',
-    )
-    location_description = fields.Char(
-        string='Olay Yeri Tanımı',
-    )
+
+    # --- Açıklamalar ---
     description = fields.Text(
-        string='Olay Tanımı',
-        required=True,
+        string='Kaza Açıklaması', required=True, tracking=True,
+    )
+    location_description = fields.Text(
+        string='Kazanın Meydana Geldiği Yer',
     )
 
-    # --- Etkilenen Kişi ---
-    victim_id = fields.Many2one(
-        'hr.employee',
-        string='Kazaya Uğrayan / Etkilenen',
-        tracking=True,
+    # --- Yaralanan Kişi ---
+    injured_employee_id = fields.Many2one(
+        'hr.employee', string='Yaralanan Çalışan',
     )
-    victim_job_title = fields.Char(
-        string='Görevi',
-        related='victim_id.job_title',
-        store=True,
-    )
-    victim_tenure_days = fields.Integer(
-        string='İşyerindeki Kıdem (Gün)',
-    )
-    witness_ids = fields.Many2many(
-        'hr.employee',
-        'isg_incident_witness_rel',
-        'incident_id',
-        'employee_id',
-        string='Tanıklar',
+    injured_person_name = fields.Char(
+        string='Yaralanan Adı (Kontraktor/Ziyaretçi ise)',
     )
 
-    # --- Yaralanma Bilgileri ---
-    injury_type = fields.Selection([
-        ('none', 'Yaralanma Yok'),
-        ('cut', 'Kesik / Yara'),
-        ('fracture', 'Kırık'),
-        ('burn', 'Yanık'),
-        ('crush', 'Ezilme / Burkulmak'),
-        ('eye', 'Göz Yaralanması'),
-        ('chemical', 'Kimyasal Maruziyet'),
-        ('electrical', 'Elektrik Çarpması'),
-        ('fall', 'Düşme'),
-        ('death', 'Ölüm'),
-        ('other', 'Diğer'),
-    ], string='Yaralanma Türü', tracking=True)
-
-    body_part = fields.Selection([
-        ('head', 'Baş / Boyun'),
-        ('eye', 'Göz'),
-        ('hand', 'El / Parmak'),
-        ('arm', 'Kol / Omuz'),
-        ('leg', 'Bacak / Ayak'),
-        ('back', 'Sırt / Bel'),
-        ('trunk', 'Gövde'),
-        ('multiple', 'Çoklu'),
-        ('other', 'Diğer'),
-    ], string='Vücut Bölgesi')
-
-    first_aid_given = fields.Boolean(string='İlk Yardım Yapıldı mı?')
-    hospitalized = fields.Boolean(string='Hastaneye Kaldırıldı mı?')
-    lost_work_days = fields.Integer(
-        string='Kayıp İş Günü',
-        default=0,
-        tracking=True,
+    # --- Yaralanma Detayları ---
+    injury_ids = fields.One2many(
+        'isg.incident.injury', 'incident_id', string='Yaralanma Detayları',
     )
 
-    # --- SGK Bildirimi (6331 md.14) ---
-    sgk_notification_required = fields.Boolean(
-        string='SGK Bildirimi Gerekli mi?',
-        compute='_compute_sgk_notification',
-        store=True,
-    )
-    sgk_notification_deadline = fields.Date(
-        string='SGK Bildirim Son Tarihi',
-        compute='_compute_sgk_notification',
-        store=True,
-        help='İş kazasında 3 iş günü içinde SGK\'ya bildirim zorunludur (6331 md.14)',
-    )
-    sgk_notification_done = fields.Boolean(
-        string='SGK Bildirimi Yapıldı mı?',
-        tracking=True,
-    )
-    sgk_notification_date = fields.Date(
-        string='SGK Bildirim Tarihi',
-        tracking=True,
-    )
-    sgk_reference_no = fields.Char(
-        string='SGK Bildirim Referans No',
-    )
+    # --- Tanıklar ---
+    witnesses = fields.Text(string='Tanık Adları')
 
-    # --- Kök Neden ve DÖF ---
-    immediate_cause = fields.Text(string='Anlık Neden')
-    root_cause = fields.Text(string='Kök Neden (Özet)')
-    capa_id = fields.Many2one(
-        'isg.capa',
-        string='İlgili DÖF',
-        readonly=True,
-        tracking=True,
-    )
+    # --- Acil İşlemler ---
+    immediate_action = fields.Text(string='Alınan Acil İşlemler')
 
-    # --- Belge ---
-    document_id = fields.Many2one(
-        'isg.document',
-        string='İlgili Belge',
+    # --- Soruşturma ---
+    investigation_date = fields.Date(string='Soruşturma Tarihi')
+    investigation_notes = fields.Text(string='Soruşturma Bulguları')
+
+    # --- Koku Analizi (CAPA) ---
+    root_cause_analysis_id = fields.Many2one(
+        'isg.capa', string='Koku Analizi (DÖF)',
     )
 
     # --- Durum ---
     state = fields.Selection([
-        ('draft', 'Taslak'),
-        ('investigation', 'Araştırma'),
-        ('sgk_pending', 'SGK Bildirimi Bekliyor'),
-        ('closed', 'Kapalı'),
-    ], string='Durum', default='draft', tracking=True)
+        ('reported', 'Bildirildi'),
+        ('investigating', 'Soruşturma Devam Ediyor'),
+        ('analyzed', 'Analiz Tamamlandı'),
+        ('resolved', 'Kapalı'),
+    ], string='Durum', required=True, default='reported', tracking=True,
+    )
 
-    notes = fields.Html(string='Notlar')
+    # --- SGK Bildirimi ---
+    sgk_notification_required = fields.Boolean(
+        string='SGK Bildirimi Gerekli',
+        compute='_compute_sgk_notification_required', store=True, tracking=True,
+    )
+    sgk_notification_date = fields.Date(
+        string='SGK Bildirimi Tarihi', tracking=True,
+    )
+    sgk_notification_deadline = fields.Date(
+        string='SGK Bildirim Süresi (3 İş Günü)',
+        compute='_compute_sgk_notification_deadline', store=True,
+    )
+    sgk_days_remaining = fields.Integer(
+        string='Kalan Gün',
+        compute='_compute_sgk_days_remaining', store=True,
+    )
 
-    # -------------------------------------------------------------------------
-    # Compute
-    # -------------------------------------------------------------------------
+    # --- Dönüş Eğitimi ---
+    return_to_work_required = fields.Boolean(
+        string='Dönüş Eğitimi Gerekli',
+        compute='_compute_return_to_work_required', store=True,
+    )
+    return_to_work_training_id = fields.Many2one(
+        'isg.training.record', string='Dönüş Eğitimi',
+    )
 
-    @api.depends('incident_type', 'incident_date')
-    def _compute_sgk_notification(self):
+    # --- TRIR ---
+    trir_eligible = fields.Boolean(
+        string='TRIR\'a Dahil',
+        compute='_compute_trir_eligible', store=True,
+    )
+
+    # --- Sistem ---
+    created_date = fields.Datetime(readonly=True, tracking=True)
+    created_by_id = fields.Many2one('res.users', readonly=True)
+    notes = fields.Text(string='Ek Notlar')
+    active = fields.Boolean(default=True)
+
+    @api.model
+    def create(self, vals):
+        if 'name' not in vals:
+            vals['name'] = self.env['ir.sequence'].next_by_code('isg.incident') or '/'
+        vals['created_date'] = fields.Datetime.now()
+        vals['created_by_id'] = self.env.user.id
+        return super().create(vals)
+
+    @api.depends('incident_type', 'severity')
+    def _compute_sgk_notification_required(self):
+        """SGK bildirimi gerekli mi?"""
         for rec in self:
-            if rec.incident_type == 'accident' and rec.incident_date:
-                rec.sgk_notification_required = True
-                # 6331 md.14: 3 iş günü — basit hesaplama (takvim günü olarak +3)
-                rec.sgk_notification_deadline = rec.incident_date + relativedelta(days=3)
-            else:
-                rec.sgk_notification_required = False
-                rec.sgk_notification_deadline = False
+            rec.sgk_notification_required = (
+                rec.incident_type in ['accident', 'occupational_disease']
+                and rec.severity in ['serious', 'fatal']
+            )
 
-    # -------------------------------------------------------------------------
-    # Durum geçişleri
-    # -------------------------------------------------------------------------
+    @api.depends('incident_date', 'sgk_notification_required')
+    def _compute_sgk_notification_deadline(self):
+        """SGK bildirimi süresi: incident_date + 3 iş günü (basit: +4 takvim günü)"""
+        for rec in self:
+            if rec.sgk_notification_required and rec.incident_date:
+                # Basit hesaplama: 3 iş günü ≈ 4 takvim günü (hafta sonu kurtarma)
+                deadline = rec.incident_date + timedelta(days=4)
+                rec.sgk_notification_deadline = deadline.date()
+            else:
+                rec.sgk_notification_deadline = None
+
+    @api.depends('sgk_notification_deadline')
+    def _compute_sgk_days_remaining(self):
+        """Kalan gün (uyarı için)"""
+        for rec in self:
+            if rec.sgk_notification_deadline:
+                remaining = (rec.sgk_notification_deadline - fields.Date.today()).days
+                rec.sgk_days_remaining = remaining
+            else:
+                rec.sgk_days_remaining = None
+
+    @api.depends('state', 'injury_ids')
+    def _compute_return_to_work_required(self):
+        """Dönüş eğitimi gerekli mi?"""
+        for rec in self:
+            rec.return_to_work_required = (
+                rec.state == 'resolved'
+                and any(inj.needs_return_training for inj in rec.injury_ids)
+            )
+
+    @api.depends('incident_type', 'injury_ids')
+    def _compute_trir_eligible(self):
+        """TRIR'a dahil mi?"""
+        for rec in self:
+            has_lost_time = any(
+                inj.injury_type in ['lost_time', 'permanent_disability', 'fatality']
+                for inj in rec.injury_ids
+            )
+            rec.trir_eligible = (
+                rec.incident_type in ['accident', 'occupational_disease']
+                and has_lost_time
+            )
 
     def action_start_investigation(self):
-        for rec in self:
-            if rec.state != 'draft':
-                raise UserError('Sadece Taslak durumdaki kayıtlar araştırmaya alınabilir.')
-            rec.state = 'investigation'
-
-    def action_sgk_pending(self):
-        for rec in self:
-            if rec.state != 'investigation':
-                raise UserError('Önce araştırma aşamasına geçilmeli.')
-            if rec.incident_type != 'accident':
-                raise UserError('SGK bildirimi sadece iş kazaları için geçerlidir.')
-            rec.state = 'sgk_pending'
-
-    def action_close(self):
-        for rec in self:
-            if rec.state not in ('investigation', 'sgk_pending'):
-                raise UserError('Kapatmak için önce araştırma aşamasında olmalı.')
-            if rec.incident_type == 'accident' and rec.sgk_notification_required and not rec.sgk_notification_done:
-                raise UserError('İş kazası kaydı kapatılmadan önce SGK bildirimi yapılmalıdır.')
-            rec.state = 'closed'
-
-    def action_reset_draft(self):
-        for rec in self:
-            if rec.state == 'closed':
-                raise UserError('Kapalı kayıt taslağa alınamaz.')
-            rec.state = 'draft'
-
-    def action_create_capa(self):
+        """Soruşturma başla"""
         self.ensure_one()
-        if self.capa_id:
-            raise UserError('Bu kayıt için zaten bir DÖF mevcut: %s' % self.capa_id.name)
-        type_label = dict(self._fields['incident_type'].selection).get(self.incident_type, '')
+        self.state = 'investigating'
+        self.investigation_date = fields.Date.today()
+
+    def action_add_root_cause(self):
+        """Koku analizi oluştur (CAPA)"""
+        self.ensure_one()
         capa = self.env['isg.capa'].create({
-            'company_id': self.company_id.id,
+            'name': f'Kuka Analizi: {self.name}',
             'workplace_id': self.workplace_id.id,
-            'source': 'incident',
-            'description': '%s — %s\nOlay: %s' % (
-                type_label,
-                self.name,
-                self.description or '',
-            ),
+            'incident_id': self.id,
+            'description': f'Kaza: {self.description}',
         })
-        self.capa_id = capa.id
+        self.root_cause_analysis_id = capa.id
+        self.state = 'analyzed'
         return {
             'type': 'ir.actions.act_window',
             'res_model': 'isg.capa',
             'res_id': capa.id,
             'view_mode': 'form',
+            'target': 'current',
         }
 
-    # -------------------------------------------------------------------------
-    # ORM
-    # -------------------------------------------------------------------------
+    def action_create_return_training(self):
+        """Dönüş eğitimi oluştur"""
+        self.ensure_one()
+        if not self.return_to_work_required:
+            raise ValueError('Bu kaza için dönüş eğitimi gerekli değil.')
 
-    @api.model_create_multi
-    def create(self, vals_list):
-        for vals in vals_list:
-            if vals.get('name', 'Yeni') == 'Yeni':
-                vals['name'] = self.env['ir.sequence'].next_by_code('isg.incident') or 'Yeni'
-        return super().create(vals_list)
+        training_record = self.env['isg.training.record'].create({
+            'training_type_id': self.env.ref('isg_training.training_type_return').id,
+            'employee_id': self.injured_employee_id.id,
+            'planned_date': fields.Date.today() + timedelta(days=5),
+            'description': f'Dönüş Eğitimi: {self.name}',
+            'incident_id': self.id,
+        })
+        self.return_to_work_training_id = training_record.id
+
+    def action_close(self):
+        """Kazayı kapat"""
+        self.ensure_one()
+        self.state = 'resolved'
+        # Dönüş eğitimi gerekli ise otomatik oluştur
+        if self.return_to_work_required and not self.return_to_work_training_id:
+            self.action_create_return_training()
+
+    def name_get(self):
+        result = []
+        for rec in self:
+            name = f'{rec.name} - {rec.workplace_id.name}' if rec.workplace_id else rec.name
+            result.append((rec.id, name))
+        return result

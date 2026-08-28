@@ -2,9 +2,9 @@
 <odoo>
     <data noupdate="1">
         <record id="seq_isg_incident" model="ir.sequence">
-            <field name="name">İSG İş Kazası / Ramak Kala</field>
+            <field name="name">İSG Kazası Numarası</field>
             <field name="code">isg.incident</field>
-            <field name="prefix">ISG-KZ-%(year)s-</field>
+            <field name="prefix">ISG-KZA-%(year)s-</field>
             <field name="padding">4</field>
             <field name="company_id" eval="False"/>
         </record>

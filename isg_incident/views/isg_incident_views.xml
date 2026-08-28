@@ -1,164 +1,175 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- LIST VIEW -->
-    <record id="view_isg_incident_list" model="ir.ui.view">
-        <field name="name">isg.incident.list</field>
-        <field name="model">isg.incident</field>
-        <field name="arch" type="xml">
-            <list string="İş Kazaları / Ramak Kala"
-                decoration-danger="incident_type == 'accident'"
-                decoration-warning="incident_type == 'near_miss'">
-                <field name="name"/>
-                <field name="incident_type"/>
-                <field name="incident_date"/>
-                <field name="workplace_id"/>
-                <field name="site_id"/>
-                <field name="victim_id"/>
-                <field name="injury_type"/>
-                <field name="lost_work_days"/>
-                <field name="sgk_notification_required"/>
-                <field name="sgk_notification_done"/>
-                <field name="capa_id"/>
-                <field name="state" widget="badge"/>
-            </list>
-        </field>
-    </record>
-
-    <!-- FORM VIEW -->
+    <!-- ========== isg.incident FORM ========== -->
     <record id="view_isg_incident_form" model="ir.ui.view">
         <field name="name">isg.incident.form</field>
         <field name="model">isg.incident</field>
         <field name="arch" type="xml">
-            <form string="İş Kazası / Ramak Kala">
+            <form>
                 <header>
-                    <button name="action_start_investigation" string="Araştırmaya Al"
-                        type="object" class="btn-primary"
-                        invisible="state != 'draft'"/>
-                    <button name="action_sgk_pending" string="SGK Bildirimi Gerekli"
-                        type="object" class="btn-warning"
-                        invisible="state != 'investigation' or incident_type != 'accident'"/>
-                    <button name="action_close" string="Kapat"
-                        type="object" class="btn-success"
-                        invisible="state not in ('investigation', 'sgk_pending')"/>
-                    <button name="action_reset_draft" string="Taslağa Al"
-                        type="object"
-                        invisible="state == 'closed'"/>
-                    <field name="state" widget="statusbar"
-                        statusbar_visible="draft,investigation,sgk_pending,closed"/>
+                    <button name="action_start_investigation" string="Soruşturma Başla" type="object" class="btn-primary" invisible="state != 'reported'"/>
+                    <button name="action_add_root_cause" string="Koku Analizi Ekle" type="object" class="btn-primary" invisible="state != 'investigating'"/>
+                    <button name="action_close" string="Kapat" type="object" class="btn-primary" invisible="state != 'analyzed'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="reported,investigating,analyzed,resolved"/>
                 </header>
                 <sheet>
                     <div class="oe_title">
                         <h1><field name="name" readonly="1"/></h1>
                     </div>
-                    <group>
-                        <group string="Olay Bilgileri">
-                            <field name="incident_type"/>
-                            <field name="company_id"/>
-                            <field name="workplace_id"/>
-                            <field name="site_id"/>
-                            <field name="incident_date"/>
-                            <field name="incident_time"/>
-                            <field name="location_description"/>
-                        </group>
-                        <group string="Etkilenen Kişi">
-                            <field name="victim_id"/>
-                            <field name="victim_job_title" readonly="1"/>
-                            <field name="victim_tenure_days"/>
-                            <field name="witness_ids" widget="many2many_tags"/>
-                        </group>
-                    </group>
-                    <group string="Olay Tanımı">
-                        <field name="description" nolabel="1"/>
-                    </group>
-                    <group>
-                        <group string="Yaralanma Bilgileri">
-                            <field name="injury_type"/>
-                            <field name="body_part"/>
-                            <field name="first_aid_given"/>
-                            <field name="hospitalized"/>
-                            <field name="lost_work_days"/>
-                        </group>
-                        <group string="SGK Bildirimi" invisible="incident_type != 'accident'">
-                            <field name="sgk_notification_required" readonly="1"/>
-                            <field name="sgk_notification_deadline" readonly="1"/>
-                            <field name="sgk_notification_done"/>
-                            <field name="sgk_notification_date"
-                                invisible="not sgk_notification_done"/>
-                            <field name="sgk_reference_no"
-                                invisible="not sgk_notification_done"/>
-                        </group>
-                    </group>
-                    <group string="Kök Neden ve Aksiyon">
-                        <group>
-                            <field name="immediate_cause"/>
-                            <field name="root_cause"/>
-                        </group>
-                        <group>
-                            <field name="capa_id" readonly="1"/>
-                            <button name="action_create_capa"
-                                string="DÖF Kaydı Oluştur"
-                                type="object"
-                                class="btn-warning"
-                                invisible="capa_id != False"/>
-                            <field name="document_id"/>
-                        </group>
-                    </group>
                     <notebook>
-                        <page string="Notlar">
-                            <field name="notes"/>
+                        <page string="Temel Bilgiler" name="basic">
+                            <group>
+                                <group string="Kaza Bilgileri">
+                                    <field name="incident_date" required="1"/>
+                                    <field name="incident_type" required="1"/>
+                                    <field name="severity" required="1"/>
+                                    <field name="workplace_id" required="1"/>
+                                    <field name="site_id"/>
+                                </group>
+                                <group string="Yaralanan Kişi">
+                                    <field name="injured_employee_id"/>
+                                    <field name="injured_person_name"/>
+                                </group>
+                            </group>
+                            <group string="Kaza Açıklaması">
+                                <field name="description" required="1" nolabel="1"/>
+                            </group>
+                            <group string="Kazanın Meydana Geldiği Yer">
+                                <field name="location_description" nolabel="1"/>
+                            </group>
+                            <group string="Tanıklar ve Acil İşlemler">
+                                <field name="witnesses" nolabel="1" placeholder="Tanık adları..."/>
+                                <field name="immediate_action" nolabel="1" placeholder="Alınan acil işlemler..."/>
+                            </group>
+                        </page>
+                        <page string="Yaralanma Detayları" name="injuries">
+                            <field name="injury_ids" nolabel="1">
+                                <list editable="bottom">
+                                    <field name="injury_type" required="1"/>
+                                    <field name="body_part"/>
+                                    <field name="injury_description"/>
+                                    <field name="medical_treatment"/>
+                                    <field name="days_lost"/>
+                                    <field name="needs_return_training"/>
+                                    <field name="permanent_consequence"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="SGK Bildirimi" name="sgk_notification">
+                            <group>
+                                <group string="Bildirim Durumu">
+                                    <field name="sgk_notification_required" readonly="1"/>
+                                    <field name="sgk_notification_date"/>
+                                    <field name="sgk_notification_deadline" readonly="1"/>
+                                    <field name="sgk_days_remaining" readonly="1" widget="badge"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Soruşturma" name="investigation">
+                            <group>
+                                <group string="Soruşturma Bilgileri">
+                                    <field name="investigation_date"/>
+                                </group>
+                            </group>
+                            <group string="Soruşturma Bulguları">
+                                <field name="investigation_notes" nolabel="1"/>
+                            </group>
+                        </page>
+                        <page string="Koku Analizi (DÖF)" name="root_cause">
+                            <group>
+                                <field name="root_cause_analysis_id" readonly="1"/>
+                            </group>
+                        </page>
+                        <page string="Dönüş Eğitimi" name="return_to_work">
+                            <group>
+                                <group string="Dönüş Eğitimi">
+                                    <field name="return_to_work_required" readonly="1"/>
+                                    <field name="return_to_work_training_id" readonly="1"/>
+                                </group>
+                            </group>
+                            <button name="action_create_return_training" string="Dönüş Eğitimi Oluştur" type="object" class="btn-primary" invisible="not return_to_work_required or return_to_work_training_id"/>
+                        </page>
+                        <page string="TRIR" name="trir">
+                            <group>
+                                <field name="trir_eligible" readonly="1"/>
+                            </group>
+                        </page>
+                        <page string="Notlar" name="notes">
+                            <field name="notes" nolabel="1"/>
                         </page>
                     </notebook>
                 </sheet>
-                <chatter/>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
             </form>
         </field>
     </record>
 
-    <!-- SEARCH VIEW -->
+    <!-- ========== isg.incident LIST ========== -->
+    <record id="view_isg_incident_list" model="ir.ui.view">
+        <field name="name">isg.incident.list</field>
+        <field name="model">isg.incident</field>
+        <field name="arch" type="xml">
+            <list decoration-danger="sgk_days_remaining and sgk_days_remaining &lt; 0" decoration-warning="sgk_days_remaining and sgk_days_remaining &gt;= 0 and sgk_days_remaining &lt; 3" decoration-muted="state == 'resolved'">
+                <field name="name"/>
+                <field name="incident_date"/>
+                <field name="workplace_id"/>
+                <field name="incident_type" widget="badge"/>
+                <field name="severity" widget="badge"/>
+                <field name="injured_employee_id"/>
+                <field name="sgk_notification_required"/>
+                <field name="sgk_days_remaining" widget="badge"/>
+                <field name="state" widget="badge"/>
+                <field name="trir_eligible"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ========== isg.incident SEARCH ========== -->
     <record id="view_isg_incident_search" model="ir.ui.view">
         <field name="name">isg.incident.search</field>
         <field name="model">isg.incident</field>
         <field name="arch" type="xml">
-            <search string="İş Kazası / Ramak Kala Ara">
-                <field name="name"/>
+            <search>
+                <field name="name" string="Kaza No / Açıklama"/>
                 <field name="workplace_id"/>
-                <field name="victim_id"/>
+                <field name="injured_employee_id"/>
                 <separator/>
-                <filter string="İş Kazası" name="accident"
-                    domain="[('incident_type','=','accident')]"/>
-                <filter string="Ramak Kala" name="near_miss"
-                    domain="[('incident_type','=','near_miss')]"/>
-                <filter string="Meslek Hastalığı" name="occupational_disease"
-                    domain="[('incident_type','=','occupational_disease')]"/>
+                <filter name="type_accident" string="İş Kazası" domain="[('incident_type', '=', 'accident')]"/>
+                <filter name="type_near_miss" string="Ramak Kala" domain="[('incident_type', '=', 'near_miss')]"/>
+                <filter name="type_disease" string="Meslek Hastalığı" domain="[('incident_type', '=', 'occupational_disease')]"/>
                 <separator/>
-                <filter string="SGK Bildirimi Bekleyen" name="sgk_pending"
-                    domain="[('sgk_notification_required','=',True),('sgk_notification_done','=',False)]"/>
-                <filter string="DÖF Açılmamış" name="no_capa"
-                    domain="[('capa_id','=',False)]"/>
+                <filter name="severity_minor" string="Hafif" domain="[('severity', '=', 'minor')]"/>
+                <filter name="severity_serious" string="Ciddi" domain="[('severity', '=', 'serious')]"/>
+                <filter name="severity_fatal" string="Ölümcül" domain="[('severity', '=', 'fatal')]"/>
                 <separator/>
-                <filter string="Taslak" name="draft" domain="[('state','=','draft')]"/>
-                <filter string="Araştırma" name="investigation" domain="[('state','=','investigation')]"/>
-                <filter string="Kapalı" name="closed" domain="[('state','=','closed')]"/>
+                <filter name="state_reported" string="Bildirildi" domain="[('state', '=', 'reported')]"/>
+                <filter name="state_investigating" string="Soruşturma Devam" domain="[('state', '=', 'investigating')]"/>
+                <filter name="state_analyzed" string="Analiz Yapıldı" domain="[('state', '=', 'analyzed')]"/>
+                <filter name="state_resolved" string="Kapalı" domain="[('state', '=', 'resolved')]"/>
+                <separator/>
+                <filter name="sgk_notification" string="SGK Bildirimi Gerekli" domain="[('sgk_notification_required', '=', True)]"/>
+                <filter name="trir_eligible" string="TRIR Dahil" domain="[('trir_eligible', '=', True)]"/>
                 <group expand="0" string="Grupla">
-                    <filter string="Olay Türü" name="group_type"
-                        context="{'group_by': 'incident_type'}"/>
-                    <filter string="İşyeri" name="group_workplace"
-                        context="{'group_by': 'workplace_id'}"/>
-                    <filter string="Durum" name="group_state"
-                        context="{'group_by': 'state'}"/>
-                    <filter string="Ay" name="group_month"
-                        context="{'group_by': 'incident_date:month'}"/>
+                    <filter name="group_by_workplace" string="İşyeri" context="{'group_by': 'workplace_id'}"/>
+                    <filter name="group_by_type" string="Kaza Türü" context="{'group_by': 'incident_type'}"/>
+                    <filter name="group_by_state" string="Durum" context="{'group_by': 'state'}"/>
                 </group>
             </search>
         </field>
     </record>
 
-    <!-- ACTION -->
+    <!-- ========== ACTIONS ========== -->
     <record id="action_isg_incident" model="ir.actions.act_window">
-        <field name="name">İş Kazaları / Ramak Kala</field>
+        <field name="name">İş Kazası</field>
         <field name="res_model">isg.incident</field>
         <field name="view_mode">list,form</field>
-        <field name="search_view_id" ref="view_isg_incident_search"/>
-        <field name="context">{}</field>
+        <field name="help">İş kazası, ramak kala ve meslek hastalığı kayıtlarını yönetin.</field>
     </record>
+
+    <!-- ========== MENUS ========== -->
+    <menuitem id="menu_isg_incident" name="İş Kazası Yönetimi" parent="isg_core.menu_isg_root" sequence="50" action="action_isg_incident"/>
 </odoo>

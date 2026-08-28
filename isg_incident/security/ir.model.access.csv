@@ -1,4 +1,7 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_isg_incident_readonly,isg.incident readonly,isg_incident.model_isg_incident,isg_security.group_isg_readonly,1,0,0,0
-access_isg_incident_expert,isg.incident expert,isg_incident.model_isg_incident,isg_security.group_isg_expert,1,1,1,0
-access_isg_incident_manager,isg.incident manager,isg_incident.model_isg_incident,isg_security.group_isg_manager,1,1,1,1
+access_isg_incident_readonly,isg.incident readonly,model_isg_incident,isg_security.group_isg_readonly,1,0,0,0
+access_isg_incident_expert,isg.incident expert,model_isg_incident,isg_security.group_isg_expert,1,1,1,0
+access_isg_incident_manager,isg.incident manager,model_isg_incident,isg_security.group_isg_manager,1,1,1,1
+access_isg_incident_injury_readonly,isg.incident.injury readonly,model_isg_incident_injury,isg_security.group_isg_readonly,1,0,0,0
+access_isg_incident_injury_expert,isg.incident.injury expert,model_isg_incident_injury,isg_security.group_isg_expert,1,1,1,0
+access_isg_incident_injury_manager,isg.incident.injury manager,model_isg_incident_injury,isg_security.group_isg_manager,1,1,1,1
