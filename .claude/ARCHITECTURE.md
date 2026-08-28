@@ -1,97 +1,57 @@
-# ARCHITECTURE.md — Mimari ve Tasarım Kararları
+# ARCHITECT.md
 
-Genel Mimari: Odoo 18 İSG Platform
+## System Overview
 
-Odoo 18 ERP Altyapısı (İK, Muhasebe, Satın Alma, CRM)
-↓
-isg_core (Workplace/Site hiyerarşisi, isg.rate.table)
-↓
-FAZ 0-1 (Güvenlik, Yönetişim)
-isg_security, isg_party, isg_training, isg_contractor, isg_board
-↓
-FAZ 4 — Sanal Müfettiş (Çekirdek DNA)
-1. isg_legislation — mevzuat kütüphanesi (7 obligation)
-2. isg_compliance — uygunluk motoru (snapshot mimarisi)
-3. isg_penalty — ceza hesabı (2026 tarife)
-4. isg_simulator — bulgular modeli
-↓
-FAZ 2 (Operasyonel Modüller)
-isg_risk, isg_capa, isg_incident (✅ sırada)
-isg_audit, isg_ppe, isg_emergency, isg_chemical, isg_equipment, isg_ptw+loto
-↓
-OSGB Planlama (isg_osgb)
-İşyeri-uzman atama, aylık dakika uygunluğu, kapasite planlama
-(isg.rate.table entegre)
-↓
-FAZ 3 (Ölçüm/Çevre)
-isg_measurement_core, isg_measurement_hygiene, isg_environment
-↓
-FAZ 5 (Raporlama)
-isg_reporting, Superset, TRIR/LWDR KPI
+PBIMonitor — Multi-tenant Power BI monitoring SaaS on Contabo VPS (95.111.242.96:8003)
 
-Tasarım Kararları (Kritik):
+**Stack:** Flask + PyMySQL + MySQL 8.0 + Docker Compose
+**Auth:** Azure AD OAuth (device-code flow)
+**Alerts:** WhatsApp (Meta Graph API) + Email (SMTP)
+**Encryption:** Fernet (AES-128)
 
-1. isg_compliance "Snapshot" Mimarisi
-Uygunluk değerlendirmesi tarihe bağlı olarak depolanır.
-Gerekçe: Audit trail, versiyonlu mevzuat, geçmiş tarihli hesaplar.
-Sonuç: 100% audit-grade → kasa açılan her rapor tekrar üretilebilir.
+## Deployment
+- **Server:** Contabo VPS (95.111.242.96:8003)
+- **Containers:** 3 (web, scheduler, db)
+- **Network:** `pbimonitor_pbimonitor-net` (bridge)
 
-2. isg.rate.table Merkezileştirme
-Uzman/hekim dakika katsayıları isg_core'da tek tablo.
-Kullanan: isg_workplace + isg_osgb
-Versiyonlanmış: valid_from (geçmiş tarihli hesaplar için)
-Gerekçe: Ortak kaynak → veri bütünlüğü
+## Key Routes
+- `/` — dashboard (stats, datasets)
+- `/api/datasets` — list user's datasets (PBI API)
+- `/api/kontrol` — run immediate refresh check
+- `/api/ayarlar` — save dataset thresholds
+- `/api/alarm_log` — fetch alarm history
+- `/api/refresh_history/<dataset_id>` — fetch last 20 refreshes
+- `/api/gateway_log` — gateway health history
 
-3. isg_osgb.assignment "Compliance Status"
-İşyeri-uzman atamasında aylık dakika uygunluğu otomatik hesaplanır (%90 tolerans).
-Manager dashboard: red-yellow-green renkler
+## Database (MySQL 8.0)
+**9 Tables:**
+- users, pbi_connections, datasets, dataset_config
+- refresh_history, alarm_log, alarm_history
+- gateway_health, gateway_log
 
-4. Unidirectional Dependency Chain
-isg_core ← isg_hr ← isg_training, isg_contractor
-         ← isg_legislation ← isg_compliance ← isg_penalty ← isg_simulator
-         ← isg_risk ← isg_incident
-         ← isg_osgb
+## Alarms (8 conditions)
+1. Ardışık Başarısızlık (counter-based)
+2. Sıfır Süre Refresh (0 seconds = no data)
+3. Kaçırılan Refresh (expected time passed)
+4. Duration Anomaly (rolling 10-refresh avg)
+5. Schedule Disabled
+6. Gateway Down
+7. Dataset Count Mismatch
+8. (Attempted: Completed with Warnings — API impossible)
 
-Hiç geri-referans yok.
+## Data Flow
+1. Scheduler (30 min interval) calls PBI API
+2. Compare against `dataset_config` thresholds
+3. Evaluate alarm conditions
+4. Send WhatsApp + Email alerts
+5. Log to `alarm_log`
+6. Record `refresh_history`
 
-5. ACL Stratejisi
-3 rol grubu (isg_security):
-- group_isg_readonly (okuma)
-- group_isg_expert (uzman, okuma-yazma)
-- group_isg_manager (tüm yaşam döngüsü)
+## Encryption (Fernet)
+- Key: `ENCRYPTION_KEY` from `.env`
+- Fields: token, refresh_token, smtp_password, wa_token
 
-6. Sequence İsimlendirmesi
-ISG-HAZARD-YYYY-NNNN, ISG-RISK-YYYY-NNNN, ISG-INCIDENT-YYYY-NNNN
-ISG-CAPA-YYYY-NNNN, ISG-AUDIT-YYYY-NNNN, ISG-CEZA-YYYY-NNNN
-
-Mevzuat Entegrasyon Modeli:
-
-isg_legislation (kütüphane)
-→ obligation: "6331 md.6 — Uzman 40 dk"
-→ isg_compliance (uyum kontrol)
-→ workplace danger_class=high, 100 çalışan
-→ required = 4000 dk/ay
-→ isg_osgb.assignment.monthly_required_minutes = 4000
-→ monthly_actual_minutes = 3500
-→ compliance_status = "warning" (3500 < 3600 = 90%)
-
-Veri Saklama ve Maskeleme (KVKK):
-
-Sağlık Verisi (isg_health_basic):
-- Employee.medical_history → isg_health.record (hassas)
-- ACL: sadece group_isg_health_officer oku
-- Maskeleme: Raporlarda çalışan adı göstermez, "KGN001"
-- Rıza: consent_date field
-
-Test Stratejisi:
-1. Birim: create/read/update/delete
-2. Entegrasyon: workflow'lar
-3. Mevzuat: obligation matching (50+ scenario)
-4. UI: form render, list, action buttons
-5. Performans: 1000 record/modül bulk test
-
-Git: main branch, direct push
-
-Gelecek (E2/E3):
-E2: Superset, Flutter, multi-company
-E3: SGK/EKİPNET/İSG-KATİP, e-imza
+## Known Limitations
+- API gaps: "Completed with Warnings", capacity metrics, row counts, credential expiry
+- Single dataset checks only
+- Only WhatsApp + SMTP (no Teams/Slack yet)

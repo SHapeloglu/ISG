@@ -1,52 +1,59 @@
-# CLAUDE.md — Yeni Chat Bağlamı
+# CLAUDE.md
 
-Tarih: 26 Ağustos 2026
+## Critical Environment Patterns
 
-Proje Özeti:
-Contabo VPS üzerinde Odoo 18 tabanlı Türkiye İSG platformu.
-Hedef: HSE Radar ile %95+ eşdeğerlik + Odoo ERP entegrasyonu.
+### Heredoc Failures
+**Do NOT use:** `<< 'PYEOF'` syntax — fails silently in this Docker/Bash environment.
+**Always use:** `python3 -c` with escaped strings, or base64-encode script.
 
-Geliştirici Profili:
-- Junior Odoo developer
-- Python/Odoo öğreniyor
-- Her adım birlikte, step by step
-- Terminal komutları sunucuda çalıştırıyor
+### Multi-line Sed
+**Do NOT use:** Complex multi-line `sed` replacements — fail silently.
+**Always use:** Python patch script with exact string anchors + `count() != 1` safety guard.
 
-Son Oturum (26 Ağustos):
-✅ B-1: isg.rate.table
-✅ B-2/B-3/B-6/B-7: MEV retrofit
-✅ isg_osgb başlandı
+### Docker Network Issues
+After `docker rm -f` + recreation:
+- New containers join: `pbimonitor_final_pbimonitor-net`
+- Old DB container on: `pbimonitor_pbimonitor-net` (no rebuild)
+- **Fix:** Always run `docker network connect pbimonitor_pbimonitor-net <container>` after restart
 
-Proje İlerleme: 30/32 modül (%93.75)
-Sistem: Stabil, 58 modül çalışıyor
+### MySQL 8.0 Quirks
+- Does NOT support `ADD COLUMN IF NOT EXISTS`
+- Use comma-separated `ADD COLUMN` statements instead
+- Prepare patch script to validate before deployment
 
-Çalışma Kuralları:
-- Komutları tek tek ver
-- Terminal çıktısını bekle
-- `--logfile=""` daima
-- Manifest: base, mail
-- Views: Odoo 18 (list editable="bottom")
-- ACL: readonly/expert/manager
-- Sequence: ISG-XXX-YYYY-NNNN
+## Session Management Protocol
 
-Odoo 18 Uyumluluğu (KRİTİK):
-1. <tree> → <list>
-2. states= ve attrs= YASAK
-3. fields.Datetime (büyük D)
-4. unique=True Char'da WARNING
-5. XML: <data> wrapper gerek yok
-6. <list editable="bottom">
-7. tracking=True Selection'da desteklenmiyor
+1. **Self-monitor:** Every ~10 messages, check if session exceeds ~15 messages or involves heavy file ops
+2. **Close sequence when needed:**
+   - Update SESSION.md (current status)
+   - Update TASKS.md (completed/pending)
+   - Update ARCHITECT.md (system design)
+   - Update DB_SCHEMA.md (table structure)
+   - Update ERRORS.md (known issues)
+   - Git commit + push all docs
+   - Instruct user to download zip
 
-Kurulu Modüller (58 toplam, 30 ISG):
-isg_core, isg_security, isg_party, isg_location, isg_document, isg_hr, 
-isg_base, isg_training, isg_contractor, isg_board, isg_correspondence, 
-isg_visitor, isg_legislation, isg_compliance, isg_penalty, isg_simulator,
-isg_capa, isg_risk, isg_osgb
+3. **Session entry (next time):**
+   - Fetch user's zip with all .md files
+   - Reconstruct context from CLAUDE.md + SESSION.md + ARCHITECT.md
+   - Continue from exact point
 
-Sıradaki:
-1. isg_osgb view'ları
-2. B-4/8/9 MEV retrofit
-3. F2-003 isg_incident
+## Workflow
+1. Generate command
+2. User runs on server, pastes terminal output
+3. Claude diagnoses + responds
+4. Repeat until feature complete
 
-Proje Durum: %71 (adam-gün %75)
+## User Interaction Style
+- **Terse:** Minimal explanation, direct action
+- **User trusts:** Frequently responds "önerin nedir" (what's your recommendation)
+- **No unnecessary detail:** Just the command + expected output
+
+## Patch-Deploy Cycle
+1. Write Python patch script (exact string anchors)
+2. Test on local clone (py_compile validation)
+3. Base64 encode + one-liner for sunucu
+4. Run on sunucu → verify output
+5. Docker rebuild → network connect → restart
+6. Verify logs
+7. Git commit
