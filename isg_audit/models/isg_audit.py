@@ -37,6 +37,10 @@ class IsgAudit(models.Model):
         'isg.site', string='Lokasyon',
         domain="[('workplace_id', '=', workplace_id)]",
     )
+    contractor_id = fields.Many2one(
+        'isg.contractor', string='Alt İşveren (Opsiyonel)',
+        help='Eğer bu denetim bir alt işverenin denetimi ise burada seçin',
+    )
     audit_date = fields.Date(
         string='Denetim Tarihi', required=True,
         default=fields.Date.context_today, tracking=True,
@@ -74,6 +78,23 @@ class IsgAudit(models.Model):
     open_capa_count = fields.Integer(
         string='Açık DÖF', compute='_compute_stats', store=True,
     )
+    total_weight = fields.Integer(
+        string='Toplam Ağırlık (Max Puan)', compute='_compute_scoring', store=True,
+    )
+    achieved_weight = fields.Integer(
+        string='Elde Edilen Puan', compute='_compute_scoring', store=True,
+    )
+    compliance_percentage = fields.Float(
+        string='Uyum %', compute='_compute_scoring', store=True,
+    )
+    compliance_status = fields.Selection(
+        [
+            ('red', 'RED - Uygunsuz'),
+            ('yellow', 'YELLOW - Kısmi Uyum'),
+            ('green', 'GREEN - Uyumlu'),
+        ],
+        string='Uyum Durumu', compute='_compute_scoring', store=True,
+    )
 
     @api.depends('line_ids.result', 'line_ids.capa_id.state')
     def _compute_stats(self):
@@ -85,6 +106,29 @@ class IsgAudit(models.Model):
             rec.open_capa_count = len(lines.filtered(
                 lambda l: l.capa_id and l.capa_id.state not in ('closed', 'cancelled')
             ))
+
+    @api.depends('line_ids.weight', 'line_ids.response_weight', 'line_ids.is_critical', 'line_ids.result')
+    def _compute_scoring(self):
+        for rec in self:
+            lines = rec.line_ids
+            rec.total_weight = sum(lines.mapped('weight'))
+            rec.achieved_weight = sum(lines.mapped('response_weight'))
+            
+            if rec.total_weight > 0:
+                rec.compliance_percentage = (rec.achieved_weight / rec.total_weight) * 100
+            else:
+                rec.compliance_percentage = 0
+            
+            # Kritik bulgu varsa RED, yoksa % bağlı
+            has_critical_nok = any(l.is_critical and l.result == 'nok' for l in lines)
+            if has_critical_nok:
+                rec.compliance_status = 'red'
+            elif rec.compliance_percentage >= 90:
+                rec.compliance_status = 'green'
+            elif rec.compliance_percentage >= 70:
+                rec.compliance_status = 'yellow'
+            else:
+                rec.compliance_status = 'red'
 
     @api.model_create_multi
     def create(self, vals_list):
@@ -112,6 +156,7 @@ class IsgAudit(models.Model):
                 'question': q.question,
                 'category': q.category,
                 'legal_reference': q.legal_reference,
+                'weight': q.weight,
                 'is_critical': q.is_critical,
             })
         self.env['isg.audit.line'].create(lines)
@@ -160,6 +205,10 @@ class IsgAuditLine(models.Model):
         string='Kategori', default='other',
     )
     legal_reference = fields.Char(string='Yasal Dayanak')
+    weight = fields.Integer(
+        string='Ağırlık (Puan)', default=1,
+        help='Template\'ten otomatik kopyalanır',
+    )
     is_critical = fields.Boolean(string='Kritik Madde')
     result = fields.Selection(
         [
@@ -170,11 +219,23 @@ class IsgAuditLine(models.Model):
         ],
         string='Sonuç',
     )
+    response_weight = fields.Integer(
+        string='Yanıt Puanı', compute='_compute_response_weight', store=True,
+        help='Uygun ise weight, değilse 0',
+    )
     finding = fields.Text(string='Bulgu / Açıklama')
     evidence = fields.Char(string='Kanıt / Referans')
     capa_id = fields.Many2one(
         'isg.capa', string='İlişkili DÖF', readonly=True, copy=False,
     )
+
+    @api.depends('result', 'weight')
+    def _compute_response_weight(self):
+        for rec in self:
+            if rec.result == 'ok':
+                rec.response_weight = rec.weight
+            else:
+                rec.response_weight = 0
 
     def action_create_capa(self):
         self.ensure_one()

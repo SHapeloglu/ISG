@@ -42,7 +42,8 @@
                                     <field name="question"/>
                                     <field name="category"/>
                                     <field name="legal_reference"/>
-                                    <field name="is_critical"/>
+                                    <field name="weight" string="Ağırlık"/>
+                                    <field name="is_critical" string="Kritik"/>
                                 </list>
                             </field>
                         </page>

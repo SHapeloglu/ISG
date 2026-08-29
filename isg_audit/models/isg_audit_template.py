@@ -62,6 +62,10 @@ class IsgAuditTemplateQuestion(models.Model):
         string='Kategori', default='other',
     )
     legal_reference = fields.Char(string='Yasal Dayanak')
+    weight = fields.Integer(
+        string='Ağırlık (Puan)', default=1,
+        help='1=Minör, 2=Düşük, 3=Orta, 4=Yüksek, 5=Kritik',
+    )
     is_critical = fields.Boolean(
         string='Kritik Madde',
         help='İşaretlenirse uygunsuz bulgu otomatik DÖF açar',
