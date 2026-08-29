@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <!-- isg.waste.disposal: List View -->
+        <record model="ir.ui.view" id="view_waste_disposal_list">
+            <field name="name">isg.waste.disposal.list</field>
+            <field name="model">isg.waste.disposal</field>
+            <field name="arch" type="xml">
+                <list decoration-muted="state == 'archived'">
+                    <field name="disposal_date"/>
+                    <field name="workplace_id"/>
+                    <field name="waste_code_id"/>
+                    <field name="quantity_m3"/>
+                    <field name="disposal_method"/>
+                    <field name="disposal_company_id"/>
+                    <field name="cost"/>
+                    <field name="state" widget="badge"/>
+                </list>
+            </field>
+        </record>
+        
+        <!-- isg.waste.disposal: Form View -->
+        <record model="ir.ui.view" id="view_waste_disposal_form">
+            <field name="name">isg.waste.disposal.form</field>
+            <field name="model">isg.waste.disposal</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="action_confirm" string="Onayla" type="object" class="btn-primary" invisible="state != 'draft'"/>
+                        <button name="action_dispose" string="Bertaraf Tamamlandı" type="object" class="btn-success" invisible="state != 'confirmed'"/>
+                        <button name="action_archive" string="Arşivle" type="object" invisible="state != 'disposed'"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="workplace_id"/>
+                                <field name="disposal_date"/>
+                                <field name="waste_code_id"/>
+                            </group>
+                            <group>
+                                <field name="waste_storage_id"/>
+                                <field name="disposal_method"/>
+                                <field name="responsible_person_id"/>
+                            </group>
+                        </group>
+                        
+                        <separator string="Miktar"/>
+                        <group>
+                            <group>
+                                <field name="quantity_m3"/>
+                                <field name="quantity_kg"/>
+                            </group>
+                        </group>
+                        
+                        <separator string="Bertaraf Kuruluşu"/>
+                        <group>
+                            <group>
+                                <field name="disposal_company_id"/>
+                                <field name="disposal_license_no"/>
+                            </group>
+                            <group>
+                                <field name="disposal_cert_date"/>
+                            </group>
+                        </group>
+                        
+                        <separator string="Maliyet"/>
+                        <group>
+                            <group>
+                                <field name="cost"/>
+                                <field name="cost_per_unit"/>
+                            </group>
+                        </group>
+                        
+                        <separator string="Belgelendirme"/>
+                        <group>
+                            <group>
+                                <field name="disposal_certificate"/>
+                                <field name="manifest_document"/>
+                            </group>
+                        </group>
+                        
+                        <separator string="Notlar"/>
+                        <field name="notes" nolabel="1"/>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        
+        <!-- isg.waste.disposal: Search View -->
+        <record model="ir.ui.view" id="view_waste_disposal_search">
+            <field name="name">isg.waste.disposal.search</field>
+            <field name="model">isg.waste.disposal</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="disposal_date"/>
+                    <field name="workplace_id"/>
+                    <field name="waste_code_id"/>
+                    <field name="disposal_company_id" string="Bertaraf Kuruluşu"/>
+                    <separator/>
+                    <filter name="filter_draft" string="Taslak" domain="[('state', '=', 'draft')]"/>
+                    <filter name="filter_confirmed" string="Onaylandı" domain="[('state', '=', 'confirmed')]"/>
+                    <filter name="filter_disposed" string="Bertaraf Yapıldı" domain="[('state', '=', 'disposed')]"/>
+                    <separator/>
+                    <filter name="filter_by_month" string="Bu Ay" domain="[('disposal_date', '&gt;=', datetime.date.today().replace(day=1)), ('disposal_date', '&lt;=', datetime.date.today())]"/>
+                </search>
+            </field>
+        </record>
+        
+        <!-- Action -->
+        <record model="ir.actions.act_window" id="action_waste_disposal_list">
+            <field name="name">Atık Bertaraf Kaydı</field>
+            <field name="res_model">isg.waste.disposal</field>
+            <field name="view_mode">list,form</field>
+        </record>
+        
+    </data>
+</odoo>

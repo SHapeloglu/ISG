@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        
+        <!-- Genel Atıklar -->
+        <record model="isg.waste.code" id="waste_code_general_paper">
+            <field name="code">20.01</field>
+            <field name="name">Kağıt ve Karton (Ayırılmış)</field>
+            <field name="waste_category">general</field>
+            <field name="is_hazardous">0</field>
+            <field name="disposal_method">recycling</field>
+        </record>
+        
+        <record model="isg.waste.code" id="waste_code_general_plastic">
+            <field name="code">20.02</field>
+            <field name="name">Plastik</field>
+            <field name="waste_category">general</field>
+            <field name="is_hazardous">0</field>
+            <field name="disposal_method">recycling</field>
+        </record>
+        
+        <record model="isg.waste.code" id="waste_code_general_metal">
+            <field name="code">20.04</field>
+            <field name="name">Metal</field>
+            <field name="waste_category">general</field>
+            <field name="is_hazardous">0</field>
+            <field name="disposal_method">recycling</field>
+        </record>
+        
+        <!-- Tehlikeli Atıklar -->
+        <record model="isg.waste.code" id="waste_code_hazard_oil">
+            <field name="code">08.04.02</field>
+            <field name="name">Kullanılmış Mineral Yağ</field>
+            <field name="waste_category">hazardous</field>
+            <field name="is_hazardous">1</field>
+            <field name="hazard_characteristics">Başında H* işareti (2014/955/EU)</field>
+            <field name="disposal_method">hazmat</field>
+            <field name="storage_requirements">Kapalı, uygun konteynerler içinde, kütlesi 3000 kg'dan fazla ise depo mühendis onaylı olmalı</field>
+        </record>
+        
+        <record model="isg.waste.code" id="waste_code_hazard_battery">
+            <field name="code">16.06.01</field>
+            <field name="name">Kurşunlu Piller</field>
+            <field name="waste_category">hazardous</field>
+            <field name="is_hazardous">1</field>
+            <field name="disposal_method">hazmat</field>
+            <field name="storage_requirements">Kuru, uygun yerde, kurşun ve asit sızıntısı önlenmeli</field>
+        </record>
+        
+        <!-- İnşaat Atığı -->
+        <record model="isg.waste.code" id="waste_code_construction_concrete">
+            <field name="code">17.01.01</field>
+            <field name="name">Beton Atığı</field>
+            <field name="waste_category">construction</field>
+            <field name="is_hazardous">0</field>
+            <field name="disposal_method">landfill</field>
+        </record>
+        
+    </data>
+</odoo>

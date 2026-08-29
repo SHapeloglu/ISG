@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <!-- isg.waste.storage: List View -->
+        <record model="ir.ui.view" id="view_waste_storage_list">
+            <field name="name">isg.waste.storage.list</field>
+            <field name="model">isg.waste.storage</field>
+            <field name="arch" type="xml">
+                <list decoration-success="capacity_status == 'ok'" 
+                      decoration-warning="capacity_status == 'warning'" 
+                      decoration-danger="capacity_status == 'full'">
+                    <field name="workplace_id"/>
+                    <field name="name"/>
+                    <field name="storage_type"/>
+                    <field name="capacity_m3"/>
+                    <field name="current_volume_m3"/>
+                    <field name="capacity_percentage" widget="progressbar"/>
+                    <field name="capacity_status" widget="badge"/>
+                    <field name="is_active"/>
+                </list>
+            </field>
+        </record>
+        
+        <!-- isg.waste.storage: Form View -->
+        <record model="ir.ui.view" id="view_waste_storage_form">
+            <field name="name">isg.waste.storage.form</field>
+            <field name="model">isg.waste.storage</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <div class="alert alert-warning" invisible="capacity_status != 'full'">
+                            <strong>UYARI:</strong> Depo kapasitesi %90'ın üzerindedir!
+                        </div>
+                        
+                        <group>
+                            <group>
+                                <field name="workplace_id" readonly="1"/>
+                                <field name="site_id"/>
+                                <field name="name"/>
+                                <field name="storage_type"/>
+                            </group>
+                            <group>
+                                <field name="capacity_m3"/>
+                                <field name="current_volume_m3"/>
+                                <field name="capacity_percentage" widget="gauge"/>
+                                <field name="capacity_status" widget="badge"/>
+                                <field name="is_active"/>
+                            </group>
+                        </group>
+                        
+                        <separator string="Depolanan Atık Türleri"/>
+                        <field name="waste_code_ids" nolabel="1" widget="many2many_tags"/>
+                        
+                        <separator string="Depolama Koşulları"/>
+                        <group>
+                            <group>
+                                <field name="temperature_controlled"/>
+                                <field name="min_temperature" invisible="not temperature_controlled"/>
+                                <field name="max_temperature" invisible="not temperature_controlled"/>
+                            </group>
+                            <group>
+                                <field name="ventilated"/>
+                                <field name="fire_extinguisher_count"/>
+                            </group>
+                        </group>
+                        
+                        <separator string="Periyodik İnceleme"/>
+                        <group>
+                            <group>
+                                <field name="inspection_required"/>
+                                <field name="last_inspection_date" invisible="not inspection_required"/>
+                                <field name="next_inspection_date" invisible="not inspection_required"/>
+                            </group>
+                        </group>
+                        
+                        <separator string="Notlar"/>
+                        <field name="compliance_notes" nolabel="1"/>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        
+        <!-- isg.waste.storage: Search View -->
+        <record model="ir.ui.view" id="view_waste_storage_search">
+            <field name="name">isg.waste.storage.search</field>
+            <field name="model">isg.waste.storage</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="workplace_id"/>
+                    <field name="name" string="Depo Adı"/>
+                    <field name="storage_type"/>
+                    <separator/>
+                    <filter name="filter_full" string="Dolu (90%+)" domain="[('capacity_status', '=', 'full')]"/>
+                    <filter name="filter_warning" string="Uyarı (70%+)" domain="[('capacity_status', '=', 'warning')]"/>
+                    <filter name="filter_active" string="Aktif" domain="[('is_active', '=', True)]"/>
+                </search>
+            </field>
+        </record>
+        
+        <!-- Action -->
+        <record model="ir.actions.act_window" id="action_waste_storage_list">
+            <field name="name">Atık Depolama Alanları</field>
+            <field name="res_model">isg.waste.storage</field>
+            <field name="view_mode">list,form</field>
+        </record>
+        
+    </data>
+</odoo>

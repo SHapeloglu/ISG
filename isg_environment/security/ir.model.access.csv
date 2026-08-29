@@ -1,0 +1,12 @@
+id,name,model_id:id,group_id:id,perm_create,perm_write,perm_read,perm_unlink
+access_waste_code_readonly,isg.waste.code / Salt Okuma,model_isg_waste_code,isg_security.group_isg_readonly,0,0,1,0
+access_waste_code_expert,isg.waste.code / Uzman,model_isg_waste_code,isg_security.group_isg_expert,1,1,1,0
+access_waste_code_manager,isg.waste.code / Yönetici,model_isg_waste_code,isg_security.group_isg_manager,1,1,1,1
+
+access_waste_storage_readonly,isg.waste.storage / Salt Okuma,model_isg_waste_storage,isg_security.group_isg_readonly,0,0,1,0
+access_waste_storage_expert,isg.waste.storage / Uzman,model_isg_waste_storage,isg_security.group_isg_expert,1,1,1,0
+access_waste_storage_manager,isg.waste.storage / Yönetici,model_isg_waste_storage,isg_security.group_isg_manager,1,1,1,1
+
+access_waste_disposal_readonly,isg.waste.disposal / Salt Okuma,model_isg_waste_disposal,isg_security.group_isg_readonly,0,0,1,0
+access_waste_disposal_expert,isg.waste.disposal / Uzman,model_isg_waste_disposal,isg_security.group_isg_expert,1,1,1,0
+access_waste_disposal_manager,isg.waste.disposal / Yönetici,model_isg_waste_disposal,isg_security.group_isg_manager,1,1,1,1

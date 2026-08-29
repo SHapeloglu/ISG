@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <!-- Çevre Yönetimi Ana Menüsü -->
+        <menuitem id="menu_isg_environment_root" 
+                  name="Çevre Yönetimi" 
+                  parent="isg_core.menu_isg_root" 
+                  sequence="60"/>
+        
+        <!-- Atık Kodu Kataloğu -->
+        <menuitem id="menu_waste_code" 
+                  name="Atık Kodları" 
+                  parent="menu_isg_environment_root" 
+                  action="isg_environment.action_waste_code_list" 
+                  sequence="10"/>
+        
+        <!-- Atık Depolama -->
+        <menuitem id="menu_waste_storage" 
+                  name="Atık Depolama Alanları" 
+                  parent="menu_isg_environment_root" 
+                  action="isg_environment.action_waste_storage_list" 
+                  sequence="20"/>
+        
+        <!-- Atık Bertaraf -->
+        <menuitem id="menu_waste_disposal" 
+                  name="Atık Bertaraf Kaydı" 
+                  parent="menu_isg_environment_root" 
+                  action="isg_environment.action_waste_disposal_list" 
+                  sequence="30"/>
+        
+    </data>
+</odoo>

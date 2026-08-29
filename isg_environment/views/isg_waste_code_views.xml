@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <!-- isg.waste.code: List View -->
+        <record model="ir.ui.view" id="view_waste_code_list">
+            <field name="name">isg.waste.code.list</field>
+            <field name="model">isg.waste.code</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="code" widget="badge" decoration-success="not is_hazardous" decoration-danger="is_hazardous"/>
+                    <field name="name"/>
+                    <field name="waste_category"/>
+                    <field name="is_hazardous"/>
+                    <field name="disposal_method"/>
+                    <field name="is_active"/>
+                </list>
+            </field>
+        </record>
+        
+        <!-- isg.waste.code: Form View -->
+        <record model="ir.ui.view" id="view_waste_code_form">
+            <field name="name">isg.waste.code.form</field>
+            <field name="model">isg.waste.code</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="code"/>
+                                <field name="name"/>
+                                <field name="waste_category"/>
+                            </group>
+                            <group>
+                                <field name="is_hazardous"/>
+                                <field name="disposal_method"/>
+                                <field name="is_active"/>
+                            </group>
+                        </group>
+                        
+                        <notebook>
+                            <page name="hazard" string="Tehlike Özellikleri">
+                                <field name="hazard_characteristics" nolabel="1"/>
+                            </page>
+                            <page name="storage" string="Depolama">
+                                <field name="storage_requirements" nolabel="1"/>
+                            </page>
+                            <page name="notes" string="Notlar">
+                                <field name="notes" nolabel="1"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        
+        <!-- isg.waste.code: Search View -->
+        <record model="ir.ui.view" id="view_waste_code_search">
+            <field name="name">isg.waste.code.search</field>
+            <field name="model">isg.waste.code</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="code" string="Atık Kodu"/>
+                    <field name="name" string="Açıklama"/>
+                    <separator/>
+                    <filter name="filter_hazardous" string="Tehlikeli Atıklar" domain="[('is_hazardous', '=', True)]"/>
+                    <filter name="filter_general" string="Genel Atıklar" domain="[('is_hazardous', '=', False)]"/>
+                    <separator/>
+                    <filter name="filter_active" string="Aktif" domain="[('is_active', '=', True)]"/>
+                </search>
+            </field>
+        </record>
+        
+        <!-- Action -->
+        <record model="ir.actions.act_window" id="action_waste_code_list">
+            <field name="name">Atık Kodları</field>
+            <field name="res_model">isg.waste.code</field>
+            <field name="view_mode">list,form</field>
+        </record>
+        
+    </data>
+</odoo>
