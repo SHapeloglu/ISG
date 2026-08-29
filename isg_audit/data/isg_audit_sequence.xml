@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <data noupdate="1">
-        <record id="seq_isg_audit" model="ir.sequence">
-            <field name="name">İSG Denetim</field>
-            <field name="code">isg.audit</field>
-            <field name="prefix">ISG-DNT-%(year)s-</field>
-            <field name="padding">4</field>
-            <field name="company_id" eval="False"/>
-        </record>
-    </data>
+    <record id="seq_isg_audit" model="ir.sequence">
+        <field name="name">İSG Denetim</field>
+        <field name="code">isg.audit</field>
+        <field name="prefix">ISG-DNT-%(year)s-</field>
+        <field name="padding">4</field>
+        <field name="company_id" eval="False"/>
+    </record>
+    
+    <record id="seq_isg_audit_finding" model="ir.sequence">
+        <field name="name">İSG Denetim Bulgusu</field>
+        <field name="code">isg.audit.finding</field>
+        <field name="prefix">ISG-BLG-%(year)s-</field>
+        <field name="padding">4</field>
+        <field name="company_id" eval="False"/>
+    </record>
 </odoo>

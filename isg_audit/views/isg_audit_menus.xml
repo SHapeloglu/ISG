@@ -9,6 +9,11 @@
         parent="menu_isg_audit_root"
         action="action_isg_audit"
         sequence="10"/>
+    <menuitem id="menu_isg_audit_finding"
+        name="Denetim Bulguları"
+        parent="menu_isg_audit_root"
+        action="action_isg_audit_finding"
+        sequence="15"/>
     <menuitem id="menu_isg_audit_template"
         name="Kontrol Listesi Şablonları"
         parent="menu_isg_audit_root"

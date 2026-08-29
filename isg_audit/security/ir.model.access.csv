@@ -11,3 +11,6 @@ access_isg_audit_manager,isg.audit manager,isg_audit.model_isg_audit,isg_securit
 access_isg_audit_line_readonly,isg.audit.line readonly,isg_audit.model_isg_audit_line,isg_security.group_isg_readonly,1,0,0,0
 access_isg_audit_line_expert,isg.audit.line expert,isg_audit.model_isg_audit_line,isg_security.group_isg_expert,1,1,1,0
 access_isg_audit_line_manager,isg.audit.line manager,isg_audit.model_isg_audit_line,isg_security.group_isg_manager,1,1,1,1
+access_isg_audit_finding_readonly,isg.audit.finding readonly,isg_audit.model_isg_audit_finding,isg_security.group_isg_readonly,1,0,0,0
+access_isg_audit_finding_expert,isg.audit.finding expert,isg_audit.model_isg_audit_finding,isg_security.group_isg_expert,1,1,1,0
+access_isg_audit_finding_manager,isg.audit.finding manager,isg_audit.model_isg_audit_finding,isg_security.group_isg_manager,1,1,1,1
