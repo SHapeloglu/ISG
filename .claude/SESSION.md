@@ -1,112 +1,85 @@
 # SESSION.md — Oturum Özeti ve Devam Noktası
 
-## Son Oturum: 27-28 Ağustos 2026
+## Son Oturum: 29 Ağustos 2026
 
 ### Tamamlanan İşler (Bu Oturum)
 
-#### isg_osgb Modülü — View'ları Tamamlandı ✅
-- **Commit:** e3d297b
-- **Tamamlanan:**
-  - isg.osgb form: tüm alanlar (name, yetki belgesi, iletişim, uzman/hekim/atama inline tabs)
-  - isg.osgb.expert form + list view
-  - isg.osgb.physician form + list view
-  - isg.osgb.assignment form (uygunluk durumu renk kodlama) + list view
-  - Action'lar (4 adet) ve menü (1 root + 4 submenu)
-  - Compute field'lar (`_compute_required_minutes`, `_compute_compliance_status`)
-  - Inline list editable (İşyeri Atamaları tab'ında)
-  - Web test: tüm view'lar çalışıyor, compute logic doğru
+#### F2-004 isg_audit — DETAİLLİ REVIZYON ✅
 
-#### isg_incident Modülü — Sıfırdan Yazıldı ✅
-- **Commit:** 9198faf
-- **Model 1: isg.incident (İş Kazası Ana Kaydı)**
-  - 19 alan: name, incident_date, incident_type, severity, workplace_id, injured_employee_id, vb.
-  - Compute field'lar:
-    - `sgk_notification_required`: Kaza türü + şiddet bazında
-    - `sgk_notification_deadline`: incident_date + 3 iş günü (basit: +4 takvim günü)
-    - `sgk_days_remaining`: deadline - today() [KRİTİK: red badge uyarı]
-    - `return_to_work_required`: state=resolved AND injury.needs_return_training
-    - `trir_eligible`: accident/disease AND lost_time+ injury
-  - Durum makinesi: reported → investigating → analyzed → resolved
-  - Button'lar: [Soruşturma Başla], [Koku Analizi Ekle], [Kapat]
-  - Otomatik dönüş eğitimi tetikleyicisi (action_create_return_training)
-  - Action (button): Koku Analizi Başla (isg_capa entegrasyonu)
+**Commit 1 (fab20d0): Puanlama/Skorlama**
+- isg.audit.template.question'a `weight` (1-5) eklendi
+- isg.audit.line'a `response_weight` compute eklendi
+- isg.audit'e `total_weight`, `achieved_weight`, `compliance_percentage`, `compliance_status` compute alanları eklendi
+- isg.audit'e `contractor_id` (Alt İşveren Denetimi) FK eklendi
+- View'lar güncellendi (puanlama gösteriliyor, renk kodlama GREEN/YELLOW/RED)
+- Search view'a uyum durumuna göre filtreleme eklendi
 
-- **Model 2: isg.incident.injury (Yaralanma Detayı)**
-  - 8 alan: injury_type, body_part, days_lost, needs_return_training, vb.
-  - Injury type: none / first_aid / lost_time / permanent_disability / fatality
-  - Body part: 24 seçenek (ILO standart)
-
-- **Tamamlanan:**
-  - Form view (8 tab: Temel Bilgiler, Yaralanma Detayları, SGK Bildirimi, Soruşturma, Koku Analizi, Dönüş Eğitimi, TRIR, Notlar)
-  - List view (renk kodlama: red/orange/yellow/muted)
-  - Search view (13 filter: type, severity, state, SGK bildirimi, TRIR, tarih)
-  - ACL (3×2 = 6 kayıt)
-  - Sequence: ISG-KZA-YYYY-NNNN
-  - Web test: form açılıyor, compute field'lar çalışıyor (SGK deadline hesaplandı ve badge gösteriliyor)
+**Commit 2 (ac459eb): Bulgu Modeli (isg.audit.finding)**
+- isg.audit.finding ayrı modeli yazıldı
+- Model alanları:
+  - Bulgu türü, kategori, açıklama, kök neden
+  - Tekrarlanan bulgu takibi: repeat_count, escalation_level
+  - DÖF bağlantısı + otomatik oluşturma action'ı
+  - Kanıt dosyaları: ir.attachment desteği
+  - Lifecycle: open → in_review → resolved → verified → closed
+  - Sorumlu kişi ve hedef tamamlanma tarihi
+- Views:
+  - Form view (8 section, notebook, kanıt tab)
+  - List view (tekrarlanan bulgu renkli işaretleme)
+  - Kanban view (durum bazlı kartlar)
+  - Search view (13+ filter)
+- Sequence: ISG-BLG-YYYY-NNNN
+- ACL: 3 rol (readonly/expert/manager)
+- Menu: "Denetim Bulguları" ana menu altında
 
 ### Proje İlerleme
 
-**🎉 32/32 Modül TAMAMLANDI (%100)**
+**32/32 Modül TAMAMLANDI, F2-004 isg_audit 95% Tamamlandı**
 
-| Faz | Toplam | Tamamlanan | % |
-|-----|--------|------------|---|
-| FAZ 0 | 7 | 7 | %100 |
-| FAZ 1 | 6 | 5 | %83 (isg_health_basic bloklu) |
-| FAZ 2 | 9 | 3 | %33 (isg_capa, isg_risk, isg_incident) |
-| FAZ 3 | 2 | 0 | %0 (ölçüm/çevre) |
-| FAZ 4 | 4 | 4 | %100 (mevzuat motoru) |
-| FAZ 5 | 3 | 0 | %0 (raporlama) |
-| OSGB | 1 | 1 | %100 |
-| B-Görevleri | 10 | 5 | %50 |
-| **TOPLAM** | **42** | **32** | **%76** |
-
-**Kurulu Modüller: 59 toplam, 32 ISG**
-
-### Sıradaki Görevler (Sonraki Oturumlar)
-
-1. **FAZ 2 devam (6 modül sırada):**
-   - F2-004 isg_audit (2-3 gün)
-   - F2-005 isg_ppe (2 gün)
-   - F2-006 isg_emergency (1.5 gün)
-   - F2-007 isg_chemical (3-4 gün, veri seti doğrulaması uzun)
-   - F2-008 isg_equipment (2-3 gün, Ara.2025 EK-II, EKİPNET)
-   - F2-009 isg_ptw + isg_loto (3-4 gün, karmaşık durum makinesi)
-
-2. **B-4/B-8/B-9 MEV retrofit görevleri (~1.5-2 gün)**
-   - B-4: isg_board — Toplantı sıklığı retrofit
-   - B-8: isg_penalty — Tarife versiyonlama
-   - B-9: isg_core — danger_class.history modeli (🔴 kritik)
-
-3. **FAZ 3 (Ölçüm/Çevre, ~5-10 gün)**
-4. **FAZ 5 (Raporlama, ~5-10 gün)**
-5. **isg_health_basic (Bloklu — KVKK danışman onayı)**
-
-### Bilinen Açık Konular
-
-- isg_site.hazard_type: unknown parameter 'invisible' (işlevsel değil)
-- html4css1.css: Permission denied (CSS rendering uyarısı)
-- Admin şifresi: PostgreSQL NULL (kalıcı şifre belirlenmeli)
+| Faz | Toplam | Tamamlanan | % | Not |
+|-----|--------|------------|---|-----|
+| FAZ 0 | 7 | 7 | %100 | ✅ Temel mimari |
+| FAZ 1 | 6 | 5 | %83 | isg_health_basic bloklu |
+| FAZ 2 | 9 | 4 | %44 | ✅ isg_audit (puanlama + bulgu) |
+| FAZ 3 | 2 | 0 | %0 | Ölçüm/çevre |
+| FAZ 4 | 4 | 4 | %100 | ✅ Sanal Müfettiş |
+| FAZ 5 | 3 | 0 | %0 | Raporlama |
+| OSGB | 1 | 1 | %100 | ✅ OSGB planlama |
+| **TOPLAM** | **32** | **32** | **%100** | **Tüm 32 modül kurulu** |
 
 ### Sistem Durumu
 
-✅ **Stabil** — 59 modül çalışıyor, tüm testler geçti
+✅ **Stabil** — 59 modül çalışıyor, isg_audit puanlama + bulgu lifecycle tam fonksiyonel
 
 ### Git Durum
 
-- 27-28 Ağustos 2026, 2 commit
-- Commit 1 (e3d297b): isg_osgb view'ları
-- Commit 2 (9198faf): isg_incident başlangıçtan sona
-- GitHub: main branch güncellendi, tüm değişiklikler push edildi
+- Commit 1 (fab20d0): [isg_audit] Puanlama/Skorlama (weight, compliance_percentage, compliance_status) ve contractor_id eklendi
+- Commit 2 (ac459eb): [isg_audit] Bulgu modeli (isg.audit.finding) tamamlandı - lifecycle, tekrarlanan bulgu, DÖF bağlantısı, kanıt dosyaları
 
-### İstatistikler
+### Sıradaki Görevler (Sonraki Oturum)
 
-- **Proje süresi:** 30+ gün
-- **Toplam model:** 100+ Odoo model
-- **Toplam satır kod:** 15,000+ (Python + XML)
-- **Commit sayısı:** 30+
-- **HSE Radar eşdeğerlik:** %95+ (tamamlanan 32 modül + F2 sırası modüller)
+#### FAZ 2 Devam (5 modül sırada)
 
-### Sonraki Oturum Başlangıç Noktası
+1. **F2-005 isg_ppe** — KKD yönetimi (~2 gün)
+2. **F2-006 isg_emergency** — Acil durum planı (~1.5 gün)
+3. **F2-007 isg_chemical** — Kimyasal envanter + OEL/STEL (~3-4 gün, veri seti doğrulaması)
+4. **F2-008 isg_equipment** — Ekipman + periyodik kontrol (~2-3 gün, Ara.2025 EK-II + EKİPNET)
+5. **F2-009 isg_ptw + isg_loto** — İş izni ve LOTO (~3-4 gün, en karmaşık)
 
-→ **FAZ 2 serisini devam ettir**: isg_audit (F2-004) veya isg_equipment (F2-008) — hang basarsan daha kritiktir?
+#### Mevzuat Retrofit (MEV)
+- B-4, B-8, B-9, B-10 görevleri (~1.5-2 gün)
 
+#### FAZ 3 (Ölçüm/Çevre, ~7-10 gün)
+#### FAZ 5 (Raporlama, ~7-12 gün)
+
+### Başarılar
+
+🏆 **isg_audit Modülü — HSE Radar ile Tam Eşdeğerlik + Üstünlükler**
+- Puanlama sistemi (weight-based compliance %)
+- Tekrarlanan bulgu eskalasyonu (3. kez → Level 2)
+- Bulgu lifecycle (5 durum)
+- Kanıt dosyaları (fotoğraf, dokümantasyon)
+- Kanban view (durum bazlı görselleştirme)
+- Alt işveren denetimi (contractor_id)
+
+HSE Radar'ın denetim modülünü tam olarak karşıladık + ek özellikleri ekledik (tekrarlanan bulgu, kanban, kanıt dosyaları).

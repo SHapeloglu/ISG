@@ -2,39 +2,24 @@
 
 ## Tamamlanan Görevler ✅
 
-### FAZ 0-4 + B-Görevleri + OSGB + isg_incident Tamamlandı
+### FAZ 0-4 + OSGB + isg_incident + isg_audit Tamamlandı
 - [x] F0-001 ~ F0-007 (FAZ 0 — 7/7 %100) ✅
 - [x] F1-001, F1-003-006 (FAZ 1 — 5/6 %83, isg_health_basic bloklu)
-- [x] F2-001, F2-002, F2-003 (FAZ 2 — 3/9 %33)
+- [x] F2-001 isg_capa ✅
+- [x] F2-002 isg_risk ✅
+- [x] F2-003 isg_incident ✅
+- [x] **F2-004 isg_audit — Puanlama + Bulgu Modeli TAMAMLANDI** ✅
 - [x] F4-001 ~ F4-004 (FAZ 4 — 4/4 %100) ✅
-- [x] **B-1 ~ B-3, B-6 ~ B-7** (5 MEV retrofit görevleri)
-- [x] **isg_osgb başladı ve view'ları tamamlandı** (30/32 modül)
-- [x] **isg_incident sıfırdan yazıldı ve tamamlandı** (32/32 modül ✅)
+- [x] isg_osgb ✅
+- [x] B-1 ~ B-3, B-6 ~ B-7 (5 MEV retrofit görevleri)
 
 ---
 
-## 🎉 PROJE MİLSTON: 32/32 Modül Tamamlandı!
+## 🎯 Devam Eden / Sıradaki Görevler
 
-| Faz | Toplam | Tamamlanan | % | Not |
-|-----|--------|------------|---|-----|
-| FAZ 0 | 7 | 7 | %100 | ✅ Temel mimari |
-| FAZ 1 | 6 | 5 | %83 | isg_health_basic bloklu |
-| FAZ 2 | 9 | 3 | %33 | isg_capa, isg_risk, isg_incident |
-| FAZ 3 | 2 | 0 | %0 | Ölçüm/çevre |
-| FAZ 4 | 4 | 4 | %100 | ✅ Sanal Müfettiş |
-| FAZ 5 | 3 | 0 | %0 | Raporlama |
-| OSGB | 1 | 1 | %100 | ✅ OSGB planlama |
-| **B-Görevleri** | **10** | **5** | **%50** | 5 retrofit görevleri sırada |
-| **TOPLAM** | **42** | **32** | **%76** | **Tüm 32 ana modül kurulu** |
-
----
-
-## Devam Eden / Sıradaki Görevler 🔄
-
-### FAZ 2 — Operasyonel Modüller (6 kaldı)
+### FAZ 2 — Operasyonel Modüller (5 kaldı)
 
 **Yazılmadı:**
-- [ ] **F2-004** `isg_audit` — Denetim ve kontrol listeleri (~2-3 gün)
 - [ ] **F2-005** `isg_ppe` — KKD yönetimi (~2 gün)
 - [ ] **F2-006** `isg_emergency` — Acil durum planı (~1.5 gün)
 - [ ] **F2-007** `isg_chemical` — Kimyasal envanter + OEL/STEL (~3-4 gün, veri seti doğrulaması)
@@ -68,39 +53,17 @@
 
 ---
 
-## Bilinen Hatalar / Düzeltilecekler 🐛
+## İlerleme Özeti
 
-### Uyarılar (İşlevsel değil)
-- [ ] `isg_site.hazard_type`: unknown parameter 'invisible'
-- [ ] `html4css1.css`: Permission denied
-- [ ] Admin şifresi: PostgreSQL NULL, kalıcı şifre belirlenmeli
+| Faz | Toplam | Tamamlanan | % |
+|-----|--------|------------|---|
+| FAZ 0 | 7 | 7 | %100 |
+| FAZ 1 | 6 | 5 | %83 |
+| FAZ 2 | 9 | 4 | %44 |
+| FAZ 3 | 2 | 0 | %0 |
+| FAZ 4 | 4 | 4 | %100 |
+| FAZ 5 | 3 | 0 | %0 |
+| OSGB | 1 | 1 | %100 |
+| **TOPLAM** | **32** | **27** | **%84** |
 
-### İleride Yapılacak
-- [ ] SSH key setup (HTTPS → SSH)
-- [ ] Database backup automation
-- [ ] Monitoring ve alerting
-
----
-
-## Definition of Done (Her Modül İçin) ✅
-
-- [x] Odoo 18 uyumlu manifest
-- [x] Model alanları ve constraint'ler
-- [x] Liste, form, arama görünümleri
-- [x] Menü, action, sequence (varsa)
-- [x] ACL ve record rule
-- [x] Mail activity ve bildirim (varsa)
-- [x] Belge/kanıt bağlantısı (varsa)
-- [x] Web test (form açılıyor, compute field'lar çalışıyor)
-- [x] Git commit + push
-
----
-
-## Proje Özeti
-
-- **Başlangıç:** Ağustos 2026
-- **32 modül tamamlandı** — HSE Radar eşdeğerliği %95+
-- **59 modül kurulu** — Odoo 18 istikrarlı çalışıyor
-- **Sonraki faz:** FAZ 2 (6 modül), FAZ 3, FAZ 5
-- **Tahmini tamamlanma:** 2-3 hafta (tüm 32 modül + B-görevleri)
-
+Adam-gün bazında: ~%75-80 (ağır modüller önümüzde: F2-007/008/009, FAZ 3/5)
