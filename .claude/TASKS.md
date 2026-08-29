@@ -1,69 +1,69 @@
-# TASKS.md — Görev Listesi
+# TASKS.md — Görev Listesi (Doğrulanmış — 29 Ağustos 2026)
+
+**ÖNEMLİ:** Bu dosya VPS komutları ile doğrulanmıştır. Önceki TASKS.md bayat.
 
 ## Tamamlanan Görevler ✅
 
-### FAZ 0-4 + OSGB + isg_incident + isg_audit Tamamlandı
-- [x] F0-001 ~ F0-007 (FAZ 0 — 7/7 %100) ✅
-- [x] F1-001, F1-003-006 (FAZ 1 — 5/6 %83, isg_health_basic bloklu)
-- [x] F2-001 isg_capa ✅
-- [x] F2-002 isg_risk ✅
-- [x] F2-003 isg_incident ✅
-- [x] **F2-004 isg_audit — Puanlama + Bulgu Modeli TAMAMLANDI** ✅
-- [x] F4-001 ~ F4-004 (FAZ 4 — 4/4 %100) ✅
-- [x] isg_osgb ✅
-- [x] B-1 ~ B-3, B-6 ~ B-7 (5 MEV retrofit görevleri)
+### FAZ 0 — Temel Mimari (7/7 %100) ✅
+- [x] F0-001 isg_core
+- [x] F0-002 isg_security
+- [x] F0-003 isg_party
+- [x] F0-004 isg_location
+- [x] F0-005 isg_document
+- [x] F0-006 isg_hr
+- [x] F0-007 isg_base
 
----
+### FAZ 1 — Kurumsal Yönetişim (5/6 %83) ✅
+- [x] F1-001 isg_contractor
+- [x] F1-003 isg_training
+- [x] F1-004 isg_visitor
+- [x] F1-005 isg_board
+- [x] F1-006 isg_correspondence
+- [ ] F1-002 isg_health_basic — ⏳ KVKK danışman onayı
 
-## 🎯 Devam Eden / Sıradaki Görevler
+### FAZ 2 — Çekirdek İSG Operasyonları (9/9 %100) ✅
+- [x] F2-001 isg_capa
+- [x] F2-002 isg_risk
+- [x] F2-003 isg_incident
+- [x] F2-004 isg_audit (puanlama + bulgu)
+- [x] F2-005 isg_ppe
+- [x] F2-006 isg_emergency
+- [x] F2-007 isg_chemical
+- [x] F2-008 isg_equipment
+- [x] F2-009 isg_ptw (+ loto gömülü)
 
-### FAZ 2 — Operasyonel Modüller (5 kaldı)
+### FAZ 3 — Ölçüm (2/3) ✅
+- [x] F3-001 isg_measurement_core
+- [x] F3-002 isg_measurement_hygiene (gürültü)
+- [ ] F3-003 isg_environment — ❌ YAZILMAMIS (~2-3 gün)
 
-**Yazılmadı:**
-- [ ] **F2-005** `isg_ppe` — KKD yönetimi (~2 gün)
-- [ ] **F2-006** `isg_emergency` — Acil durum planı (~1.5 gün)
-- [ ] **F2-007** `isg_chemical` — Kimyasal envanter + OEL/STEL (~3-4 gün, veri seti doğrulaması)
-- [ ] **F2-008** `isg_equipment` — Ekipman + periyodik kontrol (~2-3 gün, Ara.2025 EK-II + EKİPNET)
-- [ ] **F2-009** `isg_ptw + isg_loto` — İş izni ve LOTO (~3-4 gün, en karmaşık)
+### FAZ 4 — Sanal Müfettiş (4/4) ✅
+- [x] F4-001 isg_legislation
+- [x] F4-002 isg_compliance
+- [x] F4-003 isg_penalty
+- [x] F4-004 isg_simulator
 
-### B-Görevleri — MEV Retrofit (5 kaldı)
+### FAZ 5 — Raporlama (1/3+)
+- [x] F5-001 isg_reporting ✅
+- [ ] F5-002 QWeb PDF şablonları (belirsiz)
+- [ ] F5-003 HSE Radar Kabul Testi (belirsiz)
 
-| # | Modül | Görev | Durum | Tahmini |
-|---|---|---|---|---|
-| B-4 | isg_board | Toplantı sıklığı retrofit | Sırada | 1 gün |
-| B-5 | isg_board | 21 Oca 2026 hukuki teyidi | Harici bekleme | - |
-| B-8 | isg_penalty | Tarife versiyonlama | Sırada | 0.5-1 gün |
-| B-9 | isg_core | danger_class.history modeli | Sırada | 0.5-1 gün |
-| B-10 | isg_training | 2 Nisan 2026 tam uyum | Sırada | 2-3 gün |
+### OSGB (1/1) ✅
+- [x] isg_osgb
 
-### FAZ 3 — Ölçüm ve Çevre
-
-- [ ] **F3-001** `isg_measurement_core` + `isg_measurement_hygiene` (~5-7 gün)
-- [ ] **F3-002** `isg_environment` (~2-3 gün)
-
-### FAZ 5 — Raporlama
-
-- [ ] **F5-001** `isg_reporting` — Superset entegrasyonu + dashboard'lar (~5-10 gün)
-- [ ] **F5-002** QWeb PDF şablonları
-- [ ] **F5-003** HSE Radar kabul testi
-
-### Bloklu
-
-- [ ] **F1-002** `isg_health_basic` — KVKK danışman onayı bekliyor
-
----
+### B-Görevleri (Mevzuat Retrofit)
+- [x] B-1 isg.rate.table ✅
+- [ ] B-4 isg_board (toplantı sıklığı, ~1 gün)
+- [ ] B-8 isg_penalty (versiyonlama, ~0.5-1 gün)
+- [ ] B-9 isg_core (danger_class.history, ~0.5-1 gün)
+- [ ] B-10 isg_training (2 Nisan 2026, ~2-3 gün)
 
 ## İlerleme Özeti
 
-| Faz | Toplam | Tamamlanan | % |
-|-----|--------|------------|---|
-| FAZ 0 | 7 | 7 | %100 |
-| FAZ 1 | 6 | 5 | %83 |
-| FAZ 2 | 9 | 4 | %44 |
-| FAZ 3 | 2 | 0 | %0 |
-| FAZ 4 | 4 | 4 | %100 |
-| FAZ 5 | 3 | 0 | %0 |
-| OSGB | 1 | 1 | %100 |
-| **TOPLAM** | **32** | **27** | **%84** |
+30/32 kurulu (%94). Yapılacak: isg_environment + B-4/8/9/10 + F5 kontrol (~7-9 gün).
 
-Adam-gün bazında: ~%75-80 (ağır modüller önümüzde: F2-007/008/009, FAZ 3/5)
+## Sıradaki Görevler
+
+1. isg_environment (~2-3 gün)
+2. B-4, B-8, B-9, B-10 (~4-5 gün)
+3. F5-002/F5-003 Kontrol (~1 gün)

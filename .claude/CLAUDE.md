@@ -1,20 +1,19 @@
-# CLAUDE.md — Yeni Chat Bağlamı
+# CLAUDE.md — Yeni Chat Bağlamı (Doğrulanmış)
 
-**Tarih:** 29 Ağustos 2026  
-**Proje:** Contabo VPS'te Odoo 18 tabanlı Türkiye İSG platformu
+**Tarih:** 29 Ağustos 2026 — Doğrulama Oturumu
 
----
+## 🎉 PROJE MİLSTON (Güncellenmiş)
 
-## 🎉 PROJE MİLSTON
-
-**32/32 Modül KURULU + F2-004 isg_audit 95% TAMAMLANDI**
-- Tüm ana modüller kurulu ve test edildi
-- 59 Odoo modülü çalışıyor (native + ISG)
+**30/32 ISG Modülü KURULU (%94)**
+- 59 Odoo modülü çalışıyor (29 ISG + 30 native)
+- Tüm FAZ 0, FAZ 1 (isg_health_basic bloklu), FAZ 2 TAM, FAZ 3 measurement, FAZ 4, OSGB, FAZ 5 reporting
 - HSE Radar eşdeğerliği %95+
-- isg_audit: Puanlama + Bulgu Lifecycle tam fonksiyonel
-- Sistem stabil
+- Sistem stabil, log'da hata yok, git senkron
 
----
+**Eksik:**
+- ❌ isg_environment (yazılmamış)
+- ⏳ isg_health_basic (bloklu, KVKK)
+- ❓ F5-002/F5-003 (belirsiz)
 
 ## Geliştirici Profili
 
@@ -23,139 +22,88 @@
 - Her adım birlikte, step by step
 - Terminal komutları VPS'te çalıştırıyor
 
----
+## Kurulu Modüller (30/32)
 
-## Son Oturum (29 Ağustos)
-
-✅ **F2-004 isg_audit — Detaylı Revizyon Tamamlandı**
-
-**Commit 1 (fab20d0): Puanlama/Skorlama**
-- weight (1-5) alanı template + line'a eklendi
-- response_weight compute eklendi (Uygun ise weight, değilse 0)
-- compliance_percentage = (achieved_weight / total_weight) * 100
-- compliance_status = GREEN (≥90%) / YELLOW (70-89%) / RED (<70% veya kritik bulgu)
-- contractor_id eklendi (alt işveren denetimi)
-- View'lar güncellendi (puanlama renkli gösterim)
-
-**Commit 2 (ac459eb): Bulgu Modeli (isg.audit.finding)**
-- isg.audit.finding ayrı modeli yazıldı (lifecycle: open → resolved → closed)
-- finding_type: observation / non_conformity / major / critical
-- repeat_count + escalation_level (3. kez → Level 2 eskalasyon)
-- DÖF bağlantısı + otomatik oluşturma
-- Kanıt dosyaları (ir.attachment)
-- Form (8 section), List (renk kodlama), Kanban (durum bazlı), Search (13+ filter)
-- Sequence: ISG-BLG-YYYY-NNNN
-- ACL: 3 rol (readonly/expert/manager)
-
----
-
-## Proje İlerleme: 32/32 Modül (%100)
-
-| Faz | Toplam | Tamamlanan | % | Not |
-|-----|--------|------------|---|-----|
-| FAZ 0 | 7 | 7 | %100 | ✅ Temel mimari |
-| FAZ 1 | 6 | 5 | %83 | isg_health_basic bloklu |
-| FAZ 2 | 9 | 4 | %44 | ✅ isg_audit (puanlama + bulgu) |
-| FAZ 3 | 2 | 0 | %0 | Ölçüm/çevre |
-| FAZ 4 | 4 | 4 | %100 | ✅ Sanal Müfettiş |
-| FAZ 5 | 3 | 0 | %0 | Raporlama |
-| OSGB | 1 | 1 | %100 | ✅ OSGB planlama |
-| **TOPLAM** | **32** | **27** | **%84** | |
-
----
+| Faz | Modüller | Kurulu |
+|---|---|---|
+| FAZ 0 | isg_core, security, party, location, document, hr, base | 7/7 ✅ |
+| FAZ 1 | training, contractor, visitor, board, correspondence | 5/6 ✅ |
+| FAZ 2 | capa, risk, incident, audit, ppe, emergency, chemical, equipment, ptw | 9/9 ✅ |
+| FAZ 3 | measurement_core, measurement_hygiene | 2/3 ✅ |
+| FAZ 4 | legislation, compliance, penalty, simulator | 4/4 ✅ |
+| FAZ 5 | reporting | 1/3+ ✅ |
+| OSGB | isg_osgb | 1/1 ✅ |
 
 ## Çalışma Kuralları (Kritik)
 
 ### Terminal Komutları
 - Tek tek ver, art arda değil
-- `--logfile=""` daima (config'de logfile tanımlı)
-- `| tail -N` ile çıktıyı kısa tut
+- `--logfile=""` daima
+- `| tail -N` ile kısa tut
 - `| grep -E "ERROR|loaded"` hata kontrolü
 
 ### Modül Geliştirme
 - Manifest: base, mail, isg_core bağımlılıkları
-- Views: Odoo 18 (tree → list, states= yasak, attrs= yasak)
+- Views: Odoo 18 (`<tree>` → `<list>`, `states=` yasak, `attrs=` yasak)
 - ACL: readonly/expert/manager 3 rol
 - Sequence: ISG-XXX-YYYY-NNNN formatı
 
 ### Odoo 18 Kritik Kurallar
 1. `<tree>` → `<list>` (Odoo 18 syntax)
-2. `states=` ve `attrs=` YASAK (Odoo 17+ hata verir)
+2. `states=` ve `attrs=` **YASAK** (Odoo 17+ hata)
 3. `fields.Datetime` (büyük D), `fields.Date` kullan
-4. `unique=True` Char'da warning verir, kullanma
-5. XML wrapper: `<data>` gerek yok, doğrudan `<record>`
-6. `invisible=` expression kullan (Odoo 18)
+4. `unique=True` Char'da warning
+5. XML'de `<` → `&lt;`, `&` → `&amp;`
+6. `invisible=` expression kullan
 7. `<list editable="bottom">` inline edit için
-8. XML'de `<` karakteri `&lt;` olarak escape edilmeli
 
----
+## Sıradaki Görevler (Öncelik Sırası)
 
-## Kurulu Modüller (59 toplam, 32 ISG)
+### Kısa Vadeli (~7-9 gün)
 
-**FAZ 0:** isg_core, isg_security, isg_party, isg_location, isg_document, isg_hr, isg_base
+1. **isg_environment (F3-003)** — ~2-3 gün
+   - Atık kodu kataloğu
+   - Atık depolama/bertaraf
+   - Çevre etki değerlendirmesi (opsiyonel)
 
-**FAZ 1:** isg_training, isg_contractor, isg_board, isg_correspondence, isg_visitor
+2. **B-4, B-8, B-9, B-10** — ~4-5 gün (mevzuat retrofit)
+   - B-4: isg_board toplantı sıklığı
+   - B-8: isg_penalty versiyonlama
+   - B-9: isg_core danger_class.history
+   - B-10: isg_training 2 Nisan 2026 tam uyum
 
-**FAZ 2:** isg_capa, isg_risk, isg_incident, **isg_audit** (puanlama + bulgu)
+3. **F5-002/F5-003 Kontrol** — ~1 gün
+   - QWeb PDF şablonları var mı?
+   - HSE Radar kabul testi protokolü?
 
-**FAZ 4:** isg_legislation, isg_compliance, isg_penalty, isg_simulator
+### Ardından
 
-**OSGB:** isg_osgb
+- E3 Entegrasyon (SGK, EKİPNET, İSG-KATİP, e-imza)
+- isg_health_basic (KVKK onayı sonrası)
+- Superset raporlama
 
-**Odoo Native:** base, mail, hr, hr_skills, hr_org_chart, account, stock, 30+ diğer
-
----
-
-## Sıradaki Görevler
-
-### Kısa Vadeli (1-2 hafta)
-
-1. **FAZ 2 devam (5 modül):**
-   - F2-005 isg_ppe (~2 gün)
-   - F2-006 isg_emergency (~1.5 gün)
-   - F2-007 isg_chemical (~3-4 gün, veri seti doğrulaması)
-   - F2-008 isg_equipment (~2-3 gün, Ara.2025 EK-II)
-   - F2-009 isg_ptw + isg_loto (~3-4 gün)
-
-2. **B-4/B-8/B-9/B-10 MEV retrofit (~1.5-2 gün)**
-
-### Orta Vadeli (2-4 hafta)
-
-3. **FAZ 3 (Ölçüm/Çevre, ~7-10 gün)**
-4. **FAZ 5 (Raporlama + Superset, ~7-12 gün)**
-
-### Uzun Vadeli (Üretim Hazırlığı)
-
-5. **E3 Entegrasyonu:** SGK, EKİPNET, İSG-KATİP, e-imza (5070 s.K.)
-
----
-
-## İstatistikler
+## İstatistikler (Doğrulanmış)
 
 | Metrik | Değer |
 |---|---|
-| Toplam Modül | 32 (42 B-görevleri dahil) |
-| Kurulu Modül | 59 (Odoo native + ISG) |
+| Kurulu Modül | 30 |
+| İlerleme | %94 (code), %79 (görev sayısı) |
+| Kurulu ISG | 29 (DB doğrulaması yapıldı) |
+| Kurulu Native | 30+ |
 | Toplam Model | 100+ |
-| Kod Satırı | 18,000+ (Python + XML) |
-| Commit Sayısı | 32+ |
-| Proje Süresi | 30+ gün |
 | HSE Radar Eşdeğerlik | %95+ |
 
----
+## Önemli Dosya Yolları
+/opt/odoo/isg_addons/ # ISG modülleri (29 kurulu)
+/opt/odoo/venv18-isg/ # ISG Python venv
+/etc/odoo/odoo18-isg.conf # Config
+/var/log/odoo/odoo18-isg.log # Log (hata yok)
+https://github.com/SHapeloglu/ISG # Git (main, clean)
 
 ## Sonraki Adım
 
-**F2-005 isg_ppe** (KKD yönetimi) ile devam et.
+F3-003 isg_environment ile mi başlayalım, yoksa B-görevleri mi yapacağız?
 
-- İlk olarak F2-005'e başlayacak mısın, yoksa B-görevlerini (MEV retrofit) mi yapmak istiyorsun?
+**Tavsiye:** isg_environment önce (hızlı, 2-3 gün), sonra B-görevleri (5 gün), sonra F5 kontrol.
 
----
-
-## Git Durum
-
-- **Repository:** https://github.com/SHapeloglu/ISG
-- **Branch:** main
-- **Commit sayısı:** 32+
-- **Son commit:** ac459eb — [isg_audit] Bulgu modeli tamamlandı
-
+Başlamaya hazır mısız? 🚀

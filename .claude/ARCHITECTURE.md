@@ -1,260 +1,204 @@
 # ARCHITECTURE.md — Mimari ve Tasarım Kararları
 
-**Güncelleme:** 29 Ağustos 2026 — 32/32 modül kurulu + F2-004 isg_audit 95%
-
----
+**Güncelleme:** 29 Ağustos 2026 — 30/32 modül kurulu
 
 ## Genel Mimari
-Odoo 18 ERP Altyapısı (İK, Muhasebe, Satın Alma, CRM)
+Odoo 18 ERP (base, mail, hr, account, stock, 30+)
 ↓
-isg_core (Workplace/Site hiyerarşisi, isg.rate.table)
+isg_core (Workplace/Site, isg.rate.table)
 ↓
-FAZ 0-1 (Güvenlik, Yönetişim)
-isg_security, isg_party, isg_training, isg_contractor,
-isg_board, isg_correspondence, isg_visitor
+FAZ 0: Güvenlik + Yönetişim (7/7 ✅)
 ↓
-FAZ 4 — Sanal Müfettiş (Çekirdek DNA)
-isg_legislation, isg_obligation, isg_compliance, isg_penalty, isg_simulator
+FAZ 1: Kurumsal (5/6 ✅ isg_health_basic bloklu)
 ↓
-FAZ 2 (Operasyonel Modüller — Kısmen Sırada)
-isg_risk ✅, isg_capa ✅, isg_incident ✅
-isg_audit ✅ (puanlama + bulgu lifecycle)
-isg_ppe, isg_emergency, isg_chemical, isg_equipment, isg_ptw+loto (sırada)
+FAZ 2: Operasyonel (9/9 ✅ TAM)
+capa, risk, incident, audit, ppe, emergency, chemical, equipment, ptw
 ↓
-OSGB Planlama (isg_osgb) ✅
-İşyeri-uzman atama, aylık dakika uygunluğu, kapasite planlama
-(isg.rate.table entegre)
+OSGB: İşyeri-uzman planlama (1/1 ✅)
 ↓
-FAZ 3 (Ölçüm/Çevre — Sırada)
-isg_measurement_core, isg_measurement_hygiene, isg_environment
+FAZ 3: Ölçüm (2/3 ✅)
+measurement_core, measurement_hygiene
+❌ isg_environment (yazılmamış)
 ↓
-FAZ 5 (Raporlama — Sırada)
-isg_reporting, Superset, TRIR/LWDR KPI
-
----
+FAZ 4: Sanal Müfettiş (4/4 ✅)
+legislation, compliance, penalty, simulator
+↓
+FAZ 5: Raporlama (1/3+ ✅)
+reporting (TRIR/LWDR KPI)
 
 ## Tasarım Kararları (Kritik)
 
-### 1. isg_compliance "Snapshot" Mimarisi ✅
-Uygunluk değerlendirmesi tarihe bağlı olarak depolanır.
-- **Gerekçe:** Audit trail, versiyonlu mevzuat, geçmiş tarihli hesaplar
-- **Sonuç:** 100% audit-grade → kasa açılan her rapor tekrar üretilebilir
+### 1. Snapshot Mimarisi (isg_compliance) ✅
 
-### 2. isg.rate.table Merkezileştirme ✅
-Uzman/hekim dakika katsayıları isg_core'da tek tablo.
-- **Kullanan:** isg_workplace + isg_osgb
-- **Versiyonlanmış:** valid_from (geçmiş tarihli hesaplar için)
+Uyunluk değerlendirmesi tarihe bağlı freezelanmış:
+- evaluation_date: Ne zaman değerlendirildi?
+- obligation_version: Hangi mevzuat sürümü?
+- status: O tarihte uyumlu mu?
+
+**Faydası:** 100% audit trail — 2 ay sonra rapor tekrar üretilebilir, aynı sonuç gelir
+
+### 2. isg.rate.table Merkezileştirmesi ✅
+
+Tüm uzman/hekim dakika katsayıları tek tabloda:
+- danger_class → minutes_per_employee_per_month
+- role (uzman/hekim)
+- fulltime_threshold (kaç çalışanda tam zamanlı?)
+- valid_from (sürüm geçmişi — B-8'de eklenecek)
+
+**Kullanan:** isg_workplace, isg_osgb, isg_hr
 
 ### 3. isg_osgb.assignment Aylık Uygunluk ✅
-İşyeri-uzman atamasında aylık dakika uygunluğu otomatik hesaplanır (%90 tolerans).
-- **Compute:** monthly_required_minutes (isg.rate.table'dan) vs. monthly_actual_minutes
-- **Durum:** compliant / warning / non_compliant (badge)
+
+OSGB'nin atadığı uzmanın aylık dakika yeterliliği:
+- monthly_required_minutes (isg.rate.table'dan otomatik)
+- monthly_actual_minutes (uzmanın ziyaret süresi)
+- compliance_status: GREEN (≥90%), YELLOW (75-89%), RED (<75%)
+
+**Faydası:** OSGB hangi müşterilerine tam hizmet veriyor, kapasite takibi
 
 ### 4. isg_incident SGK Bildirimi ✅
-Kaza kaydında SGK bildirimi gerekli mi, 3 iş günü deadline nedir otomatik hesaplanır.
-- **Compute:** sgk_notification_required, sgk_notification_deadline
-- **Uyarı:** sgk_days_remaining < 0 → RED badge
-- **Dönüş Eğitimi:** state=resolved → otomatik isg_training.record oluştur
 
-### 5. isg_audit Puanlama & Bulgu Lifecycle ✅
-Denetim sisteminde weight-based scoring ve bulgu lifecycle.
-- **Puanlama:** total_weight, achieved_weight, compliance_percentage (0-100%), compliance_status (GREEN/YELLOW/RED)
-- **Kritik Bulgu:** Tek bir kritik bulgu RED status'a yükseltir (genel % kaç olursa olsun)
-- **Bulgu Lifecycle:** open → in_review → resolved → verified → closed
-- **Tekrarlanan Bulgu:** repeat_count ≥ 3 → escalation_level = 2 (yönetim raporuna çık)
-- **Kanıt:** ir.attachment desteği (fotoğraf, dokümantasyon)
-- **Alt İşveren:** contractor_id FK (aynı model hem işyeri hem contractor denetleyebilir)
+Kaza kaydında SGK bildirimi otomatik:
+- sgk_notification_required (injury_type != none)
+- sgk_notification_deadline (3 iş günü, weekendler hariç)
+- sgk_status: RED (geçti), YELLOW (<1 gün), GREEN (ok)
 
-### 6. Unidirectional Dependency Chain ✅
+**Tetikleyici:** state=resolved → otomatik isg_training.record (dönüş eğitimi)
+
+### 5. isg_audit Puanlama ✅
+
+Weight-based scoring:
+- total_weight: Tüm kontrol maddelerinin toplam ağırlığı
+- achieved_weight: Uygun bulunduğunun toplam ağırlığı
+- compliance_percentage: (achieved / total) * 100
+- compliance_status: GREEN (≥90%), YELLOW (70-89%), RED (<70% veya kritik bulgu varsa)
+
+**Kritik Bulgu Kuralı:** Tek bir kritik madde UYGUNSUZ ise, genel % kaç olursa olsun RED
+
+### 6. isg_audit.finding Tekrarlanan Bulgu ✅
+
+Bulgu lifecycle:
+- repeat_count: Kaç kez tekrar?
+- escalation_level: repeat ≥ 3 ise level 2 (yönetim raporunda çıkarsın)
+- finding_type: observation, non_conformity, major, critical
+- state: open → in_review → resolved → verified → closed
+- capa_id: DÖF bağlantısı
+- evidence_attachment_ids: Kanıt dosyaları (fotoğraf, dokümantasyon)
+
+### 7. Unidirectional Dependency Chain ✅
+
+Hiçbir modül arkaya dönerek diğerini import etmez. Sadece yukarıya bağımlılık:
 isg_core ← isg_hr ← isg_training, isg_contractor
-← isg_legislation ← isg_compliance ← isg_penalty ← isg_simulator
-← isg_risk ← isg_incident
-← isg_audit ← isg_audit.finding
-← isg_osgb
-Hiç geri-referans yok → clean architecture
+isg_legislation ← isg_compliance ← isg_penalty ← isg_simulator
+isg_incident → isg_capa (DÖF oluşturma)
+→ isg_training (dönüş eğitimi)
+isg_audit → isg_audit.finding → isg_capa
 
-### 7. ACL Stratejisi ✅
+**Faydası:** Deployment sırası net, circular import yok
+
+### 8. ACL Stratejisi ✅
+
 3 rol grubu (isg_security):
-- **readonly:** Okuma yetki (reports, dashboards)
-- **expert:** İSG Uzmanı (okuma-yazma, yeterli yetkiler)
-- **manager:** Tam kontrol (yaşam döngüsü, silme)
+- readonly: Raporlar, dashboard (okuma)
+- expert: İSG Uzmanı (okuma-yazma, yeterli yetkiler)
+- physician: İşyeri Hekimi (sağlık verisi)
+- manager: Tam kontrol (yaşam döngüsü, onay, silme)
+- superadmin: Sistem yönetimi
 
-### 8. Sequence İsimlendirmesi ✅
-ISG-HAZARD-YYYY-NNNN (risk)
-ISG-KZA-YYYY-NNNN (incident)
-ISG-DOF-YYYY-NNNN (capa)
-ISG-DNT-YYYY-NNNN (audit)
-ISG-BLG-YYYY-NNNN (audit.finding) ← YENI
-ISG-EGT-YYYY-NNNN (training)
-ISG-KRL-YYYY-NNNN (board)
-ISG-YZ-YYYY-NNNN (correspondence)
-ISG-ZYR-YYYY-NNNN (visitor)
+### 9. Sequence İsimlendirmesi ✅
 
----
-
-## Mevzuat Entegrasyon Modeli ✅
-isg_legislation (kütüphane)
-→ obligation: "6331 md.6 — Uzman 40 dk"
-→ isg_compliance (uyum kontrol)
-→ workplace danger_class=high, 100 çalışan
-→ required = 4000 dk/ay
-→ isg_osgb.assignment.monthly_required_minutes = 4000
-→ monthly_actual_minutes = 3500
-→ compliance_status = "warning" (3500 < 3600 = 90%)
+| Model | Prefix | Örnek |
+|---|---|---|
+| isg_risk | ISG-HZR- | ISG-HZR-2026-0001 |
+| isg_incident | ISG-KZA- | ISG-KZA-2026-0042 |
+| isg_capa | ISG-DOF- | ISG-DOF-2026-0015 |
+| isg_audit | ISG-DNT- | ISG-DNT-2026-0008 |
+| isg_audit.finding | ISG-BLG- | ISG-BLG-2026-0089 |
 
 ---
 
-## Denetim Mimarisi (isg_audit) ✅
-isg.audit.template (Denetim Şablonu)
-└─ isg.audit.template.question (Kontrol Maddesi)
-└─ question (soru metni)
-└─ weight (ağırlık: 1-5)
-└─ is_critical (kritik madde?)
-
-isg.audit (Denetim Kaydı)
-├─ audit_type (İç/Dış/Müfettiş/Alt İşveren)
-├─ template_id (şablon seçim)
-├─ workplace_id + site_id (nerede yapıldı?)
-├─ contractor_id (alt işveren denetimi opsiyonel)
-├─ auditor_ids (denetçiler)
+## Modül Bağımlılıkları
+isg_core (temel)
+├─ isg_security (rol + ACL)
+├─ isg_party, isg_location, isg_document
+├─ isg_hr (employee _inherit)
+├─ isg_base (uuid.mixin, outbox)
 │
-├─ line_ids (isg.audit.line — Çıktı Satırları)
-│ ├─ question, weight, is_critical (template'ten)
-│ ├─ result (Uygun/Uygunsuz/Uygulanamaz/Gözlem)
-│ └─ response_weight (compute: result==ok ise weight, değilse 0)
+├─ F1 Serisi (training, contractor, visitor, board, correspondence)
+│ └─ isg_capa (DÖF)
+│ ├─ isg_risk
+│ ├─ isg_incident → isg_training (dönüş eğitimi)
+│ ├─ isg_audit
+│ ├─ isg_ppe, isg_emergency, isg_chemical
+│ ├─ isg_equipment, isg_ptw
 │
-├─ PUANLAMA (Computed):
-│ ├─ total_weight (toplam ağırlık)
-│ ├─ achieved_weight (elde edilen puan)
-│ ├─ compliance_percentage (%)
-│ └─ compliance_status (GREEN/YELLOW/RED)
-│└─ Durum Makinesi:
-draft → in_progress → done → closed
-
-isg.audit.finding (Bulgu Kaydı — AYRI MODEL)
-├─ audit_id (hangi denetim)
-├─ audit_line_id (uygunsuz satırdan)
-├─ finding_type (observation/non_conformity/major/critical)
-├─ finding_description (bulgu açıklaması)
+├─ isg_osgb (rate.table kullanır)
 │
-├─ Tekrarlanan Bulgu:│ ├─ repeat_count (kaç kez tekrar?)
-│ ├─ escalation_level (compute: repeat>=3 ise level 2)
-│ └─ previous_finding_ids (önceki benzer bulgular)
+├─ isg_legislation → isg_compliance → isg_penalty → isg_simulator
 │
-├─ Aksiyon:
-│ ├─ responsible_person_id (sorumlu)
-│ ├─ target_completion_date (hedef tarih)
-│ └─ capa_id (bağlı DÖF)
+├─ isg_measurement_core + isg_measurement_hygiene
+│ └─ isg_environment (yazılmamış)
 │
-├─ Kanıt:
-│ ├─ evidence_text (gözlem notları)
-│ └─ evidence_attachment_ids (fotoğraf, dokümantasyon)│
-└─ Durum Makinesi:
-open → in_review → resolved → verified → closed
----
-
-## Veri Saklama ve Maskeleme (KVKK)
-
-### Sağlık Verisi (isg_health_basic — Bloklu)
-- Employee.medical_history → isg_health.record (hassas)
-- ACL: sadece group_isg_health_officer oku
-- Maskeleme: Raporlarda çalışan adı göstermez, "KGN001"
-- Rıza: consent_date field
-- **Status:** KVKK danışman onayı bekleniyor
-
-### İş Kazası (isg_incident) ✅
-- Kaza bilgileri: herkes okuyabilir
-- Yaralanan kişi kimliği: expert/manager sadece
-- SGK bildirimi: automatic
+└─ isg_reporting (TRIR/LWDR KPI)
 
 ---
 
-## Compute Field Mimarisi ✅
+## Veri Saklama
 
-**isg_audit.line örneği:**
-```python
-@api.depends('result', 'weight')
-def _compute_response_weight(self):
-    for rec in self:
-        if rec.result == 'ok':
-            rec.response_weight = rec.weight
-        else:
-            rec.response_weight = 0
+### Sağlık Verisi (isg_health_basic — Bloklu, KVKK)
 
-@api.depends('line_ids.weight', 'line_ids.response_weight', 'line_ids.is_critical', 'line_ids.result')
-def _compute_scoring(self):
-    for rec in self:
-        rec.total_weight = sum(rec.line_ids.mapped('weight'))
-        rec.achieved_weight = sum(rec.line_ids.mapped('response_weight'))
-        rec.compliance_percentage = (rec.achieved_weight / rec.total_weight) * 100
-        
-        has_critical_nok = any(l.is_critical and l.result == 'nok' for l in rec.line_ids)
-        if has_critical_nok:
-            rec.compliance_status = 'red'  # Kritik bulgu → RED
-        elif rec.compliance_percentage >= 90:
-            rec.compliance_status = 'green'
-        else:
-            rec.compliance_status = 'yellow'
-```
+⚠️ Özel nitelikli kişisel veri — KVKK danışman onayı bekliyor
+
+Alanlar:
+- medical_history, diagnosis, medications — `groups='isg_security.group_isg_physician'`
+- restrictions — herkes görsün (yapılabilir/yapılamaz)
+- consent_date (KVKK rıza)
+- consent_revoked_date (rıza çekilirse veri silinir)
+
+### İş Kazası (isg_incident) — Açık
+
+- workplace_id, incident_type, incident_description — herkes görür
+- injured_employee_id — sadece expert/manager (record rule)
+- sgk_notification_deadline — otomatik hesap
 
 ---
 
 ## Test Stratejisi
 
-1. **Birim:** create/read/update/delete
+1. **Birim:** create/read/update/delete her modülde
 2. **Entegrasyon:** workflow'lar (state machine)
-3. **Mevzuat:** obligation matching (50+ scenario)
+3. **Mevzuat:** obligation matching (50+ senaryo)
 4. **UI:** form render, list, action buttons
-5. **Performans:** 1000 record/modül bulk test (henüz yapılmadı — FAZ 5 sonrasında)
+5. **Performans:** 1000 record bulk test (FAZ 5 sonrası)
 
 ---
 
 ## Git Strategy
 
 - **Repository:** https://github.com/SHapeloglu/ISG
-- **Branch:** main (protected, direct push)
-- **Commit format:** `[modül]: açıklama (feature, count)`
-- **Push:** Her modül tamamlandıktan sonra
-
----
-
-## Gelecek Mimarisi (E2/E3)
-
-### E2: Superset, Flutter, Multi-company
-- Superset entegrasyonu (F5)
-- Flutter mobil uygulama
-- Multi-company yönetim iyileştirmeleri
-
-### E3: Sistem Entegrasyonu
-- SGK API entegrasyonu (3 iş günü bildirimi)
-- EKİPNET entegrasyonu (ekipman kontrol)
-- İSG-KATİP entegrasyonu (uzman/hekim bildirimi)
-- E-imza (5070 s.K.) — elektronik imza
-- VERBİS uyumu (kişisel veri işleme kaydı)
-
-### E4: Analitik
-- Risk tahminlemesi (geçmiş kaza verilerinden)
-- Anomali tespiti (ölçüm değerleri)
-- Uyum önerme (otomatik aksiyon)
+- **Branch:** main (protected)
+- **Commit format:** `[modül]: açıklama`
+- **Örnek:** `[isg_audit] Bulgu modeli tamamlandı`
 
 ---
 
 ## Kritik Noktalar
 
-🔴 **KVKK:** isg_health_basic hâlâ bloklu — danışman onayı gerekir  
-🔴 **Mevzuat:** B-10 (isg_training 2 Nisan 2026) kritik  
-🔴 **Ekipman:** F2-008 (Ara.2025 EK-II) mevzuat güncellemesi  
-⚠️ **Dönüş Eğitimi:** isg_incident → isg_training otomatik tetikleme (test gerekir)  
-⚠️ **TRIR Hesaplama:** F5 raporlamada doğru filtreleme
+🔴 **KVKK:** isg_health_basic hâlâ bloklu — danışman onayı gerekir
+
+🔴 **Mevzuat:** B-10 (isg_training 2 Nisan 2026) kritik, dönüş eğitimi tetikleyicileri test edilmeli
+
+⚠️ **isg_environment:** Bilinçli mi unutuldu mu (20 Ağustos "FAZ 3 %100" yazılmışken mention yok)
+
+⚠️ **TRIR Hesaplama:** F5 raporlamada doğru filtreleme (incident_type in ('accident', 'occupational_disease'), injury_type != none)
 
 ---
 
-## Performans Notları
+## Gelecek Mimari (E2/E3)
 
-- Compute field'lar indexed (store=True)
-- Search view'lar optimized
-- One2many'lar inline editable (N+1 sorun yok)
-- Record rule'lar basit (company_id only şimdi)
+**E2:** Superset entegrasyon, Flutter mobil, multi-company optimization
 
-**İleride:** Bulk test (1000+ record), monitoring, query optimization
+**E3:** SGK API, EKİPNET, İSG-KATİP, e-imza (5070 s.K.), VERBİS uyumu
+
+**E4:** Risk tahminlemesi (ML), anomali tespiti, uyum önerme
 
