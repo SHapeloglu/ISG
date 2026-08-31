@@ -16,10 +16,24 @@
         <field name="description">2 Nisan 2026 Yönetmeliği md.5: İşe başlamadan önce yüz yüze, minimum 2 saat zorunlu.</field>
     </record>
 
+    <record id="training_type_basic" model="isg.training.type">
+        <field name="name">Temel İSG Eğitimi</field>
+        <field name="code">TEMEL</field>
+        <field name="sequence">2</field>
+        <field name="training_category">basic</field>
+        <field name="delivery_method">face_to_face</field>
+        <field name="min_duration_hours">8.0</field>
+        <field name="period_low">0</field>
+        <field name="period_medium">0</field>
+        <field name="period_high">0</field>
+        <field name="target_all">True</field>
+        <field name="description">RG 33212 Md 6: İşe başlamadan sonra max 3 ay içinde tamamlanmalı. Az tehlikeli: 8 ders saati, Tehlikeli: 12 ders saati, Çok tehlikeli: 16 ders saati.</field>
+    </record>
+
     <record id="training_type_periodic_general" model="isg.training.type">
         <field name="name">Periyodik İSG Eğitimi</field>
         <field name="code">PERIYOD</field>
-        <field name="sequence">2</field>
+        <field name="sequence">3</field>
         <field name="training_category">periodic</field>
         <field name="delivery_method">face_to_face</field>
         <field name="min_duration_hours">1.0</field>
@@ -33,21 +47,21 @@
     <record id="training_type_return" model="isg.training.type">
         <field name="name">Dönüş Eğitimi</field>
         <field name="code">DONUS</field>
-        <field name="sequence">3</field>
+        <field name="sequence">4</field>
         <field name="training_category">return</field>
         <field name="delivery_method">face_to_face</field>
-        <field name="min_duration_hours">1.0</field>
+        <field name="min_duration_hours">8.0</field>
         <field name="period_low">0</field>
         <field name="period_medium">0</field>
         <field name="period_high">0</field>
         <field name="target_all">False</field>
-        <field name="description">Kaza, meslek hastalığı veya uzun süreli hastalık sonrası işe dönüşte zorunlu.</field>
+        <field name="description">RG 33212 Md 7: Kaza, meslek hastalığı, 6 aydan fazla işten uzak kalma sonrası işe dönüşte zorunlu. Minimum 8 ders saati.</field>
     </record>
 
     <record id="training_type_emergency" model="isg.training.type">
         <field name="name">Acil Durum Eğitimi</field>
         <field name="code">ACIL</field>
-        <field name="sequence">4</field>
+        <field name="sequence">5</field>
         <field name="training_category">emergency</field>
         <field name="delivery_method">face_to_face</field>
         <field name="min_duration_hours">1.0</field>
@@ -61,7 +75,7 @@
     <record id="training_type_special_pregnant" model="isg.training.type">
         <field name="name">Gebe Çalışan Eğitimi</field>
         <field name="code">GEBE</field>
-        <field name="sequence">5</field>
+        <field name="sequence">6</field>
         <field name="training_category">special_group</field>
         <field name="delivery_method">face_to_face</field>
         <field name="min_duration_hours">1.0</field>
@@ -76,7 +90,7 @@
     <record id="training_type_special_young" model="isg.training.type">
         <field name="name">Genç Çalışan Eğitimi</field>
         <field name="code">GENC</field>
-        <field name="sequence">6</field>
+        <field name="sequence">7</field>
         <field name="training_category">special_group</field>
         <field name="delivery_method">face_to_face</field>
         <field name="min_duration_hours">2.0</field>
@@ -86,6 +100,21 @@
         <field name="target_all">False</field>
         <field name="target_young">True</field>
         <field name="description">18 yaş altı çalışanlar için özel eğitim.</field>
+    </record>
+
+    <record id="training_type_special_senior" model="isg.training.type">
+        <field name="name">Yaşlı Çalışan Eğitimi</field>
+        <field name="code">YASLI</field>
+        <field name="sequence">8</field>
+        <field name="training_category">special_group</field>
+        <field name="delivery_method">face_to_face</field>
+        <field name="min_duration_hours">2.0</field>
+        <field name="period_low">0</field>
+        <field name="period_medium">0</field>
+        <field name="period_high">0</field>
+        <field name="target_all">False</field>
+        <field name="target_senior">True</field>
+        <field name="description">55 yaş üstü çalışanlar için özel eğitim.</field>
     </record>
 
 </odoo>
