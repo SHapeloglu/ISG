@@ -16,6 +16,7 @@ class IsgTrainingType(models.Model):
     training_category = fields.Selection(
         selection=[
             ('onboarding', 'İşe Başlama Eğitimi'),
+            ('basic', 'Temel Eğitim'),
             ('periodic', 'Periyodik Eğitim'),
             ('return', 'Dönüş Eğitimi'),
             ('task_specific', 'Göreve Özgü Eğitim'),
@@ -65,6 +66,7 @@ class IsgTrainingType(models.Model):
     target_new_employee = fields.Boolean(string='Yeni İşe Başlayanlar')
     target_pregnant = fields.Boolean(string='Gebe Çalışanlar')
     target_young = fields.Boolean(string='Genç Çalışanlar (18 yaş altı)')
+    target_senior = fields.Boolean(string='Yaşlı Çalışanlar (55 yaş üstü)')
     target_disabled = fields.Boolean(string='Engelli Çalışanlar')
 
     description = fields.Text(string='Açıklama')

@@ -215,17 +215,18 @@ class IsgIncident(models.Model):
         }
 
     def action_create_return_training(self):
-        """Dönüş eğitimi oluştur"""
+        """Dönüş eğitimi oluştur (RG 33212 Md 14)"""
         self.ensure_one()
         if not self.return_to_work_required:
-            raise ValueError('Bu kaza için dönüş eğitimi gerekli değil.')
-
+            raise UserError(_('Bu kaza için dönüş eğitimi gerekli değil.'))
         training_record = self.env['isg.training.record'].create({
+            'name': f'Dönüş Eğitimi: {self.name}',
             'training_type_id': self.env.ref('isg_training.training_type_return').id,
-            'employee_id': self.injured_employee_id.id,
-            'planned_date': fields.Date.today() + timedelta(days=5),
-            'description': f'Dönüş Eğitimi: {self.name}',
-            'incident_id': self.id,
+            'training_date': fields.Date.today() + timedelta(days=5),
+            'workplace_id': self.workplace_id.id,
+            'duration_hours': 8.0,
+            'company_id': self.company_id.id,
+            'attendee_ids': [(0, 0, {'employee_id': self.injured_employee_id.id})],
         })
         self.return_to_work_training_id = training_record.id
 

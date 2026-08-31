@@ -85,5 +85,30 @@ class HrEmployee(models.Model):
         string='Eldiven Bedeni',
     )
 
+    # --- Özel Grup Üyeliği (2 Nisan 2026 yönetmeliği, RG 33212 Md 5) ---
+    # Bir çalışan birden fazla gruba ait olabilir (örn. yaşlı VE gebe)
+    is_young_worker = fields.Boolean(
+        string='Genç Çalışan (18 yaş altı)',
+        help='RG 33212 gereği ek eğitim ve koruma zorunlu.',
+    )
+    is_senior_worker = fields.Boolean(
+        string='Yaşlı Çalışan (55 yaş üstü)',
+        help='RG 33212 gereği ek eğitim ve koruma zorunlu.',
+    )
+    is_disabled_worker = fields.Boolean(
+        string='Engelli Çalışan',
+        help='RG 33212 gereği ek eğitim ve koruma zorunlu.',
+    )
+    is_pregnant_or_nursing = fields.Boolean(
+        string='Gebe / Emziren Çalışan',
+        help='RG 33212 gereği ek eğitim ve koruma zorunlu.',
+    )
+
+    # --- Son Çalışma Tarihi (Dönüş Eğitimi Tetikleyicisi) ---
+    last_working_date = fields.Date(
+        string='Son Çalışma Tarihi',
+        help='6 aydan fazla işten uzak kalma durumunda dönüş eğitimi tetiklenmesi için kullanılır.',
+    )
+
     # --- İSG Notları ---
     isg_notes = fields.Text(string='İSG Notları')
