@@ -81,7 +81,7 @@ class IsgBoardMeeting(models.Model):
         for rec in self:
             if rec.meeting_date and rec.workplace_id:
                 danger = rec.workplace_id.danger_class
-                if danger == 'very_dangerous':
+                if danger == 'high':
                     rec.next_meeting_date = rec.meeting_date + relativedelta(days=15)
                 else:
                     rec.next_meeting_date = rec.meeting_date + relativedelta(months=1)
