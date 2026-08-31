@@ -1,62 +1,68 @@
-# SESSION.md — Oturum Özeti (29 Ağustos 2026 — isg_environment Tamamlandı)
+# SESSION.md — Oturum Özeti (31 Ağustos 2026 — B-10 Tamamlandı)
 
-## Bu Oturum: Doğrulama + F3-003 isg_environment
-
-### Keşfettiklerimiz (Doğrulama)
-- Önceki dokümantasyon bayat (F2-005→F2-009 "sırada" yazılmışken aslında tamamlandı)
-- Gerçek durum: **31/32 modül kurulu (%97)**
-- Sadece **isg_environment** (F3-003) yazılmamıştı, bilinçli bloklu **isg_health_basic** (KVKK)
+## Bu Oturum: B-10 isg_training 2 Nisan 2026 Tam Uyum
 
 ### Yapılanlar (Bu Oturum)
 
-**1. Belgeler Güncellenmiş (Commit 028738a)**
-- .claude/TASKS.md (30/32 → 31/32 güncellenmeli)
-- .claude/SESSION.md (bu dosya)
-- .claude/CLAUDE.md
-- .claude/BACKLOG.md
-- .claude/ARCHITECTURE.md
+**B-10 isg_training — RG 33212 Md 5-7 Tam Uyum (Commit 9adcd1f, d81a9b4, 1b7ec36)**
 
-**2. F3-003 isg_environment Tamamlandı (Commit 4eba10c)**
-- `isg.waste.code` — Atık kodu kataloğu (6 sample record)
-- `isg.waste.storage` — Atık depolama alanları (capacity tracking, renkli warning)
-- `isg.waste.disposal` — Atık bertaraf kaydı (state machine: draft → confirmed → disposed → archived)
-- Views: List, Form, Search
-- ACL: 3 rol (readonly/expert/manager)
-- Record rule: işyeri bazlı erişim
-- Menüler: Çevre Yönetimi ana menu altında 3 item
+1. **isg_training_type.py** — Eksik alanlar eklendi:
+   - `target_senior` (yaşlı 55+ eğitim zorunluluğu)
+   - `'basic'` kategorisi (temel eğitim, oryantasyondan ayrı)
 
-**Sonuç:** 31/32 modül kurulu, **FAZ 3 %100 tamamlandı** ✅
+2. **hr_employee.py** — 4 özel grup boolean alanı:
+   - `is_young_worker` (18 yaş altı)
+   - `is_senior_worker` (55 yaş üstü)
+   - `is_disabled_worker` (engelli)
+   - `is_pregnant_or_nursing` (gebe/emziren)
+   - `last_working_date` (6 ay uzak kalma tetikleyicisi için)
+
+3. **isg_incident.py** — Kritik bug fix:
+   - `action_create_return_training()` alan uyuşmazlığı düzeltildi
+   - Yanlış: `employee_id`, `planned_date`, `description` (modelde yok)
+   - Doğru: `name`, `training_date`, `attendee_ids` üzerinden employee
+
+4. **Seed Data Güncellemesi**:
+   - `training_type_basic` (8 saat, temel eğitim)
+   - `training_type_return` (min 8 saat dönüş eğitimi)
+   - `training_type_special_senior` (yaşlı grubu)
+
+5. **Cron Job (6 ay uzak kalma tetikleyicisi)**:
+   - `isg.training.scheduler` modeli (yeni)
+   - `ir.cron` kaydı — her gece 2'de çalışır
+   - Otomatik dönüş eğitimi kaydı oluşturma
+
+**Mevzuat Doğrulaması:**
+- ✅ Tekrar periyodu (36/24/12 ay) — BACKLOG.md'deki 24/12/6 rakamları YANLIŞTI, kod DOĞRU
+- ✅ İşe başlama eğitimi (2 saat, yüz yüze) — zaten var
+- ✅ Temel eğitim (8/12/16 ders saati) — eklendi
+- ✅ Dönüş eğitimi (8 saat, 6 ay kuralı) — eklendi + tetikleyici
+- ✅ Özel gruplar — tamamlandı
 
 ### Sistem Durumu
 - 59 modül kurulu (31 ISG + 28 native)
-- Servis stabil
-- Log'da hata yok
-- Git senkron (commit 4eba10c)
+- Servis stabil, log'da hata yok
+- Git senkron (3 commit)
 
-### Sıradaki Modüller (Next Session)
+### İlerleme
+- **Modül:** 31/32 (%97)
+- **HSE Radar Eşdeğerlik:** %96-97 (mevzuat düzeltmeleri pending)
+- **Adam-gün Kalan:** ~3-4 gün (B-4/B-8/B-9 + F5 + gap analysis)
 
-**B-10 isg_training (2 Nisan 2026 Tam Uyum)** — ~2-3 gün
-- İşe başlama eğitimi ayrı tür (induction flag)
-- Tehlike sınıfına göre tekrar periyotları
-- Dönüş eğitimi tetikleyicileri (incident → training)
-- Özel gruplar (genç, yaşlı, engelli, gebe)
-- **Kritik:** isg_incident (state=resolved) → otomatik training.record oluşturması
+### Sıradaki Adımlar (Next Session)
 
-**B-4, B-8, B-9** — ~2-3 gün
-- B-4: isg_board toplantı sıklığı (15 gün vs. 1 ay)
-- B-8: isg_penalty versiyonlama (valid_from)
-- B-9: isg_core danger_class.history
+**Kısa Vadeli (~2-3 gün):**
+1. B-4 isg_board — Toplantı sıklığı (15 gün vs 1 ay)
+2. B-8 isg_penalty — Versiyonlama (valid_from)
+3. B-9 isg_core — danger_class.history
+4. F5-002/F5-003 — Kontrol (PDF, kabul testi)
 
-**F5-002/F5-003 Kontrol** — ~1 gün
-- QWeb PDF şablonları (isg_reporting)
-- HSE Radar kabul testi protokolü
+**Sonraki Seans:**
+- **Competitive Gap Analysis** — HSE Radar ile kapsamlı karşılaştırma
+  - Mevzuat kapsam, UI/UX, entegrasyon, raporlama, performans
+  - Eksikler listesi + düzeltme planı
 
-**Ardından:**
-- Superset + raporlama
-- E3 Entegrasyon (SGK, EKİPNET, İSG-KATİP, e-imza)
-- isg_health_basic (KVKK onayı sonrası)
-
-## İstatistikler (Son)
+## İstatistikler (Güncellenmiş)
 
 | Kalem | Değer |
 |---|---|
@@ -66,19 +72,13 @@
 | Kurulu ISG | 31 |
 | Kurulu Odoo Native | 28 |
 | Toplam Model | 105+ |
-| Commit Sayısı | 34+ |
-| Proje Süresi | ~32 gün |
-| HSE Radar Eşdeğerlik | %97+ |
+| HSE Radar Eşdeğerlik | %96-97 |
+| Commit Sayısı | 37+ |
 
 ## Sonuç
 
-**Proje %97 tamamlandı.** Kalan: 1 bloklu + 4-5 gün B-görevleri + 1 gün F5 kontrol.
+**B-10 TAMAMLANDI** ✅
 
-Başarılar kütüphanesine yazılabilir:
-- ✅ Mevzuat motoru (Sanal Müfettiş) — tam ve audit-grade
-- ✅ Audit sistem (puanlama + bulgu lifecycle)
-- ✅ Çevre yönetimi (atık takibi)
-- ✅ OSGB planlama motoru
-- ✅ HSE Radar %97+ eşdeğerlik
+Proje %97 modül tamamlanmışlık + %96-97 HSE Radar eşdeğerliğinde. Kalan: mevzuat düzeltmeleri (B serisi, 2-3 gün) + gap analysis + F5 kontrol.
 
-Şimdi dinlen, next session B-10 ile başla. 🚀
+Şimdi dinlen, next session gap analysis ile başla. 🚀

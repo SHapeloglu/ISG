@@ -1,40 +1,22 @@
-# BACKLOG.md — Gelecek Geliştirmeler
+# BACKLOG.md — Gelecek Geliştirmeler (31 Ağustos 2026)
 
-**Son güncelleme:** 29 Ağustos 2026 — Doğrulama Oturumu
+## 🎯 Hemen Başlanacak (2-3 gün, ~5-7 gün)
 
-## 🎯 Hemen Başlanacak (1-2 hafta, ~7-9 gün)
+### 1. B-4: isg_board — Toplantı Sıklığı — ~1 gün ⏳
+**Mevzuat:** İSG Kurulları Yönetmeliği
 
-### 1. isg_environment (F3-003) — ~2-3 gün ⏳
-**Status:** Yazılmamış, git'te commit yok — UNUTULMUŞ GÖREV
-
-Bileşenler:
-- `isg.waste.code` — Atık kodu kataloğu (TR atık kodları)
-- `isg.waste.storage` — Atık depolama alanı kaydı
-- `isg.waste.disposal` — Atık bertaraf kaydı (tarih, miktar, maliyeti)
-- Çevre etki değerlendirmesi (opsiyonel)
-
-Views: Liste, form, kanban (depo durumu), search (atık tipi, lokasyon)
-
-Mevzuat: Çevre kanunları, tehlikeli atık kaydı, depolama koşulları
-
----
-
-### 2. B-4: isg_board — Toplantı Sıklığı — ~1 gün ⏳
-
-**Sorun:** Mevzuat danger_class'a göre farklı toplantı periyodu gerektirir
+**Sorun:** Danger_class'a göre farklı toplantı periyodu gerektirir
 - Çok tehlikeli: 15 gün arası
-- Diğer: 1 ay arası
+- Diğer (az/tehlikeli): 1 ay arası
 
 **Çözüm:**
 - `isg_board_meeting.next_meeting_date_expected` compute'a danger_class ekle
-- Kurul oluşturmasında danger_class'a göre başlangıç aralığı belirle
 - Test: çok tehlikeli 15 gün, normal 30 gün
-
-**Dosyalar:** isg_board/models/isg_board_meeting.py
 
 ---
 
-### 3. B-8: isg_penalty — Versiyonlama + 2026 %49 Artış — ~0.5-1 gün ⏳
+### 2. B-8: isg_penalty — Versiyonlama + 2026 %49 Artış — ~0.5-1 gün ⏳
+**Mevzuat:** 2026 ÇSGB ceza tutarları (yılda güncellenir)
 
 **Sorun:** Ceza tutarları yılda güncelleniyor. Sistem geçmiş tarihli denetim için eski tarifeler bilmeli.
 
@@ -42,13 +24,12 @@ Mevzuat: Çevre kanunları, tehlikeli atık kaydı, depolama koşulları
 - `isg.penalty.tariff` modeline `valid_from` (date) alanı ekle
 - Ceza hesaplamasında `valid_from` dikkate alınsın
 - Geçmiş tarihli simülasyonda (F4-004), o tarihte geçerli tarifeler kullanılsın
-- Veri seti: her yıl 1 Ocak'ta yeni sürüm (data xml)
-
-**Dosyalar:** isg_penalty/models/isg_penalty_tariff.py, isg_simulator/models/isg_simulator.py
+- Veri seti: her yıl 1 Ocak'ta yeni sürüm
 
 ---
 
-### 4. B-9: isg_core — danger_class.history — ~0.5-1 gün ⏳
+### 3. B-9: isg_core — danger_class.history — ~0.5-1 gün ⏳
+**Mevzuat:** İşyeri tehlike sınıfı değişiklikleri takibi
 
 **Sorun:** İşyerinin tehlike sınıfı değişebiliyor. Sistem hangi dönemde hangi sınıf olduğunu bilmeli.
 
@@ -58,43 +39,9 @@ Mevzuat: Çevre kanunları, tehlikeli atık kaydı, depolama koşulları
 - `isg_workplace.danger_class` onchange'e history kaydı oluştur
 - Geçmiş uyunluk kontrolü, o tarihte geçerli danger_class'ı kullansın
 
-**Dosyalar:** isg_core/models/isg_core_danger_class_history.py (yeni)
-
 ---
 
-### 5. B-10: isg_training — 2 Nisan 2026 Tam Uyum — ~2-3 gün ⏳
-
-**Sorunlar:**
-
-1. **İşe başlama eğitimi ayrı tür**
-   - Yüz yüze zorunlu, uzaktan kabul edilmez
-   - Minimum 2 saat, işe başlama günü
-   - `isg.training.type.induction_flag` (boolean) ekle
-
-2. **Tehlike sınıfına göre tekrar periyotları**
-   - Az tehlikeli: 2 yıl
-   - Tehlikeli: 1 yıl
-   - Çok tehlikeli: 6 ay
-   - `isg.training.type.repeat_months` (int)
-   - next_training_date otomatik hesaplansın
-
-3. **Dönüş eğitimi tetikleyicileri**
-   - 6 ay uzak kaldı → dönüş eğitimi
-   - Kaza geçirdi → dönüş eğitimi
-   - F2-003 isg_incident'ten: state=resolved → otomatik isg_training.record oluştur
-
-4. **Özel gruplar**
-   - Genç (18-25), yaşlı (55+), engelli, gebe/emziren
-   - `hr.employee.special_group` (multi-select)
-   - Eğitim planında özel grup bazlı ayarlamalar
-
-**Dosyalar:** isg_training/models/*.py, hr_employee _inherit (special_group, last_attendance_date)
-
-**Entegrasyon:** isg_incident (state=resolved → training.record), hr_attendance (son tarih)
-
----
-
-### 6. F5-002 & F5-003 Kontrol — ~1 gün ⏳
+### 4. F5-002 & F5-003 Kontrol — ~1 gün ⏳
 
 **F5-002: QWeb PDF Şablonları**
 - isg_reporting modülü kurulu ama PDF şablonları var mı kontrol et
@@ -109,6 +56,18 @@ Mevzuat: Çevre kanunları, tehlikeli atık kaydı, depolama koşulları
 
 ## 📋 Uzun Vadeli (Sonrası)
 
+### Competitive Gap Analysis (Sonraki Seans — Yüksek Öncelik)
+
+Kapsamlı HSE Radar karşılaştırması:
+- Mevzuat kapsam (hangi yönetmelikleri kaçırıyor?)
+- UI/UX (kullanıcı deneyimi farkları)
+- Entegrasyon (ERP, SGK, KVKK vb.)
+- Raporlama (HSE Radar'ın en zayıf yanı)
+- Performans (hacim, load testing)
+- Fiyatlandırma/lisans modeli
+
+---
+
 ### E3 Sistem Entegrasyon (2-3 hafta)
 
 - **SGK API:** 3 günü kaza bildirimi otomasyonu
@@ -117,11 +76,15 @@ Mevzuat: Çevre kanunları, tehlikeli atık kaydı, depolama koşulları
 - **E-imza (5070 s.K.):** Dokümanlara elektronik imza
 - **VERBİS:** Kişisel veri işleme kaydı (KVKK md.7)
 
+---
+
 ### E2 Altyapı (Paralel)
 
 - **Superset:** TRIR/LWDR dashboard'ları
 - **Flutter:** Mobil uygulama (denetim, PTW, ölçüm, kaza — offline mode)
 - **Multi-company:** Record rule'lar daha esnek
+
+---
 
 ### E4 Analitik (İleri)
 
@@ -145,29 +108,39 @@ Mevzuat: Çevre kanunları, tehlikeli atık kaydı, depolama koşulları
 - [ ] Database backup automation
 - [ ] Monitoring (Datadog/Prometheus)
 
-### Mevzuat Borcu (MEV)
+### Mevzuat Doğrulaması (Tamamlanan ✅)
 
 | # | Modül | İssue | Öncelik | Status |
 |---|---|---|---|---|
-| MEV-001 | isg_training | 2 Nisan 2026 | 🔴 Kritik | B-10 sırada |
+| MEV-001 | isg_training | 2 Nisan 2026 | 🔴 Kritik | ✅ B-10 TAMAMLANDI |
 | MEV-004 | isg_penalty | 2026 %49 artış | ⚠️ Yüksek | B-8 sırada |
 | MEV-005 | isg_core | danger_class.history | ⚠️ Yüksek | B-9 sırada |
 | MEV-008 | isg_board | Toplantı sıklığı | ⚠️ Orta | B-4 sırada |
 
 ---
 
+## ✅ Düzeltilen Hata
+
+**BACKLOG.md Periyot Hatası:**
+- **Eski (YANLIŞ):** B-10'da "periyot değerleri 24/12/6 ayda bir" yazılmıştı
+- **Doğru:** RG 33212 Md 14 gereği: Az tehlikeli 36 ay (3 yıl), Tehlikeli 24 ay (2 yıl), Çok tehlikeli 12 ay (1 yıl)
+- **Kod:** Mevcut isg_training_type.py zaten DOĞRU (period_low=36, period_medium=24, period_high=12)
+- **Doğrulama:** Web araştırması yapılıp multiple bağımsız kaynaktan teyit edildi
+
+---
+
 ## 🎯 Başlangıç Sırası (Tavsiye)
 
-**Kısa Vadeli (7-9 gün):**
-1. isg_environment (~2-3 gün)
-2. B-4, B-8, B-9, B-10 (~4-5 gün, paralel yapılabilir)
-3. F5-002/F5-003 Kontrol (~1 gün)
+**Kısa Vadeli (2-3 gün):**
+1. B-4, B-8, B-9 (~2-3 gün, paralel yapılabilir)
+2. F5-002/F5-003 Kontrol (~1 gün)
+
+**Sonraki Seans:**
+3. **Competitive Gap Analysis** (~1-2 gün, rapor hazırlık)
+4. Gap'leri kapatma (~1-2 hafta, prioritize)
 
 **Ardından:**
-4. Superset + raporlama (~1-2 hafta)
 5. E3 Entegrasyon (~2-3 hafta)
-6. Flutter mobil (~2-3 hafta)
-
-**Son:**
-7. HSE Radar kabul testi (full regression)
+6. E2 Altyapı (~2-3 hafta)
+7. HSE Radar Kabul Testi (full regression)
 8. isg_health_basic (KVKK onayı sonrası)
