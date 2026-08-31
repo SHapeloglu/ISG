@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <!-- Dönüş Eğitimi Tetikleyicisi: Her gece 2'de çalışır -->
+    <record id="cron_process_return_training" model="ir.cron">
+        <field name="name">Dönüş Eğitimi Tetikleyicisi (6 ay uzak kalma)</field>
+        <field name="model_id" ref="model_isg_training_scheduler"/>
+        <field name="state">code</field>
+        <field name="code">model.action_process_return_training()</field>
+        <field name="user_id" ref="base.user_root"/>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="nextcall">2026-09-01 02:00:00</field>
+        <field name="active">True</field>
+    </record>
+
+    <!-- Dönüş Eğitimi Tetikleyicisi kaydını oluştur (singleton) -->
+    <function model="isg.training.scheduler" name="create">
+        <value eval="{'name': 'Dönüş Eğitimi Tetikleyicisi'}"/>
+    </function>
+
+</odoo>

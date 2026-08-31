@@ -8,6 +8,7 @@
     'data': [
         'security/ir.model.access.csv',
         'data/isg_training_type_data.xml',
+        'data/isg_training_cron.xml',
         'views/isg_training_type_views.xml',
         'views/isg_training_plan_views.xml',
         'views/isg_training_record_views.xml',
