@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError
 
@@ -71,6 +72,12 @@ class IsgWorkplace(models.Model):
         string='Site Sayısı',
         compute='_compute_site_count',
     )
+    danger_class_history_ids = fields.One2many(
+        'isg.workplace.danger_class.history',
+        'workplace_id',
+        string='Tehlike Sınıfı Değişim Geçmişi',
+        readonly=True,
+    )
 
     # ── Hesaplama ───────────────────────────────────────────
     @api.depends('site_ids')
@@ -84,6 +91,25 @@ class IsgWorkplace(models.Model):
         for rec in self:
             if rec.employee_count < 0:
                 raise ValidationError('Çalışan sayısı negatif olamaz.')
+
+    # ── Tehlike Sınıfı Değişim Geçmişi (B-9) ─────────────────
+    @api.onchange('danger_class')
+    def _onchange_danger_class(self):
+        """Tehlike sınıfı değiştiğinde, history kaydı oluştur"""
+        if self.id and self.danger_class:
+            # Veritabanından mevcut değeri oku
+            old_record = self.env['isg.workplace'].browse(self.id)
+            old_danger_class = old_record.danger_class
+            
+            # Değişim varsa history kaydı oluştur
+            if old_danger_class and old_danger_class != self.danger_class:
+                self.env['isg.workplace.danger_class.history'].create({
+                    'workplace_id': self.id,
+                    'danger_class_old': old_danger_class,
+                    'danger_class_new': self.danger_class,
+                    'change_date': fields.Date.context_today(self),
+                    'reason': f'Tehlike sınıfı {old_danger_class} → {self.danger_class} olarak değiştirildi',
+                })
 
     # ── Uzman/Hekim Süre Hesabı (6331 s.K. md.6) ───────────
     # NOT: Katsayılar artık isg.rate.table modelinden okunuyor (versiyonlu).
