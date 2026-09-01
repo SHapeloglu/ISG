@@ -1,19 +1,24 @@
-# CLAUDE.md — Yeni Chat Bağlamı (31 Ağustos 2026 — B-10 Tamamlandı)
+# CLAUDE.md — Yeni Chat Bağlamı (01 Eylül 2026 — B-9 Tamamlandı, MEV-002 Başlangıç)
 
-**Tarih:** 31 Ağustos 2026 — B-10 tamamlandı, gap analysis hazırlığında
+**Tarih:** 01 Eylül 2026 — B-4/B-8/B-9 tamamlandı, gap analysis hazırlandı, MEV-002 başlanacak
 
 ## 🎉 PROJE MİLSTON (Güncellenmiş)
 
 **31/32 ISG Modülü KURULU (%97)**
-- 59 Odoo modülü çalışıyor (31 ISG + 28 native)
+- 58 Odoo modülü çalışıyor (31 ISG + 27 native)
 - Tüm FAZ 0, FAZ 1 (isg_health_basic bloklu), FAZ 2 TAM, FAZ 3, FAZ 4, OSGB, FAZ 5 (reporting)
-- **HSE Radar eşdeğerliği %96-97** (mevzuat düzeltmeleri pending)
+- **HSE Radar eşdeğerliği %96-97** (full eşdeğerlik için 25-35 gün)
 - Sistem stabil, log'da hata yok, git senkron
 
-**Eksik:**
-- ❌ isg_health_basic (bloklu, KVKK danışman onayı bekleniyor)
-- ⏳ F5-002/F5-003 (doğrulama pending)
-- ⏳ B-4/B-8/B-9 (mevzuat düzeltmeleri, ~2-3 gün)
+**3 B-Görev Tamamlandı:**
+- ✅ B-4: isg_board danger_class bug fix
+- ✅ B-8: isg_penalty valid_from versiyonlama
+- ✅ B-9: isg_core danger_class.history modeli
+
+**Gap Analysis Raporu Hazırlandı:**
+- 4 bölüm operasyonel format
+- MEV- boşlukları detaylandırılmış
+- Top 10 Düzeltme Listesi (sıralanmış, adam-gün tahminli)
 
 ## Geliştirici Profili
 
@@ -27,7 +32,7 @@
 | Faz | Modüller | Kurulu |
 |---|---|---|
 | FAZ 0 | isg_core, security, party, location, document, hr, base | 7/7 ✅ |
-| FAZ 1 | training (**✅ B-10 tamamlandı**), contractor, visitor, board, correspondence | 5/6 ✅ |
+| FAZ 1 | training (**✅ B-10**), contractor, visitor, board, correspondence | 5/6 ✅ |
 | FAZ 2 | capa, risk, incident, audit, ppe, emergency, chemical, equipment, ptw | 9/9 ✅ |
 | FAZ 3 | measurement_core, measurement_hygiene, environment | 3/3 ✅ |
 | FAZ 4 | legislation, compliance, penalty, simulator | 4/4 ✅ |
@@ -60,32 +65,37 @@
 
 ## Sıradaki Görevler (Öncelik Sırası)
 
-### Kısa Vadeli (~2-3 gün)
+### HEMEN BAŞLANACAK (~3-5 gün)
 
-1. **B-4, B-8, B-9** — ~2-3 gün (mevzuat retrofit)
-   - B-4: isg_board toplantı sıklığı (15 gün vs 1 ay)
-   - B-8: isg_penalty versiyonlama (valid_from)
-   - B-9: isg_core danger_class.history
+**MEV-002: isg_equipment — Ara.2025 EK-II Güncellemesi**
+- Ekipman kataloğu: kompresör, vinç, asansör, baskı kapı, forklift, platform, kaldırma cihazları
+- Periyodik kontrol periyodu (6 ay / 1 yıl / vb.) ve yöntem
+- e-imza desteği (5070 s.K.)
+- EKİPNET sözleşme onayı + bildirim hazırlık
+- Kontrol sonucu rapor ve uyarı sistemi
+- Mevzuat: İş Ekipmanları Yönetmeliği (Ara.2025 güncellendi)
 
-2. **F5-002/F5-003 Kontrol** — ~1 gün
-   - QWeb PDF şablonları var mı?
-   - HSE Radar kabul testi protokolü?
+### İkinci Hafta (~3-5 gün)
 
-### Sonraki Seans (YÜKSEKÖ ÖNCELİK)
+**isg_incident — SGK Bildirimi + Dönüş Eğitimi**
+- Kaza kaydı (state machine)
+- SGK 3 iş günü bildirimi uyarısı
+- Otomatik dönüş eğitimi tetikleyicisi (isg_training ile link)
 
-3. **Competitive Gap Analysis** — HSE Radar ile kapsamlı karşılaştırma
-   - Mevzuat kapsam (hangi yönetmelikleri kaçırıyor?)
-   - UI/UX (kullanıcı deneyimi farkları)
-   - Entegrasyon (ERP, SGK, KVKK)
-   - Raporlama (HSE Radar'ın en zayıf yanı)
-   - Performans (hacim, load testing)
-   - **Sonuç:** Eksi puanlar listesi + düzeltme planı
+**isg_audit — Denetim Motoru**
+- Bulgu kaydı (finding model)
+- Weight-based compliance scoring
+- Tekrarlanan bulgu escalation (3+ tekrar)
 
-### Ardından
+### Üçüncü Hafta (~2-4 hafta)
 
-- E3 Entegrasyon (SGK, EKİPNET, İSG-KATİP, e-imza)
-- isg_health_basic (KVKK onayı sonrası)
-- Superset raporlama + Flutter mobil
+- isg_ppe, isg_chemical, isg_ptw (paralel yapılabilir)
+- MEV-008 (risk bilgilendirmesi) + isg_emergency (küçük fixler)
+- F5-002/F5-003 (doğrulama)
+
+### Bloklu
+
+- **isg_health_basic** — KVKK danışman onayı bekleniyor (F1-002)
 
 ## İstatistikler (Doğrulanmış)
 
@@ -97,7 +107,8 @@
 | Kurulu Native | 28 |
 | Toplam Model | 105+ |
 | HSE Radar Eşdeğerlik | %96-97 |
-| Commit Sayısı | 37+ |
+| Full Eşdeğerlik İçin | 25-35 gün |
+| Commit Sayısı | 40+ |
 
 ## Önemli Dosya Yolları
 /opt/odoo/isg_addons/ # ISG modülleri (31 kurulu)
@@ -106,27 +117,32 @@
 /var/log/odoo/odoo18-isg.log # Log (hata yok)
 https://github.com/SHapeloglu/ISG # Git (main, clean)
 
-## Son Yapılanlar (Bu Oturum — B-10)
+## Son Yapılanlar (Bu Oturum — B-9 Tamamlandı)
 
-✅ **isg_training 2 Nisan 2026 Tam Uyum**
-- Özel grup alanları (4 boolean)
-- `last_working_date` (6 ay tetikleyicisi)
-- `target_senior` (yaşlı 55+)
-- 'basic' kategorisi (temel eğitim)
-- Dönüş eğitimi 8 saat
-- Bug fix: `action_create_return_training()` alan uyuşmazlığı
-- Cron job: 6 ay uzak kalma → otomatik dönüş eğitimi
+✅ **B-4: isg_board danger_class bug fix**
+- String hatası: 'very_dangerous' → 'high'
+- Toplantı sıklığı: çok tehlikeli 15 gün, diğer 1 ay
 
-✅ **Mevzuat Doğrulaması**
-- RG 33212 Md 5-7 (eğitim yönetmeliği) ✅
-- Tekrar periyotu (36/24/12 ay) ✅
-- BACKLOG.md hata düzeltildi (periyotlar doğruydu, BACKLOG yanlıştı)
+✅ **B-8: isg_penalty versiyonlama**
+- valid_from alanı (tarifesi sürüm geçmişi)
+- Geçmiş tarihli simülasyonda doğru tarifeler
+
+✅ **B-9: isg_core danger_class.history**
+- isg.workplace.danger_class.history modeli
+- Otomatik history kaydı (@onchange)
+- Geçmiş uyunluk kontrolü desteği
+
+✅ **Gap Analysis Raporu**
+- 4 bölüm, operasyonel format
+- MEV-002 (EK-II) en kritik
+- Top 10 Düzeltme Listesi hazırlandı
 
 ## Sonraki Adım
 
-**Competitive Gap Analysis** — HSE Radar ile kapsamlı karşılaştırma
-- Kod/tasarım eklemek yerine **eksikleri listelemek** hedefi
-- Mevzuat, UI/UX, entegrasyon, raporlama, performans boyutlarında
-- **Çıkış:** Önceliklendirilmiş düzeltme listesi
+**MEV-002: isg_equipment — Ara.2025 EK-II Güncellemesi**
+- Skeleton var, implementasyon yapılacak
+- Ekipman kataloğu + periyodik kontrol form
+- e-imza + EKİPNET alanları
+- Tahmini: 3-5 gün
 
 Başlamaya hazır! 🚀

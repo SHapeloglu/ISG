@@ -1,146 +1,79 @@
-# BACKLOG.md — Gelecek Geliştirmeler (31 Ağustos 2026)
+# BACKLOG.md — Gelecek Geliştirmeler (01 Eylül 2026 — B-9 Tamamlandı)
 
-## 🎯 Hemen Başlanacak (2-3 gün, ~5-7 gün)
+## 🎯 Hemen Başlanacak (3-5 gün)
 
-### 1. B-4: isg_board — Toplantı Sıklığı — ~1 gün ⏳
-**Mevzuat:** İSG Kurulları Yönetmeliği
+### MEV-002: isg_equipment — Ara.2025 EK-II Güncellemesi — BAŞLANACAK ← START
+**Mevzuat:** İş Ekipmanları Yönetmeliği (Aralık 2025)
 
-**Sorun:** Danger_class'a göre farklı toplantı periyodu gerektirir
-- Çok tehlikeli: 15 gün arası
-- Diğer (az/tehlikeli): 1 ay arası
+**Gereksinim:**
+- Ara.2025 EK-II ekipman kataloğu (kompresör, vinç, asansör, baskı kapı, forklift, platform, kaldırma cihazları)
+- Periyodik kontrol periyodu (6 ay / 1 yıl / vb.) ve yöntem
+- e-imza desteği (5070 s.K.)
+- EKİPNET sözleşme onayı + bildirim hazırlık
+- Kontrol sonucu rapor ve uyarı sistemi (kontrol tarihi yaklaşınca)
 
-**Çözüm:**
-- `isg_board_meeting.next_meeting_date_expected` compute'a danger_class ekle
-- Test: çok tehlikeli 15 gün, normal 30 gün
-
----
-
-### 2. B-8: isg_penalty — Versiyonlama + 2026 %49 Artış — ~0.5-1 gün ⏳
-**Mevzuat:** 2026 ÇSGB ceza tutarları (yılda güncellenir)
-
-**Sorun:** Ceza tutarları yılda güncelleniyor. Sistem geçmiş tarihli denetim için eski tarifeler bilmeli.
-
-**Çözüm:**
-- `isg.penalty.tariff` modeline `valid_from` (date) alanı ekle
-- Ceza hesaplamasında `valid_from` dikkate alınsın
-- Geçmiş tarihli simülasyonda (F4-004), o tarihte geçerli tarifeler kullanılsın
-- Veri seti: her yıl 1 Ocak'ta yeni sürüm
+**Tahmini Adam-Gün:** 3-5 gün
 
 ---
 
-### 3. B-9: isg_core — danger_class.history — ~0.5-1 gün ⏳
-**Mevzuat:** İşyeri tehlike sınıfı değişiklikleri takibi
+## 📋 Sonraki Sırada (1-2 hafta)
 
-**Sorun:** İşyerinin tehlike sınıfı değişebiliyor. Sistem hangi dönemde hangi sınıf olduğunu bilmeli.
+### isg_incident — SGK Bildirimi + Dönüş Eğitimi
+- Kaza kaydı (state machine)
+- SGK 3 iş günü bildirimi uyarısı
+- Otomatik dönüş eğitimi tetikleyicisi (isg_training ile link)
+- **Tahmini:** 3-5 gün
 
-**Çözüm:**
-- `isg.workplace.danger_class.history` ayrı modeli oluştur
-  - workplace_id, danger_class_old → danger_class_new, change_date, reason, modified_by
-- `isg_workplace.danger_class` onchange'e history kaydı oluştur
-- Geçmiş uyunluk kontrolü, o tarihte geçerli danger_class'ı kullansın
-
----
-
-### 4. F5-002 & F5-003 Kontrol — ~1 gün ⏳
-
-**F5-002: QWeb PDF Şablonları**
-- isg_reporting modülü kurulu ama PDF şablonları var mı kontrol et
-- TRIR/LWDR raporları PDF çıktısı alabilir mi?
-
-**F5-003: HSE Radar Kabul Testi**
-- Test protokolü yazılmış mı?
-- 27 HSE Radar işlev × 5 test = 135 senaryo
-- Acceptance criteria belirle
+### isg_audit — Denetim Motoru
+- Bulgu kaydı (finding model)
+- Weight-based compliance scoring
+- Tekrarlanan bulgu escalation (3+)
+- **Tahmini:** 4-6 gün
 
 ---
 
-## 📋 Uzun Vadeli (Sonrası)
+## 📊 Medium Priority (2-3 hafta)
 
-### Competitive Gap Analysis (Sonraki Seans — Yüksek Öncelik)
-
-Kapsamlı HSE Radar karşılaştırması:
-- Mevzuat kapsam (hangi yönetmelikleri kaçırıyor?)
-- UI/UX (kullanıcı deneyimi farkları)
-- Entegrasyon (ERP, SGK, KVKK vb.)
-- Raporlama (HSE Radar'ın en zayıf yanı)
-- Performans (hacim, load testing)
-- Fiyatlandırma/lisans modeli
-
----
-
-### E3 Sistem Entegrasyon (2-3 hafta)
-
-- **SGK API:** 3 günü kaza bildirimi otomasyonu
-- **EKİPNET:** Periyodik kontrol sonuçlarını gönder
-- **İSG-KATİP:** Uzman/hekim bildirimleri
-- **E-imza (5070 s.K.):** Dokümanlara elektronik imza
-- **VERBİS:** Kişisel veri işleme kaydı (KVKK md.7)
-
----
-
-### E2 Altyapı (Paralel)
-
-- **Superset:** TRIR/LWDR dashboard'ları
-- **Flutter:** Mobil uygulama (denetim, PTW, ölçüm, kaza — offline mode)
-- **Multi-company:** Record rule'lar daha esnek
-
----
-
-### E4 Analitik (İleri)
-
-- **Risk tahminlemesi:** Geçmiş kaza verilerinden ML modeli
-- **Anomali tespiti:** Ölçüm outliers, compliance düşüşü
-- **Uyum önerme:** Benzer işyerleri karşılaştırması
+- isg_ppe (KKD envanter, zimmet) — 3-4 gün
+- isg_chemical (kimyasal, OEL/STEL limit) — 3-4 gün
+- isg_ptw + isg_loto (iş izni, LOTO) — 4-6 gün
+- (Paralel yapılabilir)
 
 ---
 
 ## 🐛 Teknik Borç
 
-### Açık Konular
-- [ ] isg_site.hazard_type — 'invisible' warning
-- [ ] html4css1.css — Permission denied warning
-- [ ] Admin şifresi — PostgreSQL NULL
-
-### İyileştirmeler
-- [ ] Compute field indexing (performans)
-- [ ] Search view cache
-- [ ] SSH key setup (HTTPS → SSH git)
-- [ ] Database backup automation
-- [ ] Monitoring (Datadog/Prometheus)
-
-### Mevzuat Doğrulaması (Tamamlanan ✅)
-
-| # | Modül | İssue | Öncelik | Status |
-|---|---|---|---|---|
-| MEV-001 | isg_training | 2 Nisan 2026 | 🔴 Kritik | ✅ B-10 TAMAMLANDI |
-| MEV-004 | isg_penalty | 2026 %49 artış | ⚠️ Yüksek | B-8 sırada |
-| MEV-005 | isg_core | danger_class.history | ⚠️ Yüksek | B-9 sırada |
-| MEV-008 | isg_board | Toplantı sıklığı | ⚠️ Orta | B-4 sırada |
+- [ ] isg_site.hazard_type — 'invisible' warning (operasyonel değil)
+- [ ] html4css1.css — Permission denied warning (operasyonel değil)
+- [ ] Admin şifresi — PostgreSQL NULL (kalıcı şifre belirlenmeli)
 
 ---
 
-## ✅ Düzeltilen Hata
+## ✅ Tamamlanan B-Görevleri (01 Eylül 2026)
 
-**BACKLOG.md Periyot Hatası:**
-- **Eski (YANLIŞ):** B-10'da "periyot değerleri 24/12/6 ayda bir" yazılmıştı
-- **Doğru:** RG 33212 Md 14 gereği: Az tehlikeli 36 ay (3 yıl), Tehlikeli 24 ay (2 yıl), Çok tehlikeli 12 ay (1 yıl)
-- **Kod:** Mevcut isg_training_type.py zaten DOĞRU (period_low=36, period_medium=24, period_high=12)
-- **Doğrulama:** Web araştırması yapılıp multiple bağımsız kaynaktan teyit edildi
+- [x] **B-4 isg_board** (f511508) — danger_class string bug
+- [x] **B-8 isg_penalty** (2aa4983) — valid_from versiyonlama
+- [x] **B-9 isg_core** (d037d71) — danger_class.history modeli
+
+---
+
+## 📈 Gap Analysis Sonuçları
+
+Kapsamlı rapor hazırlandı (ISG_Gap_Analysis_20260901.md):
+- **Mevzuat Boşlukları:** MEV-002 (EK-II) en kritik, 0.5-5 gün
+- **İşlevsel Eksikler:** F2 serisi 7 modül (22-33 gün)
+- **Top 10 Düzeltme:** Sıralanmış, adam-gün tahminli
+- **Full Eşdeğerlik:** 25-35 gün daha
 
 ---
 
 ## 🎯 Başlangıç Sırası (Tavsiye)
 
-**Kısa Vadeli (2-3 gün):**
-1. B-4, B-8, B-9 (~2-3 gün, paralel yapılabilir)
-2. F5-002/F5-003 Kontrol (~1 gün)
+**Bu Hafta:**
+1. MEV-002 isg_equipment (3-5 gün) ← START
+2. isg_incident (3-5 gün)
 
-**Sonraki Seans:**
-3. **Competitive Gap Analysis** (~1-2 gün, rapor hazırlık)
-4. Gap'leri kapatma (~1-2 hafta, prioritize)
-
-**Ardından:**
-5. E3 Entegrasyon (~2-3 hafta)
-6. E2 Altyapı (~2-3 hafta)
-7. HSE Radar Kabul Testi (full regression)
-8. isg_health_basic (KVKK onayı sonrası)
+**Sonraki Hafta:**
+3. isg_audit (4-6 gün)
+4. isg_ppe, isg_chemical, isg_ptw (paralel, 2-3 hafta)
+5. Küçük fixler + doğrulama (F5-002/F5-003)

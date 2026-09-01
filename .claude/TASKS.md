@@ -1,4 +1,4 @@
-# TASKS.md — Görev Listesi (31 Ağustos 2026 — B-10 Tamamlandı)
+# TASKS.md — Görev Listesi (01 Eylül 2026 — B-9 Tamamlandı)
 
 ## Tamamlanan Görevler ✅
 
@@ -11,16 +11,24 @@
 - [x] OSGB isg_osgb (1 modül)
 - [x] FAZ 5 isg_reporting (1 modül, PDF+Kabul test pending)
 
-### B-10 isg_training (31 Ağustos 2026) ✅ TAMAMLANDI
-- [x] Özel grup alanları (is_young_worker, is_senior_worker, is_disabled_worker, is_pregnant_or_nursing)
-- [x] last_working_date alanı
-- [x] target_senior (yaşlı çalışan eğitimi)
-- [x] 'basic' kategorisi (temel eğitim)
-- [x] Dönüş eğitimi 8 saat (mevzuat uyumu)
-- [x] isg_incident bug fix (action_create_return_training)
-- [x] Seed data (temel, dönüş, yaşlı eğitim türleri)
-- [x] Cron job (6 ay uzak kalma tetikleyicisi)
-- [x] Mevzuat doğrulaması (RG 33212 Md 5-7)
+### B-Görevleri (Mevzuat Retrofit) — 3/3 TAMAMLANDI ✅
+
+- [x] **B-10 isg_training** (31 Ağustos 2026)
+  - Özel grup alanları + dönüş eğitimi + cron job
+
+- [x] **B-4 isg_board** (01 Eylül 2026)
+  - danger_class string hatası ('very_dangerous' → 'high')
+  - Commit f511508
+
+- [x] **B-8 isg_penalty** (01 Eylül 2026)
+  - valid_from versiyonlama
+  - Tarife seçimi evaluation_date'e göre
+  - Commit 2aa4983
+
+- [x] **B-9 isg_core** (01 Eylül 2026)
+  - danger_class.history modeli
+  - Otomatik history kaydı (@onchange)
+  - Commit d037d71
 
 **Proje İlerleme: 31/32 Modül (%97)**
 
@@ -39,38 +47,37 @@
 
 ## Devam Eden Görevler 🔄
 
-### B-Görevleri — Mevzuat Retrofit (2-3 gün)
+### MEV- Görevleri (Mevzuat Boşlukları) — Gap Analysis Sonrası
 
-- [x] **B-10 isg_training** ✅ TAMAMLANDI (31 Ağustos)
+**High Priority:**
+- [ ] **MEV-002 isg_equipment** — EK-II güncellemesi (3-5 gün) ← **START**
+  - Ara.2025 EK-II ekipman kataloğu
+  - e-imza desteği (5070 s.K.)
+  - EKİPNET bildirim alanları
+  - Periyodik kontrol raporu form
 
-- [ ] **B-4 isg_board — Toplantı Sıklığı (~1 gün)**
-  - Çok tehlikeli: 15 gün arası
-  - Diğer: 1 ay arası
-  - Mevzuat: İSG Kurulları Yönetmeliği
+- [ ] **isg_incident** — SGK bildirimi (3-5 gün)
+  - Kaza kaydı (state machine)
+  - SGK 3 gün bildirimi otomasyonu
+  - Dönüş eğitimi tetikleyicisi
 
-- [ ] **B-8 isg_penalty — Versiyonlama (~0.5-1 gün)**
-  - `valid_from` alanı ekle
-  - 2026 %49 artış
-  - Geçmiş tarihli simülasyon uyumu
+- [ ] **isg_audit** — Denetim motoru (4-6 gün)
+  - Bulgu kaydı + weight-based scoring
+  - Tekrarlanan bulgu escalation
 
-- [ ] **B-9 isg_core — danger_class.history (~0.5-1 gün)**
-  - Tehlike sınıfı değişim geçmişi
-  - Geçmiş uyunluk kontrolü
+**Medium Priority:**
+- [ ] **isg_ppe** — KKD envanter (3-4 gün)
+- [ ] **isg_chemical** — Kimyasal + OEL/STEL (3-4 gün)
+- [ ] **isg_ptw + isg_loto** — İş izni + LOTO (4-6 gün)
+- [ ] **MEV-008** — Risk bilgilendirmesi (0.5 gün)
+- [ ] **isg_emergency** — Acil durum (2-3 gün)
 
-### F5 Kontrol (~1 gün)
-
-- [ ] **F5-002 QWeb PDF Şablonları** — durumu kontrol et
-- [ ] **F5-003 HSE Radar Kabul Testi** — protokol
-
-### Bloklu
-
+**Bloklu:**
 - [ ] **F1-002 isg_health_basic** — KVKK danışman onayı bekleniyor
 
-### Sonraki Seans (Yüksek Öncelik)
-
-- [ ] **Competitive Gap Analysis** — HSE Radar ile kapsamlı karşılaştırma
-  - Mevzuat kapsam, UI/UX, entegrasyon, raporlama, performans
-  - Eksikler listesi + düzeltme planı
+**Doğrulama Pending:**
+- [ ] **F5-002 QWeb PDF** — Şablonları kontrol et
+- [ ] **F5-003 Kabul Testi** — Protokol hazır mı?
 
 ---
 
@@ -96,8 +103,9 @@
 | Metrik | Değer |
 |---|---|
 | Kurulu Modül | 31/32 (%97) |
-| Tamamlanan Görev | 32 |
+| Tamamlanan Görev | 35+ (FAZ 0-4 + OSGB + isg_reporting + B-görevleri) |
 | Bloklu | 1 (KVKK) |
 | HSE Radar Eşdeğerlik | %96-97 |
-| Commit Sayısı | 37+ |
-| Süre | ~33 gün (projeleme + geliştirme) |
+| Full Eşdeğerlik İçin | 25-35 gün |
+| Commit Sayısı | 40+ |
+| Süre | ~35 gün (sıfırdan) |
