@@ -69,20 +69,32 @@ class IsgAudit(models.Model):
     total_questions = fields.Integer(
         string='Toplam Madde', compute='_compute_stats', store=True,
     )
+    applicable_questions = fields.Integer(
+        string='Uygulanabilir Madde', compute='_compute_stats', store=True,
+        help='NA (Uygulanamaz) hariç',
+    )
     conformity_count = fields.Integer(
         string='Uygun', compute='_compute_stats', store=True,
     )
     nonconformity_count = fields.Integer(
         string='Uygunsuz', compute='_compute_stats', store=True,
     )
+    observation_count = fields.Integer(
+        string='Gözlem', compute='_compute_stats', store=True,
+    )
+    na_count = fields.Integer(
+        string='Uygulanamaz', compute='_compute_stats', store=True,
+    )
     open_capa_count = fields.Integer(
         string='Açık DÖF', compute='_compute_stats', store=True,
     )
     total_weight = fields.Integer(
         string='Toplam Ağırlık (Max Puan)', compute='_compute_scoring', store=True,
+        help='NA hariç uygulanabilir maddeler',
     )
     achieved_weight = fields.Integer(
         string='Elde Edilen Puan', compute='_compute_scoring', store=True,
+        help='Uygun sonuçlu maddeler',
     )
     compliance_percentage = fields.Float(
         string='Uyum %', compute='_compute_scoring', store=True,
@@ -103,6 +115,9 @@ class IsgAudit(models.Model):
             rec.total_questions = len(lines)
             rec.conformity_count = len(lines.filtered(lambda l: l.result == 'ok'))
             rec.nonconformity_count = len(lines.filtered(lambda l: l.result == 'nok'))
+            rec.observation_count = len(lines.filtered(lambda l: l.result == 'obs'))
+            rec.na_count = len(lines.filtered(lambda l: l.result == 'na'))
+            rec.applicable_questions = rec.total_questions - rec.na_count
             rec.open_capa_count = len(lines.filtered(
                 lambda l: l.capa_id and l.capa_id.state not in ('closed', 'cancelled')
             ))
@@ -110,17 +125,21 @@ class IsgAudit(models.Model):
     @api.depends('line_ids.weight', 'line_ids.response_weight', 'line_ids.is_critical', 'line_ids.result')
     def _compute_scoring(self):
         for rec in self:
-            lines = rec.line_ids
-            rec.total_weight = sum(lines.mapped('weight'))
-            rec.achieved_weight = sum(lines.mapped('response_weight'))
+            # FİKS: NA (uygulanamaz) maddeleri hariç tut
+            applicable_lines = rec.line_ids.filtered(lambda l: l.result != 'na')
             
+            rec.total_weight = sum(applicable_lines.mapped('weight'))
+            rec.achieved_weight = sum(applicable_lines.filtered(lambda l: l.result == 'ok').mapped('weight'))
+
             if rec.total_weight > 0:
                 rec.compliance_percentage = (rec.achieved_weight / rec.total_weight) * 100
             else:
                 rec.compliance_percentage = 0
-            
+
             # Kritik bulgu varsa RED, yoksa % bağlı
-            has_critical_nok = any(l.is_critical and l.result == 'nok' for l in lines)
+            has_critical_nok = any(
+                l.is_critical and l.result == 'nok' for l in rec.line_ids
+            )
             if has_critical_nok:
                 rec.compliance_status = 'red'
             elif rec.compliance_percentage >= 90:
@@ -221,7 +240,7 @@ class IsgAuditLine(models.Model):
     )
     response_weight = fields.Integer(
         string='Yanıt Puanı', compute='_compute_response_weight', store=True,
-        help='Uygun ise weight, değilse 0',
+        help='Uygun ise weight, değilse 0; NA ise ignored',
     )
     finding = fields.Text(string='Bulgu / Açıklama')
     evidence = fields.Char(string='Kanıt / Referans')
