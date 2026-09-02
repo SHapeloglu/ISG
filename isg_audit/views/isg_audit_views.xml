@@ -18,8 +18,11 @@
                 <field name="compliance_percentage" string="Uyum %"/>
                 <field name="compliance_status" widget="badge"/>
                 <field name="total_questions"/>
+                <field name="applicable_questions"/>
                 <field name="conformity_count"/>
                 <field name="nonconformity_count"/>
+                <field name="observation_count"/>
+                <field name="na_count"/>
                 <field name="open_capa_count"/>
                 <field name="state" widget="badge"/>
             </list>
@@ -74,14 +77,19 @@
                     </group>
                     <group string="Uyum Özeti">
                         <group>
+                            <field name="total_questions"/>
+                            <field name="applicable_questions"/>
+                            <field name="conformity_count"/>
+                            <field name="nonconformity_count"/>
+                            <field name="observation_count"/>
+                            <field name="na_count"/>
+                        </group>
+                        <group>
                             <field name="total_weight"/>
                             <field name="achieved_weight"/>
                             <field name="compliance_percentage" string="Uyum %" readonly="1"/>
-                        </group>
-                        <group>
                             <field name="compliance_status" widget="badge" readonly="1"/>
-                            <field name="conformity_count"/>
-                            <field name="nonconformity_count"/>
+                            <field name="open_capa_count"/>
                         </group>
                     </group>
                     <group string="Kapsam">
