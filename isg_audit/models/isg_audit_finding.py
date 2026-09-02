@@ -21,7 +21,7 @@ class IsgAuditFinding(models.Model):
         'isg.audit.line', string='Denetim Satırı',
         ondelete='set null', help='Uygunsuz satırdan geliyor',
     )
-    
+
     # Bulgu Detayı
     finding_type = fields.Selection(
         [
@@ -52,11 +52,11 @@ class IsgAuditFinding(models.Model):
         string='Kök Neden Analizi (Ön)',
         help='Ön kök neden analizi',
     )
-    
+
     # Tekrarlanan Bulgu
     repeat_count = fields.Integer(
         string='Kaç Kez Tekrar Etmiş', default=0,
-        help='Önceki denetimlerden kaç kez aynı bulgu vardı',
+        help='Önceki denetimlerden kaç kez aynı bulgu vardı (otomatik hesaplı)',
     )
     escalation_level = fields.Integer(
         string='Eskalasyon Seviyesi', compute='_compute_escalation_level',
@@ -67,7 +67,7 @@ class IsgAuditFinding(models.Model):
         string='Önceki Benzer Bulgular',
         help='Aynı konuda daha önce kaydedilen bulgular',
     )
-    
+
     # Sorumlu & Aksiyon
     responsible_person_id = fields.Many2one(
         'hr.employee', string='Sorumlu Kişi', tracking=True,
@@ -75,7 +75,7 @@ class IsgAuditFinding(models.Model):
     target_completion_date = fields.Date(
         string='Hedef Tamamlanma Tarihi', tracking=True,
     )
-    
+
     # DÖF Bağlantısı
     capa_id = fields.Many2one(
         'isg.capa', string='İlişkili DÖF', readonly=True, copy=False,
@@ -83,14 +83,14 @@ class IsgAuditFinding(models.Model):
     is_capa_created = fields.Boolean(
         string='DÖF Oluşturuldu', compute='_compute_capa_created', store=True,
     )
-    
+
     # Kanıt
     evidence_text = fields.Text(string='Kanıt / Gözlem Notları')
     evidence_attachment_ids = fields.Many2many(
         'ir.attachment', 'audit_finding_attachment_rel', 'finding_id', 'attachment_id',
         string='Kanıt Dosyaları (Fotoğraf, Belge)',
     )
-    
+
     # Durum
     state = fields.Selection(
         [
@@ -102,7 +102,7 @@ class IsgAuditFinding(models.Model):
         ],
         string='Durum', default='open', tracking=True, copy=False,
     )
-    
+
     # İşyeri Context
     workplace_id = fields.Many2one(
         'isg.workplace', string='İSG İşyeri',
@@ -135,7 +135,20 @@ class IsgAuditFinding(models.Model):
                 vals['name'] = self.env['ir.sequence'].next_by_code(
                     'isg.audit.finding'
                 ) or 'Yeni'
-        return super().create(vals_list)
+            
+            # FİKS: repeat_count otomatik hesapla
+            # Benzer bulgular: kategori + bulgu açıklamasının ilk 50 karakteri match + kapalı değil
+            if vals.get('category') and vals.get('finding_description'):
+                description_prefix = vals['finding_description'][:50]
+                similar = self.search([
+                    ('category', '=', vals['category']),
+                    ('finding_description', 'ilike', description_prefix),
+                    ('state', '!=', 'closed'),
+                ])
+                vals['repeat_count'] = len(similar)
+        
+        findings = super().create(vals_list)
+        return findings
 
     def action_create_capa(self):
         """Bulgadan DÖF oluştur."""
@@ -144,14 +157,14 @@ class IsgAuditFinding(models.Model):
             raise UserError(
                 'Bu bulgu için zaten bir DÖF mevcut: %s' % self.capa_id.name
             )
-        
+
         severity_map = {
             'observation': 'low',
             'non_conformity': 'medium',
             'major': 'high',
             'critical': 'critical',
         }
-        
+
         capa = self.env['isg.capa'].create({
             'workplace_id': self.audit_id.workplace_id.id,
             'site_id': self.audit_id.site_id.id or False,
