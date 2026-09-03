@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from odoo import api, fields, models
+from odoo.exceptions import ValidationError
 
 class IsgChemicalIncompatibility(models.Model):
     _name = 'isg.chemical.incompatibility'
@@ -9,11 +10,11 @@ class IsgChemicalIncompatibility(models.Model):
     # İki kimyasal arasındaki uyumsuzluk
     chemical_id_a = fields.Many2one(
         'isg.chemical', string='Kimyasal A', required=True,
-        ondelete='cascade', tracking=True,
+        ondelete='cascade',
     )
     chemical_id_b = fields.Many2one(
         'isg.chemical', string='Kimyasal B', required=True,
-        ondelete='cascade', tracking=True,
+        ondelete='cascade',
     )
 
     # Uyumsuzluk derecesi

@@ -8,7 +8,7 @@ class IsgChemicalOel(models.Model):
 
     chemical_id = fields.Many2one(
         'isg.chemical', string='Kimyasal', required=True,
-        ondelete='cascade', tracking=True,
+        ondelete='cascade',
     )
 
     # TWA (8 saatlik ağırlıklı ortalama)

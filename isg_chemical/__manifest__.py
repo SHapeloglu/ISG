@@ -14,7 +14,6 @@
         'security/isg_chemical_security.xml',
         'security/ir.model.access.csv',
         'data/isg_chemical_sequence.xml',
-        'data/isg_chemical_oel_data.xml',
         'views/isg_chemical_views.xml',
         'views/isg_chemical_oel_views.xml',
         'views/isg_chemical_incompatibility_views.xml',
