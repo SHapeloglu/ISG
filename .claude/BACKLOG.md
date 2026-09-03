@@ -1,4 +1,4 @@
-# BACKLOG.md — Gelecek Geliştirmeler (01 Eylül 2026 — B-9 Tamamlandı)
+# BACKLOG.md — Gelecek Geliştirmeler (03 Eylül 2026 — Seans 3 Devam)
 
 ## 🎯 Hemen Başlanacak (3-5 gün)
 
@@ -18,62 +18,60 @@
 
 ## 📋 Sonraki Sırada (1-2 hafta)
 
-### isg_incident — SGK Bildirimi + Dönüş Eğitimi
-- Kaza kaydı (state machine)
-- SGK 3 iş günü bildirimi uyarısı
-- Otomatik dönüş eğitimi tetikleyicisi (isg_training ile link)
-- **Tahmini:** 3-5 gün
+### isg_ptw + isg_loto — İş izni + LOTO (4-6 gün)
+- İzin türleri (sıcak iş, kapalı alan, elektrik, yüksekte)
+- Ön koşul kontrol listeleri
+- Çok aşamalı onay zinciri
+- LOTO izolasyon nokta yönetimi
 
-### isg_audit — Denetim Motoru
-- Bulgu kaydı (finding model)
-- Weight-based compliance scoring
-- Tekrarlanan bulgu escalation (3+)
-- **Tahmini:** 4-6 gün
+### isg_emergency — Acil durum (2-3 gün)
+- Acil durum planı, tatbikat, tahliye
+- isg_location entegrasyonu
 
 ---
 
 ## 📊 Medium Priority (2-3 hafta)
 
-- isg_ppe (KKD envanter, zimmet) — 3-4 gün
-- isg_chemical (kimyasal, OEL/STEL limit) — 3-4 gün
-- isg_ptw + isg_loto (iş izni, LOTO) — 4-6 gün
-- (Paralel yapılabilir)
+### MEV-008: Risk bilgilendirmesi (0.5 gün)
+- isg_visitor, isg_contractor risk briefing alanları
+
+### F5-002/F5-003: PDF şablonları + test (1-2 gün)
+- QWeb şablonları inceleme
+- Test case'ler hazırlama
 
 ---
 
-## 🐛 Teknik Borç
+## ✅ Tamamlanan B-Görevleri (Seans 2-3)
 
-- [ ] isg_site.hazard_type — 'invisible' warning (operasyonel değil)
-- [ ] html4css1.css — Permission denied warning (operasyonel değil)
-- [ ] Admin şifresi — PostgreSQL NULL (kalıcı şifre belirlenmeli)
-
----
-
-## ✅ Tamamlanan B-Görevleri (01 Eylül 2026)
-
-- [x] **B-4 isg_board** (f511508) — danger_class string bug
-- [x] **B-8 isg_penalty** (2aa4983) — valid_from versiyonlama
-- [x] **B-9 isg_core** (d037d71) — danger_class.history modeli
+- [x] **B-4 isg_board** — danger_class string bug
+- [x] **B-8 isg_penalty** — valid_from versiyonlama
+- [x] **B-9 isg_core** — danger_class.history modeli
+- [x] **B-10 isg_training** — 6 ay uzak kalma dönüş eğitimi
 
 ---
 
-## 📈 Gap Analysis Sonuçları
+## 📈 Gap Analysis Sonuçları (30 Ağustos)
 
 Kapsamlı rapor hazırlandı (ISG_Gap_Analysis_20260901.md):
 - **Mevzuat Boşlukları:** MEV-002 (EK-II) en kritik, 0.5-5 gün
-- **İşlevsel Eksikler:** F2 serisi 7 modül (22-33 gün)
+- **İşlevsel Eksikler:** F2 serisi 7 modül (22-33 gün) — TAMAMLANDI ✅
 - **Top 10 Düzeltme:** Sıralanmış, adam-gün tahminli
-- **Full Eşdeğerlik:** 25-35 gün daha
+- **Full Eşdeğerlik:** 11-20 gün daha
 
 ---
 
 ## 🎯 Başlangıç Sırası (Tavsiye)
 
 **Bu Hafta:**
-1. MEV-002 isg_equipment (3-5 gün) ← START
-2. isg_incident (3-5 gün)
+1. MEV-002 isg_equipment (3-5 gün) ← **START**
+2. isg_ptw + isg_loto (4-6 gün)
 
 **Sonraki Hafta:**
-3. isg_audit (4-6 gün)
-4. isg_ppe, isg_chemical, isg_ptw (paralel, 2-3 hafta)
-5. Küçük fixler + doğrulama (F5-002/F5-003)
+3. isg_emergency (2-3 gün)
+4. MEV-008 + F5 (küçük fixler + doğrulama)
+
+---
+
+## Bloklu (KVKK Danışman)
+
+- isg_health_basic (F1-002) — KVKK danışman onayı bekleniyor

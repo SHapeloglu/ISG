@@ -1,26 +1,33 @@
-# ARCHITECTURE.md — Mimari ve Tasarım Kararları (01 Eylül 2026 — B-9 Tamamlandı)
+# ARCHITECTURE.md — Mimari ve Tasarım Kararları (03 Eylül 2026 — Seans 3 Devam)
 
-**Güncelleme:** 01 Eylül 2026 — 31/32 modül kurulu, B-4/B-8/B-9 tamamlandı, MEV-002 başlanacak
+**Güncelleme:** 03 Eylül 2026 — 33/33 modül kurulu, %100 tamamlandı, MEV-002 başlanacak
 
-[önceki içeriği koruyoruz, sadece sonunda kısım güncelleyelim]
+## Son Yapılanlar (Seans 3)
 
-...
+✅ **isg_audit scoring FIX (NA hariç)**
+- applicable_lines = rec.line_ids.filtered(lambda l: l.result != 'na')
+- total_weight = sum(applicable_lines.mapped('weight'))
+- compliance_percentage doğru hesaplanıyor
 
-## Son Yapılanlar (Bu Oturum — B-9)
+✅ **isg_audit_finding repeat_count AUTO**
+- Bulgu oluşturulurken benzer bulgular query (kategori + açıklama prefix)
+- repeat_count otomatik set
+- escalation_level: >= 3 ise level 2
 
-✅ **B-4: isg_board toplantı sıklığı**
-- danger_class string bug fix ('very_dangerous' → 'high')
-- Çok tehlikeli: 15 gün, diğer: 1 ay
+✅ **isg_incident SGK notification + dönüş eğitimi**
+- sgk_notification_deadline: incident_date + 4 takvim günü (3 iş günü)
+- return_to_work_training_id: Dönüş eğitimi tetikleyicisi
+- action_create_return_training(): otomatik
 
-✅ **B-8: isg_penalty versiyonlama**
-- valid_from alanı (tarifesi sürüm geçmişi)
-- Geçmiş tarihli simülasyonda doğru tarifeler
-- 2026 %49 ceza artışı versiyonlanabilir
+✅ **isg_ppe KKD envanter**
+- IsgPpeType: 9 kategori
+- IsgPpeStock: stok + min_quantity uyarısı
+- IsgPpeIssue: zimmet, expiry_date compute (lifespan_months)
 
-✅ **B-9: isg_core danger_class.history**
-- isg.workplace.danger_class.history modeli oluşturuldu
-- @onchange('danger_class') ile otomatik history kaydı
-- Geçmiş uyunluk kontrolü desteği
+✅ **isg_chemical OEL/STEL + uyumsuzluk**
+- IsgChemicalOel: Türkiye ÇSGB TWA (8h) + STEL (15min)
+- IsgChemicalIncompatibility: depolama matrisi (kritik/yüksek/orta)
+- Ters kayıt kontrolü (A-B ve B-A)
 
 ---
 
