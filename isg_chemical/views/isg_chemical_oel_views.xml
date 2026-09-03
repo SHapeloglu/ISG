@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- OEL/STEL Limits List View -->
+    <record id="view_isg_chemical_oel_list" model="ir.ui.view">
+        <field name="name">isg.chemical.oel.list</field>
+        <field name="model">isg.chemical.oel</field>
+        <field name="arch" type="xml">
+            <list string="OEL/STEL Sınırları">
+                <field name="chemical_id"/>
+                <field name="twa_value"/>
+                <field name="twa_unit"/>
+                <field name="stel_value"/>
+                <field name="valid_from"/>
+                <field name="regulation_reference"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- OEL/STEL Limits Form View -->
+    <record id="view_isg_chemical_oel_form" model="ir.ui.view">
+        <field name="name">isg.chemical.oel.form</field>
+        <field name="model">isg.chemical.oel</field>
+        <field name="arch" type="xml">
+            <form string="OEL/STEL Sınırı">
+                <sheet>
+                    <group>
+                        <field name="chemical_id"/>
+                        <field name="valid_from"/>
+                        <field name="regulation_reference"/>
+                    </group>
+                    <group string="TWA (8 Saat)">
+                        <field name="twa_value"/>
+                        <field name="twa_unit"/>
+                    </group>
+                    <group string="STEL (15 Dakika)">
+                        <field name="stel_value"/>
+                        <field name="stel_unit"/>
+                    </group>
+                    <group string="Notlar">
+                        <field name="notes" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_isg_chemical_oel" model="ir.actions.act_window">
+        <field name="name">OEL/STEL Sınırları</field>
+        <field name="res_model">isg.chemical.oel</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>
