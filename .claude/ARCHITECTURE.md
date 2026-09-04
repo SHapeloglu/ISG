@@ -1,44 +1,40 @@
-# ARCHITECTURE.md — Mimarı ve Tasarım (Seans 3 TAMAMLANDI)
+# ARCHITECTURE.md — Mimarı (Seans 4 Güncel)
 
-**Güncelleme:** 03 Eylül 2026, 07:53 UTC — isg_equipment kurulu, 33/33 %100
+## ✅ Tamamlanan (Seans 1-3)
 
-## Seans 3'te Tamamlanan
+### FAZ 0 — Temel Mimari (7/7)
+- isg_core, isg_security, isg_party, isg_location, isg_document, isg_hr, isg_base
 
-✅ **isg_audit scoring FIX (NA hariç)**
-- applicable_lines = rec.line_ids.filtered(lambda l: l.result != 'na')
-- total_weight sadece uygulanabilir maddeler
-- compliance_percentage doğru
+### FAZ 1 — Kurumsal Yönetişim (5/6)
+- isg_contractor, isg_training, isg_board, isg_correspondence, isg_visitor
+- ⏳ isg_health_basic (KVKK bloklu)
 
-✅ **isg_audit_finding repeat_count AUTO**
-- Kategori + açıklama prefix match
-- escalation_level >= 3 ise level 2
+### FAZ 2 — Operasyonel (9/9)
+- isg_capa, isg_risk, isg_incident, isg_audit, isg_ppe, isg_chemical, isg_equipment, isg_ptw, isg_emergency
 
-✅ **isg_incident SGK notification + dönüş eğitimi**
-- Deadline: incident_date + 4 takvim günü (3 iş günü)
-- return_to_work_training otomatik
+### FAZ 3 — Ölçüm (3/3)
+- isg_measurement_core, isg_measurement_hygiene, isg_environment
 
-✅ **isg_ppe KKD envanter**
-- IsgPpeType (9 kategori)
-- IsgPpeStock (min_quantity uyarısı)
-- IsgPpeIssue (zimmet, expiry_date)
+### FAZ 4 — Mevzuat (4/4)
+- isg_legislation, isg_compliance, isg_penalty, isg_simulator
 
-✅ **isg_chemical OEL/STEL + uyumsuzluk**
-- IsgChemicalOel (Türkiye ÇSGB TWA/STEL)
-- IsgChemicalIncompatibility (depolama)
-- Ters kayıt kontrolü
+### OSGB (1/1)
+- isg_osgb
 
-✅ **isg_equipment EK-II ekipman kataloğu**
-- IsgEquipment (15+ ekipman türü)
-- IsgEquipmentType (EK-II kategori)
-- IsgEquipmentInspection (periyodik kontrol + EKİPNET)
-- Ara.2025 EK-II seed data
+### FAZ 5 — Raporlama (1/3)
+- isg_reporting ✅
+- ⏳ F5-002 (QWeb PDF şablonları)
+- ⏳ F5-003 (HSE Radar Kabul Testi)
 
----
+## Model Özeti
+- **Toplam ISG Model:** 105+
+- **Sequence Prefix:** ISG-XXX-YYYY-NNNN
+- **ACL Grupları:** 5 (readonly, expert, physician, manager, superadmin)
+- **Record Rule:** workplace + site + company iç içe
 
-## Seans 4 Başlangıç
+## Sıradaki Mimarı Tasarım
+1. PDF şablonları (F5-002) — QWeb, Jinja2, dil desteği
+2. Kabul testi (F5-003) — 27 işlev senaryosu
+3. E2/E3 (isteğe bağlı) — API, maskeleme, entegrasyon
 
-**Sıradaki:** isg_ptw + isg_loto
-- İş izni (sıcak, kapalı, elektrik, yüksekte)
-- LOTO izolasyon yönetimi
-- Ön koşul checklists
-- Multi-step approval chain
+**Tarih:** 03 Eylül 2026, 08:40 UTC

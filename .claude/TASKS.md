@@ -1,36 +1,27 @@
-# TASKS.md — Tamamlanan Görevler (03 Eylül 2026 — Seans 3 TAMAMLANDI)
+# TASKS.md — Seans 4 (03 Eylül 2026)
 
-## ✅ Seans 3'te Tamamlanan
+## ✅ Tamamlanan (Seans 1-3)
+- [x] 30/30 Modül Kurulumu
+- [x] MEV-008 (Risk Bilgilendirmesi)
+- [x] MEV-004 (Ceza Tarife Versiyonlama)
+- [x] isg_ptw (PTW + LOTO)
+- [x] isg_emergency (Acil Durum)
 
-- [x] isg_audit: scoring FIX (NA hariç)
-- [x] isg_audit_finding: repeat_count AUTO
-- [x] isg_incident: KURULU ✅
-- [x] isg_ppe: KURULU ✅
-- [x] isg_chemical: KURULU ✅
-- [x] isg_equipment: KURULU ✅
-- [x] .claude dosyaları güncellendi
+## 🔄 Sırada (Seans 4+)
+- [ ] **F5-002** — QWeb PDF Şablonları (Risk, Kaza, Denetim, EKİPNET, Ölçüm)
+- [ ] **F5-003** — HSE Radar Kabul Testi (27 işlev × 5 senaryo)
+- [ ] Fonksiyonel Test — isg_ptw/emergency UI flow
+- [ ] E2/E3 Entegrasyon (isteğe bağlı)
 
-**Proje: 33/33 modül (%100) TAMAMLANDI**
+## ⏳ Bloklu
+- isg_health_basic (KVKK danışman onayı)
 
----
+## İlerleme
+| Görev | Tamamlanan | % |
+|-------|-----------|---|
+| Modül Kurulumu | 30/30 | 100 |
+| HSE Radar Eşdeğerliği | 24/27 | 89 |
+| Mevzuat Uyumu | 28/30 | 93 |
+| **TOPLAM** | **82/87** | **94** |
 
-## Sıradaki Seans 4 (Planlanmış)
-
-### 🔥 HEMEN: isg_ptw + isg_loto (4-6 gün)
-- İzin türleri, ön koşul kontrol, çok aşamalı onay
-- LOTO izolasyon nokta yönetimi
-
-### isg_emergency (2-3 gün)
-- Acil durum planı, tatbikat, tahliye
-
-### Sonrası (2-3 gün)
-- MEV-008: Risk bilgilendirmesi
-- F5-002/F5-003: PDF doğrulama
-
-**Full HSE Radar %100:** 11-20 gün daha
-
----
-
-## Bloklu
-
-- isg_health_basic (KVKK danışman)
+**Tarih:** 03 Eylül 2026, 08:35 UTC
