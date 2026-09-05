@@ -1,71 +1,61 @@
-# CLAUDE.md — Seans 4 Bağlamı (03 Eylül 2026 — Seans 3 BİTTİ)
+# CLAUDE.md — Seans 5 Bağlamı (05 Eylül 2026 — Seans 4 BİTTİ)
 
-**Tarih:** 03 Eylül 2026, 07:53 UTC — isg_equipment kurulu, 33/33 %100, Seans 3 TAMAMLANDI
+## 🎉 SEANS 4 TAMAMLANDI
 
-## 🎉 SON DURUM
+✅ **F5-002: 5 QWeb PDF Rapor Şablonu KURULU**
+- Risk Değerlendirmesi (isg_risk)
+- Kaza/Ramak Kala (isg_incident)
+- Denetim (isg_audit)
+- Ekipman Periyodik Kontrol (isg_equipment)
+- İş Hijyeni Ölçüm (isg_measurement_hygiene)
+- Tüm template'ler ir.actions.report'a kayıtlı
 
-✅ **33/33 ISG Modülü KURULU (%100)**
-- 58 Odoo modülü toplam
-- Servis stabil, log temiz
-- Git senkron
+✅ **VPS Durumu Doğrulandı**
+- 30/30 ISG modülü kurulu (%100)
+- HSE Radar Eşdeğerliği: ~90%
+- Log: ERROR 0, Servis: running
 
-✅ **Bu Seansda (Seans 3) Kurulu:**
-1. isg_audit (scoring FIX + repeat_count AUTO)
-2. isg_incident (SGK notification + dönüş eğitimi)
-3. isg_ppe (KKD envanter)
-4. isg_chemical (OEL/STEL + uyumsuzluk)
-5. isg_equipment (EK-II + periyodik kontrol) ✅ SON
+❌ **Test Framework (isg_tests)**
+- 7 modül için test yazıldı (CRUD, workflow, relations)
+- Alan validasyon sorunları → sonraya bırakıldı
+- Strateji: Seans 5'te temiz version
 
-**HSE Radar Eşdeğerliği:** %75-80
-**Full Eşdeğerlik İçin:** 11-20 gün daha
+## 🚀 Seans 5 Başlangıcı
 
----
+**Kaldığın Yer:**
+- Commit: f5f8c3e (F5-002 PDF şablonları)
+- Modül: 30/30 kurulu (%100)
+- HSE Radar Eşdeğerliği: ~90%
+- Log: Temiz, ERROR 0
 
-## 🚀 Seans 4 Başlangıç Bilgisi
+**Sıradaki İş (Sıra TBD):**
 
-**Kaldığın Yer:** 
-- isg_equipment kurulu ve çalışıyor
-- 33/33 modül ✅
-- Commit: 301e7c0 (.claude: Seans 3 tamamlandı)
+### Seçenek 1: F5-003 (HSE Radar Kabul Testi) — 1-2 gün
+- 27 işlev × 5 senaryo = 135 test case
+- Normal akış, olumsuz akış, yetkisiz akış
+- Çok şirket/işyeri/site testleri
+- PDF raporlarının doğru render edilip edilmediği
 
-**Sıradaki İş:**
-1. **isg_ptw + isg_loto** (4-6 gün) ← BAŞLA BURADAN
-   - İş izni (Sıcak iş, kapalı alan, elektrik, yüksekte)
-   - LOTO (Lockout/Tagout) izolasyon yönetimi
-   - Ön koşul kontrol listeleri
-   - Çok aşamalı onay zinciri
+### Seçenek 2: isg_tests (Test Framework Cleanup) — 1-2 gün
+- Tüm 7 modülün alanlarını düzelt
+- TransactionCase testlerini valid kıl
+- CI/CD hazırlığı
 
-2. **isg_emergency** (2-3 gün)
-3. MEV-008 + F5 (ufak fixler, doğrulama)
+### Seçenek 3: E2/E3 Entegrasyon (İsteğe Bağlı) — 2-4 hafta
+- SGK API bildirimi
+- EKİPNET dosya yükleme
+- KVKK maskeleme
 
-**VPS Durumu:**
-- Servis: running (sudo systemctl status odoo18-isg.service)
-- Database: isg, 33 modül kurulu
+## VPS Info
 - Config: /etc/odoo/odoo18-isg.conf
 - Addons: /opt/odoo/isg_addons/
-- Git: main branch, senkron
+- Database: isg (30/30 ISG modülü)
+- Service: odoo18-isg.service (running)
 
----
+## Kural Hatırlatma
+- Terminal: 1 komut, çıktı bekle, devam et
+- Log: `--logfile=""`
+- Odoo 18: `<list>` not `<tree>`, `invisible=` not `states=`
+- Git: Sık commit, her milestone'dan sonra .claude dosyalarını güncelle
 
-## Bir Önceki Seanslar (Özet)
-
-| Seans | Tarih | Modüller | Tamamlanan |
-|---|---|---|---|
-| 1 | 27-31 Ağustos | F0-5 + OSGB | 27/32 |
-| 2 | 01-02 Eylül | B-4/8/9 + gap analysis | 30/33 |
-| 3 | 02-03 Eylül | audit/incident/ppe/chemical/equipment | **33/33 (%100)** |
-| 4 | BAŞLANACAK | ptw+loto + emergency + fixes | → %100 HSE |
-
----
-
-## Kritik Hatırlatmalar
-
-- VPS'te tek komut (art arda değil)
-- `--logfile=""` daima
-- `| tail -N` ile kısa tut
-- Odoo 18: `<list>` (not `<tree>`), `invisible=` (not `states=`)
-- Sequence: ISG-XXX-YYYY-NNNN
-- Tracking: Many2one'larda WARNING (uyar)
-- Git: Hep senkron, commit: sık
-
-**Başlamaya Hazır: SİZİN HARITANIZ HAZIR! 🗺️**
+**Seans 5'e Hazır: Hangi işi yapmak istiyorsun? (F5-003, isg_tests, E2/E3?)**

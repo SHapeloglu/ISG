@@ -1,27 +1,30 @@
-# TASKS.md — Seans 4 (03 Eylül 2026)
+# TASKS.md — Seans 4 Durumu (04-05 Eylül 2026)
 
-## ✅ Tamamlanan (Seans 1-3)
-- [x] 30/30 Modül Kurulumu
-- [x] MEV-008 (Risk Bilgilendirmesi)
-- [x] MEV-004 (Ceza Tarife Versiyonlama)
-- [x] isg_ptw (PTW + LOTO)
-- [x] isg_emergency (Acil Durum)
+## ✅ Tamamlanan (Seans 4)
+- [x] VPS Durum Taraması (30/30 modül kurulu doğrulandı)
+- [x] F5-002: 5 QWeb PDF Rapor Şablonu
+  - Risk Değerlendirmesi
+  - Kaza/Ramak Kala
+  - Denetim
+  - EKİPNET Ekipman
+  - İş Hijyeni Ölçüm
+- [x] ir.actions.report kaydları
 
-## 🔄 Sırada (Seans 4+)
-- [ ] **F5-002** — QWeb PDF Şablonları (Risk, Kaza, Denetim, EKİPNET, Ölçüm)
+## 🔄 Sırada (Seans 5)
 - [ ] **F5-003** — HSE Radar Kabul Testi (27 işlev × 5 senaryo)
-- [ ] Fonksiyonel Test — isg_ptw/emergency UI flow
-- [ ] E2/E3 Entegrasyon (isteğe bağlı)
+- [ ] **isg_tests** — Test Framework Cleanup (tam alan validasyon)
+- [ ] **isg_health_basic** — KVKK Danışman Onayı (Bloklu)
 
 ## ⏳ Bloklu
-- isg_health_basic (KVKK danışman onayı)
+- isg_health_basic (KVKK danışman onayı bekliyor)
 
 ## İlerleme
-| Görev | Tamamlanan | % |
-|-------|-----------|---|
-| Modül Kurulumu | 30/30 | 100 |
-| HSE Radar Eşdeğerliği | 24/27 | 89 |
-| Mevzuat Uyumu | 28/30 | 93 |
-| **TOPLAM** | **82/87** | **94** |
+| Görev | Durum | % |
+|-------|-------|---|
+| Modül Kurulumu | ✅ 30/30 | 100 |
+| F5-002 PDF | ✅ Bitti | 100 |
+| F5-003 Kabul Test | 🔄 Sırada | 0 |
+| HSE Radar Eşdeğerliği | ✅ 90% | 90 |
+| **TOPLAM** | **94/100** | **94** |
 
-**Tarih:** 03 Eylül 2026, 08:35 UTC
+**Tarih:** 05 Eylül 2026, 19:30 UTC
