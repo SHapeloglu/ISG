@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Risk Assessment Report -->
+        <record id="action_report_isg_risk_assessment" model="ir.actions.report">
+            <field name="name">Risk Değerlendirmesi Raporu</field>
+            <field name="model">isg.risk.assessment</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">isg_reporting.isg_risk_assessment_report_template</field>
+        </record>
+
+        <!-- Incident Report -->
+        <record id="action_report_isg_incident" model="ir.actions.report">
+            <field name="name">Kaza/Ramak Kala Raporu</field>
+            <field name="model">isg.incident</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">isg_reporting.isg_incident_report_template</field>
+        </record>
+
+        <!-- Audit Report -->
+        <record id="action_report_isg_audit" model="ir.actions.report">
+            <field name="name">Denetim Raporu</field>
+            <field name="model">isg.audit</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">isg_reporting.isg_audit_report_template</field>
+        </record>
+
+        <!-- Equipment Inspection Report -->
+        <record id="action_report_isg_equipment" model="ir.actions.report">
+            <field name="name">Ekipman Periyodik Kontrol Raporu</field>
+            <field name="model">isg.equipment.inspection</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">isg_reporting.isg_equipment_inspection_report_template</field>
+        </record>
+
+        <!-- Measurement Report -->
+        <record id="action_report_isg_measurement" model="ir.actions.report">
+            <field name="name">İş Hijyeni Ölçüm Raporu</field>
+            <field name="model">isg.measurement.hygiene</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">isg_reporting.isg_measurement_hygiene_report_template</field>
+        </record>
+    </data>
+</odoo>

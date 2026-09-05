@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="isg_equipment_inspection_report_template">
+        <t t-call="web.html_container">
+            <t t-call="web.internal_layout">
+                <div class="page">
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <h2 class="text-center"><strong>Ekipman Periyodik Kontrol Raporu (EKİPNET)</strong></h2>
+                        </div>
+                    </div>
+
+                    <table class="table table-sm table-bordered">
+                        <tr>
+                            <td><strong>Ekipman:</strong></td>
+                            <td><t t-esc="object.equipment_id.name"/></td>
+                            <td><strong>Seri No:</strong></td>
+                            <td><t t-esc="object.equipment_id.serial_number"/></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Üretici:</strong></td>
+                            <td><t t-esc="object.equipment_id.manufacturer"/></td>
+                            <td><strong>Model:</strong></td>
+                            <td><t t-esc="object.equipment_id.model"/></td>
+                        </tr>
+                        <tr>
+                            <td><strong>EK-II Kategorisi:</strong></td>
+                            <td><t t-esc="object.equipment_id.equipment_type_id.ek_ii_category"/></td>
+                            <td><strong>İşyeri:</strong></td>
+                            <td><t t-esc="object.equipment_id.workplace_id.name"/></td>
+                        </tr>
+                    </table>
+
+                    <h3 class="mt-4"><strong>Kontrol Detayları</strong></h3>
+                    <table class="table table-sm table-bordered">
+                        <tr>
+                            <td><strong>Kontrol Tarihi:</strong></td>
+                            <td><t t-esc="object.inspection_date" t-options="{'widget': 'date'}"/></td>
+                            <td><strong>Yetkili Kuruluş:</strong></td>
+                            <td><t t-esc="object.authorized_agency_id.name"/></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Kontrol Sonucu:</strong></td>
+                            <td>
+                                <t t-if="object.result == 'compliant'">
+                                    <span style="color:green;"><strong>UYUMLU</strong></span>
+                                </t>
+                                <t t-elif="object.result == 'non_compliant'">
+                                    <span style="color:red;"><strong>UYUMSUZ</strong></span>
+                                </t>
+                                <t t-else="">
+                                    <t t-esc="object.result"/>
+                                </t>
+                            </td>
+                            <td><strong>Sonraki Kontrol Tarihi:</strong></td>
+                            <td><t t-esc="object.next_inspection_date" t-options="{'widget': 'date'}"/></td>
+                        </tr>
+                    </table>
+
+                    <h3 class="mt-4"><strong>Bulgular</strong></h3>
+                    <t t-if="object.findings">
+                        <p><t t-esc="object.findings" t-options="{'widget': 'text'}"/></p>
+                    </t>
+                    <t t-else="">
+                        <p><em>Bulgu kaydedilmemiştir.</em></p>
+                    </t>
+
+                    <t t-if="object.result == 'non_compliant'">
+                        <h3 class="mt-4"><strong>Kısıtlamalar / Tavsiyeler</strong></h3>
+                        <div style="border: 2px solid red; padding: 10px; background-color: #ffe6e6;">
+                            <strong>Dikkat:</strong> <t t-esc="object.restriction" t-options="{'widget': 'text'}"/>
+                        </div>
+                    </t>
+
+                    <div class="mt-4 border p-2">
+                        <strong>EKİPNET Bilgisi:</strong>
+                        <ul>
+                            <li>EKİPNET Rapor ID: <t t-esc="object.ekmis_report_id or 'Henüz gönderilmedi'"/></li>
+                            <li>Gönderim Durumu: <t t-esc="object.ekmis_status or 'Beklemede'"/></li>
+                        </ul>
+                    </div>
+
+                    <div class="row mt-4">
+                        <div class="col-6">
+                            <p><strong>Yetkili Muayene Kuruluşu:</strong></p>
+                            <p style="margin-top: 50px;"><t t-esc="object.authorized_agency_id.name"/></p>
+                        </div>
+                        <div class="col-6">
+                            <p><strong>Kontrol Tarihi:</strong></p>
+                            <p style="margin-top: 50px;"><t t-esc="object.inspection_date" t-options="{'widget': 'date'}"/></p>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>

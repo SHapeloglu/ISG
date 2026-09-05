@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="isg_risk_assessment_report_template">
+        <t t-call="web.html_container">
+            <t t-call="web.internal_layout">
+                <div class="page">
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <h2 class="text-center"><strong>Risk Değerlendirmesi Raporu</strong></h2>
+                        </div>
+                    </div>
+
+                    <table class="table table-sm table-bordered">
+                        <tr>
+                            <td><strong>İşyeri:</strong></td>
+                            <td><t t-esc="object.workplace_id.name"/></td>
+                            <td><strong>Şirket:</strong></td>
+                            <td><t t-esc="object.company_id.name"/></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Değerlendirme Tarihi:</strong></td>
+                            <td><t t-esc="object.assessment_date" t-options="{'widget': 'date'}"/></td>
+                            <td><strong>Takım Lideri:</strong></td>
+                            <td><t t-esc="object.team_leader_id.name"/></td>
+                        </tr>
+                    </table>
+
+                    <div class="row mt-4">
+                        <div class="col-3">
+                            <div class="border p-2 text-center">
+                                <strong>Toplam Tehlikeler</strong><br/>
+                                <h3><t t-esc="object.total_hazards"/></h3>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="border p-2 text-center" style="background-color:#dc3545; color:white;">
+                                <strong>Kritik Riskler</strong><br/>
+                                <h3><t t-esc="object.critical_risks"/></h3>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="border p-2 text-center" style="background-color:#ffc107;">
+                                <strong>Yüksek Riskler</strong><br/>
+                                <h3><t t-esc="object.high_risks"/></h3>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="border p-2 text-center">
+                                <strong>Ort. Risk Puanı</strong><br/>
+                                <h3><t t-esc="object.average_risk_score"/></h3>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3 class="mt-4"><strong>Risk Detayları</strong></h3>
+                    <table class="table table-sm table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Tehlike</th>
+                                <th>Kategorisi</th>
+                                <th>Olasılık</th>
+                                <th>Şiddet</th>
+                                <th>Risk Puanı</th>
+                                <th>Seviyesi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="object.assessment_line_ids" t-as="line">
+                                <tr>
+                                    <td><t t-esc="line.hazard_id.name"/></td>
+                                    <td><t t-esc="line.hazard_category"/></td>
+                                    <td><t t-esc="line.probability"/></td>
+                                    <td><t t-esc="line.severity"/></td>
+                                    <td><t t-esc="line.risk_score"/></td>
+                                    <td><t t-esc="line.risk_level"/></td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+
+                    <div class="mt-4 border p-2">
+                        <strong>Sonraki Değerlendirme Tarihi:</strong>
+                        <t t-esc="object.next_assessment_date" t-options="{'widget': 'date'}"/>
+                    </div>
+
+                    <div class="row mt-4">
+                        <div class="col-6">
+                            <p><strong>Takım Lideri:</strong></p>
+                            <p style="margin-top: 50px;"><t t-esc="object.team_leader_id.name"/></p>
+                        </div>
+                        <div class="col-6">
+                            <p><strong>Tarih:</strong></p>
+                            <p style="margin-top: 50px;"><t t-esc="object.assessment_date" t-options="{'widget': 'date'}"/></p>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>

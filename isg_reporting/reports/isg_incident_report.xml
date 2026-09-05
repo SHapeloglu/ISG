@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="isg_incident_report_template">
+        <t t-call="web.html_container">
+            <t t-call="web.internal_layout">
+                <div class="page">
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <h2 class="text-center"><strong>İş Kazası / Ramak Kala Raporu</strong></h2>
+                        </div>
+                    </div>
+
+                    <table class="table table-sm table-bordered">
+                        <tr>
+                            <td><strong>İşyeri:</strong></td>
+                            <td><t t-esc="object.workplace_id.name"/></td>
+                            <td><strong>Kazanın Tarihi:</strong></td>
+                            <td><t t-esc="object.incident_date" t-options="{'widget': 'date'}"/></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Kazanın Türü:</strong></td>
+                            <td><t t-esc="object.incident_type"/></td>
+                            <td><strong>SGK Bildirimi Tarihi:</strong></td>
+                            <td><t t-esc="object.sgk_notification_deadline" t-options="{'widget': 'date'}"/></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"><strong>Yaralı Çalışan:</strong> <t t-esc="object.injured_employee_id.name"/></td>
+                            <td colspan="2"><strong>Yaralanma Türü:</strong> <t t-esc="object.injury_type"/></td>
+                        </tr>
+                    </table>
+
+                    <h3 class="mt-4"><strong>Kaza Açıklaması</strong></h3>
+                    <p><t t-esc="object.description" t-options="{'widget': 'text'}"/></p>
+
+                    <h3 class="mt-4"><strong>Kaza Sonrası Durumu</strong></h3>
+                    <table class="table table-sm table-bordered">
+                        <tr>
+                            <td><strong>Şu anki Durum:</strong></td>
+                            <td><t t-esc="object.state"/></td>
+                            <td><strong>Kayıp Gün:</strong></td>
+                            <td><t t-esc="object.lost_days"/></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Kaybı Geçmişse:</strong></td>
+                            <td><t t-if="object.is_fatal">Evet - Ölüm</t><t t-else="">Hayır</t></td>
+                            <td><strong>Dönüş Eğitimi:</strong></td>
+                            <td><t t-if="object.return_to_work_training_required">Gerekli</t><t t-else="">Gerekli Değil</t></td>
+                        </tr>
+                    </table>
+
+                    <div class="mt-4 border p-2">
+                        <strong>Bildirimi Yapılan Kuruluşlar:</strong>
+                        <ul>
+                            <li>SGK - <t t-esc="object.sgk_notification_deadline" t-options="{'widget': 'date'}"/></li>
+                            <li>İşyeri Yönetimi - <t t-esc="object.incident_date" t-options="{'widget': 'date'}"/></li>
+                        </ul>
+                    </div>
+
+                    <div class="row mt-4">
+                        <div class="col-6">
+                            <p><strong>Kaydeden Kişi:</strong></p>
+                            <p style="margin-top: 50px;">________________________</p>
+                        </div>
+                        <div class="col-6">
+                            <p><strong>Tarih:</strong></p>
+                            <p style="margin-top: 50px;"><t t-esc="object.incident_date" t-options="{'widget': 'date'}"/></p>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>

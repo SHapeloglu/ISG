@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="isg_measurement_hygiene_report_template">
+        <t t-call="web.html_container">
+            <t t-call="web.internal_layout">
+                <div class="page">
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <h2 class="text-center"><strong>İş Hijyeni Ölçüm Raporu</strong></h2>
+                        </div>
+                    </div>
+
+                    <table class="table table-sm table-bordered">
+                        <tr>
+                            <td><strong>İşyeri:</strong></td>
+                            <td><t t-esc="object.workplace_id.name"/></td>
+                            <td><strong>Ölçüm Tarihi:</strong></td>
+                            <td><t t-esc="object.measurement_date" t-options="{'widget': 'date'}"/></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Parametre:</strong></td>
+                            <td><t t-esc="object.parameter"/></td>
+                            <td><strong>Ölçüm Yöntemi:</strong></td>
+                            <td><t t-esc="object.measurement_method"/></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Lokasyon/SEG:</strong></td>
+                            <td><t t-esc="object.seg_id.name"/></td>
+                            <td><strong>Yetkili Laboratuvar:</strong></td>
+                            <td><t t-esc="object.authorized_lab_id.name"/></td>
+                        </tr>
+                    </table>
+
+                    <h3 class="mt-4"><strong>Ölçüm Sonuçları</strong></h3>
+                    <table class="table table-sm table-bordered">
+                        <tr>
+                            <td><strong>Ölçüm Değeri:</strong></td>
+                            <td><t t-esc="object.measured_value"/> <t t-esc="object.unit"/></td>
+                            <td><strong>TWA Limit (OEL):</strong></td>
+                            <td><t t-esc="object.twa_limit"/> <t t-esc="object.unit"/></td>
+                        </tr>
+                        <tr>
+                            <td><strong>STEL Limit:</strong></td>
+                            <td><t t-esc="object.stel_limit"/> <t t-esc="object.unit"/></td>
+                            <td><strong>Uygunluk Durumu:</strong></td>
+                            <td>
+                                <t t-if="object.compliance_status == 'compliant'">
+                                    <span style="color:green;"><strong>UYUMLU</strong></span>
+                                </t>
+                                <t t-elif="object.compliance_status == 'exceeds'">
+                                    <span style="color:red;"><strong>AŞIM</strong></span>
+                                </t>
+                                <t t-else="">
+                                    <t t-esc="object.compliance_status"/>
+                                </t>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <h3 class="mt-4"><strong>Numune Bilgileri</strong></h3>
+                    <table class="table table-sm table-bordered">
+                        <tr>
+                            <td><strong>Numune Sayısı:</strong></td>
+                            <td><t t-esc="object.sample_count"/></td>
+                            <td><strong>Numune Süresi:</strong></td>
+                            <td><t t-esc="object.sampling_duration"/> saat</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Cihaz Kalibrasyon Tarihi:</strong></td>
+                            <td><t t-esc="object.device_calibration_date" t-options="{'widget': 'date'}"/></td>
+                            <td><strong>Kalibrasyon Sertifikası:</strong></td>
+                            <td><t t-esc="object.calibration_certificate_id.name or 'Yok'"/></td>
+                        </tr>
+                    </table>
+
+                    <h3 class="mt-4"><strong>Değerlendirme</strong></h3>
+                    <div style="border: 1px solid #ccc; padding: 10px;">
+                        <t t-if="object.compliance_status == 'compliant'">
+                            <p style="color:green;"><strong>✓ SONUÇ: Ölçüm değeri limit altındadır. Maruziyet kabul edilebilir düzeydedir.</strong></p>
+                        </t>
+                        <t t-elif="object.compliance_status == 'exceeds'">
+                            <p style="color:red;"><strong>✗ SONUÇ: Ölçüm değeri limiti aşmaktadır. Kontrol önlemleri alınmalıdır.</strong></p>
+                        </t>
+                    </div>
+
+                    <t t-if="object.notes">
+                        <h3 class="mt-4"><strong>Notlar</strong></h3>
+                        <p><t t-esc="object.notes" t-options="{'widget': 'text'}"/></p>
+                    </t>
+
+                    <div class="row mt-4">
+                        <div class="col-6">
+                            <p><strong>Laboratuvar:</strong></p>
+                            <p style="margin-top: 50px;"><t t-esc="object.authorized_lab_id.name"/></p>
+                        </div>
+                        <div class="col-6">
+                            <p><strong>Rapor Tarihi:</strong></p>
+                            <p style="margin-top: 50px;"><t t-esc="object.measurement_date" t-options="{'widget': 'date'}"/></p>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>

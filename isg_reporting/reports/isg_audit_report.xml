@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="isg_audit_report_template">
+        <t t-call="web.html_container">
+            <t t-call="web.internal_layout">
+                <div class="page">
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <h2 class="text-center"><strong>İSG Denetim Raporu</strong></h2>
+                        </div>
+                    </div>
+
+                    <table class="table table-sm table-bordered">
+                        <tr>
+                            <td><strong>İşyeri:</strong></td>
+                            <td><t t-esc="object.workplace_id.name"/></td>
+                            <td><strong>Denetim Tarihi:</strong></td>
+                            <td><t t-esc="object.audit_date" t-options="{'widget': 'date'}"/></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Denetim Türü:</strong></td>
+                            <td><t t-esc="object.audit_type"/></td>
+                            <td><strong>Denetçi:</strong></td>
+                            <td><t t-esc="object.auditor_id.name"/></td>
+                        </tr>
+                    </table>
+
+                    <h3 class="mt-4"><strong>Uygunluk Özeti</strong></h3>
+                    <table class="table table-sm table-bordered">
+                        <tr>
+                            <td><strong>Toplam Kontrol Noktası:</strong></td>
+                            <td><t t-esc="len(object.line_ids)"/></td>
+                            <td><strong>Uyumlu:</strong></td>
+                            <td><t t-esc="len(object.line_ids.filtered(lambda x: x.result == 'compliant'))"/></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Uyumsuz:</strong></td>
+                            <td><t t-esc="len(object.line_ids.filtered(lambda x: x.result == 'non_compliant'))"/></td>
+                            <td><strong>Geçerli Olmayan (N/A):</strong></td>
+                            <td><t t-esc="len(object.line_ids.filtered(lambda x: x.result == 'na'))"/></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"><strong>Uygunluk Yüzdesi:</strong></td>
+                            <td colspan="2"><t t-esc="round(object.compliance_percentage, 2)"/>%</td>
+                        </tr>
+                    </table>
+
+                    <h3 class="mt-4"><strong>Kontrol Listeleri Detayları</strong></h3>
+                    <table class="table table-sm table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Kontrol Noktası</th>
+                                <th>Ağırlık</th>
+                                <th>Sonuç</th>
+                                <th>Gözlemler</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="object.line_ids" t-as="line">
+                                <tr>
+                                    <td><t t-esc="line.description"/></td>
+                                    <td><t t-esc="line.weight"/></td>
+                                    <td>
+                                        <t t-if="line.result == 'compliant'">
+                                            <span style="color:green;"><strong>Uyumlu</strong></span>
+                                        </t>
+                                        <t t-elif="line.result == 'non_compliant'">
+                                            <span style="color:red;"><strong>Uyumsuz</strong></span>
+                                        </t>
+                                        <t t-else="">
+                                            <span>N/A</span>
+                                        </t>
+                                    </td>
+                                    <td><t t-esc="line.observations"/></td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+
+                    <h3 class="mt-4"><strong>Bulgular (Findings)</strong></h3>
+                    <t t-if="object.finding_ids">
+                        <table class="table table-sm table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Bulgu</th>
+                                    <th>Kategori</th>
+                                    <th>Şiddeti</th>
+                                    <th>Tekrar Sayısı</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="object.finding_ids" t-as="finding">
+                                    <tr>
+                                        <td><t t-esc="finding.description"/></td>
+                                        <td><t t-esc="finding.category"/></td>
+                                        <td><t t-esc="finding.severity"/></td>
+                                        <td><t t-esc="finding.repeat_count"/></td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </t>
+                    <t t-else="">
+                        <p><em>Bulgu kaydedilmemiştir.</em></p>
+                    </t>
+
+                    <div class="row mt-4">
+                        <div class="col-6">
+                            <p><strong>Denetçi:</strong></p>
+                            <p style="margin-top: 50px;"><t t-esc="object.auditor_id.name"/></p>
+                        </div>
+                        <div class="col-6">
+                            <p><strong>Tarih:</strong></p>
+                            <p style="margin-top: 50px;"><t t-esc="object.audit_date" t-options="{'widget': 'date'}"/></p>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>
