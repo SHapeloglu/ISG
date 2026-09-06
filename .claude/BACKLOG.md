@@ -1,56 +1,58 @@
-# BACKLOG.md — Seans 5 (05 Eylül 2026)
+# BACKLOG.md — Seans 6 Hazırlığı
 
-## 🎯 ÖNCELİKLİ (Seans 5+)
+## 🎯 ÖNCELİKLİ (Seans 6)
 
-### F5-003 — HSE Radar Kabul Testi (1-2 gün)
-**Status:** 🔄 Sırada  
-**Neden:** HSE Radar eşdeğerliğinin %100'e ulaşması için son parça
-
-**Test Planı:**
-- [ ] 27 işlev × 5 senaryo = 135 test case
-- [ ] Normal akış testleri
-- [ ] Olumsuz akış testleri (error handling)
-- [ ] Yetkisiz erişim testleri (ACL)
-- [ ] Çok şirket/işyeri/site testleri
-- [ ] PDF raporlarının render edilmesi
-- [ ] Log kontrolü (ERROR 0)
-
-### isg_tests — Test Framework Cleanup (1-2 gün)
-**Status:** ⏳ Bekleme  
-**Neden:** TransactionCase testleri alan validation sorunlarında takıldı
+### F5-003 — HSE Radar Acceptance Test (1-2 gün)
+**Status:** 🔄 Test Protocol Ready, Implementation Pending
 
 **Yapılacak:**
-- [ ] Tüm 7 modülün alanlarını doğrula
-- [ ] test_isg_core, test_isg_incident, test_isg_audit vb. fix et
-- [ ] Tüm testleri `--test-enable` ile çalıştır
-- [ ] CI/CD hazırlığı (GitHub Actions)
+- [ ] Clean Test Data Creation (Odoo UI fixture)
+  - [ ] Workplace + Site
+  - [ ] Employee
+  - [ ] Risk Assessment
+  - [ ] Incident (SGK 3-day flow)
+  - [ ] Audit + Findings
+  - [ ] Equipment Inspection
+  - [ ] PTW + LOTO
+- [ ] PDF Raporlarını Generate et
+  - [ ] Risk raporu
+  - [ ] Incident raporu
+  - [ ] Audit raporu
+  - [ ] Equipment raporu
+  - [ ] Measurement raporu
+- [ ] Validation
+  - [ ] ERROR 0 in log
+  - [ ] All fields render correctly
+  - [ ] HSE Radar 27 işlev compliance check
 
 ---
 
-## 📋 SONRASI (2-4 hafta)
+## ⏳ SONRASI (Seans 7+)
 
-### E2/E3 Entegrasyon (İsteğe Bağlı)
-- [ ] SGK bildirimi API
-- [ ] EKİPNET dosya yükleme
-- [ ] KVKK maskeleme (isg_health_basic)
-- [ ] E-imza (5070 s.K., MEV-006)
+### isg_tests — Test Framework (1-2 gün)
+- [ ] TransactionCase tests cleanup
+- [ ] All 7 modules validation
+- [ ] CI/CD preparation
+
+### E2/E3 Integration (optional, 2-4 hafta)
+- [ ] SGK API
+- [ ] EKİPNET
+- [ ] KVKK masking
 
 ---
 
 ## ✅ BLOKLU
-
-- isg_health_basic (KVKK danışman onayı)
+- isg_health_basic (KVKK consultant approval)
 
 ---
 
-## İlerleme
-
-| Faz | Tamamlanan | % |
-|-----|-----------|---|
+## PROGRESS
+| Phase | Complete | % |
+|-------|----------|---|
 | FAZ 0-4 | 26/30 | 87 |
 | FAZ 5 | 2/3 | 67 |
-| **TOPLAM** | **28/33** | **85** |
+| **TOTAL** | **28/33** | **85** |
 
-**Adam-Gün:** ~65/80 tamamlandı (%81)
+**Next Session:** F5-003 implementation (1-2 days to completion)
 
-**Tarih:** 05 Eylül 2026, 19:38 UTC
+**Date:** 05 September 2026, 20:15 UTC
