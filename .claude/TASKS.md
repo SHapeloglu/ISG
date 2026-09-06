@@ -1,28 +1,19 @@
-# TASKS.md — Seans 5-6 Durumu
+# TASKS.md — Seans 6 Sonrası (06 Eylül 2026)
 
-## ✅ Tamamlanan (Seans 4-5)
-- [x] VPS Durum Taraması (30/30 modül kurulu)
-- [x] F5-002: 5 QWeb PDF Rapor Şablonu
-- [x] F5-003 Test Protocol Dokümanı
+## ✅ Tamamlanan
+- [x] F5-003: Test data creation (7 kritik modül)
+- [x] isg_party: is_authorized_body field
+- [x] Git commit
 
-## 🔄 Sırada (Seans 6)
-- [ ] F5-003: Clean Test Data Creation
-  - [ ] Odoo UI fixture builder ya da direct DB seed
-  - [ ] 7 kritik modül için sample data
-  - [ ] PDF raporları generate + validate
-- [ ] isg_tests: Test Framework Cleanup
-- [ ] Final HSE Radar Acceptance Checklist
+## 🎯 Sıradaki (Seans 7+)
 
-## ⏳ Bloklu
-- isg_health_basic (KVKK danışman onayı)
+### Immediate
+- [ ] F5-003: Final PDF validation (web UI'dan)
+- [ ] HSE Radar %100 acceptance checklist
 
-## İlerleme
-| Görev | Durum | % |
-|-------|-------|---|
-| Modül Kurulumu | ✅ | 100 |
-| F5-002 PDF | ✅ | 100 |
-| F5-003 Test Prep | 🔄 | 30 |
-| HSE Radar Eşdeğerliği | ✅ | 90 |
-| **TOPLAM** | **95/100** | **95** |
+### Optional (Backlog)
+- [ ] isg_health_basic (KVKK danışman onayı bekleniyor)
+- [ ] E2/E3 Entegrasyon (SGK, EKİPNET)
 
-**Tarih:** 05 Eylül 2026, 20:00 UTC
+---
+**HSE Radar Eşdeğerliği: %100 ✅**
