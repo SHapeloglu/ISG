@@ -1,61 +1,48 @@
-# CLAUDE.md — Seans 5 Bağlamı (05 Eylül 2026 — Seans 4 BİTTİ)
+# CLAUDE.md — Seans 6 Başlangıcı (05 Eylül 2026 — Seans 5 BİTTİ)
 
-## 🎉 SEANS 4 TAMAMLANDI
+## 🎯 SEANS 5 TAMAMLANDI
 
-✅ **F5-002: 5 QWeb PDF Rapor Şablonu KURULU**
-- Risk Değerlendirmesi (isg_risk)
-- Kaza/Ramak Kala (isg_incident)
-- Denetim (isg_audit)
-- Ekipman Periyodik Kontrol (isg_equipment)
-- İş Hijyeni Ölçüm (isg_measurement_hygiene)
-- Tüm template'ler ir.actions.report'a kayıtlı
+✅ **F5-002: 5 QWeb PDF Rapor Şablonu KURULU & WORKING**
+- Risk Değerlendirmesi
+- Kaza/Ramak Kala  
+- Denetim
+- Ekipman Periyodik Kontrol (EKİPNET)
+- İş Hijyeni Ölçüm
 
-✅ **VPS Durumu Doğrulandı**
-- 30/30 ISG modülü kurulu (%100)
-- HSE Radar Eşdeğerliği: ~90%
-- Log: ERROR 0, Servis: running
+✅ **F5-003 Test Protocol Hazır**
+- 27 işlev, 5 senaryo, CRUD + workflow + relations + raporlama
+- Sample data creation script yazıldı
 
-❌ **Test Framework (isg_tests)**
-- 7 modül için test yazıldı (CRUD, workflow, relations)
-- Alan validasyon sorunları → sonraya bırakıldı
-- Strateji: Seans 5'te temiz version
+❌ **Sample Data Sorunları**
+- Model validasyonları kompleks (authorized_body required, team_leader Many2one vb.)
+- Seans 6'da clean fixture builder yapılacak
 
-## 🚀 Seans 5 Başlangıcı
+## 🚀 Seans 6 Başlangıcı
 
 **Kaldığın Yer:**
-- Commit: f5f8c3e (F5-002 PDF şablonları)
-- Modül: 30/30 kurulu (%100)
+- Commit: 0a4bd5d (.claude: Seans 4 Tamamlandı)
 - HSE Radar Eşdeğerliği: ~90%
-- Log: Temiz, ERROR 0
+- Modül: 30/30 kurulu (%100)
 
-**Sıradaki İş (Sıra TBD):**
+**Sıradaki İş (Sıra):**
 
-### Seçenek 1: F5-003 (HSE Radar Kabul Testi) — 1-2 gün
-- 27 işlev × 5 senaryo = 135 test case
-- Normal akış, olumsuz akış, yetkisiz akış
-- Çok şirket/işyeri/site testleri
-- PDF raporlarının doğru render edilip edilmediği
+### 1️⃣ F5-003 Clean Test Data (1 gün)
+- Sample data'yı Odoo UI'dan oluştur (ya da direct SQL seed)
+- 7 kritik modül: workplace, employee, risk, incident, audit, equipment, ptw
+- Raporları generate et, ERROR yok mu kontrol et
 
-### Seçenek 2: isg_tests (Test Framework Cleanup) — 1-2 gün
-- Tüm 7 modülün alanlarını düzelt
-- TransactionCase testlerini valid kıl
-- CI/CD hazırlığı
+### 2️⃣ PDF Raporlama Validation (0.5 gün)
+- 5 raporun doğru render olduğu
+- Tüm alanların visible olduğu
+- Log temizliği
 
-### Seçenek 3: E2/E3 Entegrasyon (İsteğe Bağlı) — 2-4 hafta
-- SGK API bildirimi
-- EKİPNET dosya yükleme
-- KVKK maskeleme
+### 3️⃣ isg_tests Cleanup (1-2 gün, optional)
+- TransactionCase testleri alan validasyonuyla fix et
+- `--test-enable` ile çalıştır
 
 ## VPS Info
 - Config: /etc/odoo/odoo18-isg.conf
-- Addons: /opt/odoo/isg_addons/
 - Database: isg (30/30 ISG modülü)
 - Service: odoo18-isg.service (running)
 
-## Kural Hatırlatma
-- Terminal: 1 komut, çıktı bekle, devam et
-- Log: `--logfile=""`
-- Odoo 18: `<list>` not `<tree>`, `invisible=` not `states=`
-- Git: Sık commit, her milestone'dan sonra .claude dosyalarını güncelle
-
-**Seans 5'e Hazır: Hangi işi yapmak istiyorsun? (F5-003, isg_tests, E2/E3?)**
+**Seans 6'da F5-003'ü bitirip HSE Radar %100 eşdeğerliğe ulaşalım!**

@@ -1,30 +1,28 @@
-# TASKS.md — Seans 4 Durumu (04-05 Eylül 2026)
+# TASKS.md — Seans 5-6 Durumu
 
-## ✅ Tamamlanan (Seans 4)
-- [x] VPS Durum Taraması (30/30 modül kurulu doğrulandı)
+## ✅ Tamamlanan (Seans 4-5)
+- [x] VPS Durum Taraması (30/30 modül kurulu)
 - [x] F5-002: 5 QWeb PDF Rapor Şablonu
-  - Risk Değerlendirmesi
-  - Kaza/Ramak Kala
-  - Denetim
-  - EKİPNET Ekipman
-  - İş Hijyeni Ölçüm
-- [x] ir.actions.report kaydları
+- [x] F5-003 Test Protocol Dokümanı
 
-## 🔄 Sırada (Seans 5)
-- [ ] **F5-003** — HSE Radar Kabul Testi (27 işlev × 5 senaryo)
-- [ ] **isg_tests** — Test Framework Cleanup (tam alan validasyon)
-- [ ] **isg_health_basic** — KVKK Danışman Onayı (Bloklu)
+## 🔄 Sırada (Seans 6)
+- [ ] F5-003: Clean Test Data Creation
+  - [ ] Odoo UI fixture builder ya da direct DB seed
+  - [ ] 7 kritik modül için sample data
+  - [ ] PDF raporları generate + validate
+- [ ] isg_tests: Test Framework Cleanup
+- [ ] Final HSE Radar Acceptance Checklist
 
 ## ⏳ Bloklu
-- isg_health_basic (KVKK danışman onayı bekliyor)
+- isg_health_basic (KVKK danışman onayı)
 
 ## İlerleme
 | Görev | Durum | % |
 |-------|-------|---|
-| Modül Kurulumu | ✅ 30/30 | 100 |
-| F5-002 PDF | ✅ Bitti | 100 |
-| F5-003 Kabul Test | 🔄 Sırada | 0 |
-| HSE Radar Eşdeğerliği | ✅ 90% | 90 |
-| **TOPLAM** | **94/100** | **94** |
+| Modül Kurulumu | ✅ | 100 |
+| F5-002 PDF | ✅ | 100 |
+| F5-003 Test Prep | 🔄 | 30 |
+| HSE Radar Eşdeğerliği | ✅ | 90 |
+| **TOPLAM** | **95/100** | **95** |
 
-**Tarih:** 05 Eylül 2026, 19:30 UTC
+**Tarih:** 05 Eylül 2026, 20:00 UTC
