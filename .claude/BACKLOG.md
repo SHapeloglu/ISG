@@ -1,58 +1,72 @@
-# BACKLOG.md — Seans 6 Hazırlığı
+# BACKLOG.md — Seans 7 Sonrası Görevler (06 Eylül 2026)
 
-## 🎯 ÖNCELİKLİ (Seans 6)
+## 🎯 İMEDİAT (Seans 7)
 
-### F5-003 — HSE Radar Acceptance Test (1-2 gün)
-**Status:** 🔄 Test Protocol Ready, Implementation Pending
-
-**Yapılacak:**
-- [ ] Clean Test Data Creation (Odoo UI fixture)
-  - [ ] Workplace + Site
-  - [ ] Employee
-  - [ ] Risk Assessment
-  - [ ] Incident (SGK 3-day flow)
-  - [ ] Audit + Findings
-  - [ ] Equipment Inspection
-  - [ ] PTW + LOTO
-- [ ] PDF Raporlarını Generate et
-  - [ ] Risk raporu
-  - [ ] Incident raporu
-  - [ ] Audit raporu
-  - [ ] Equipment raporu
-  - [ ] Measurement raporu
-- [ ] Validation
-  - [ ] ERROR 0 in log
-  - [ ] All fields render correctly
-  - [ ] HSE Radar 27 işlev compliance check
+### F5-003 Final Validation (1-2 gün)
+- [ ] Web UI Login test (admin / admin_test_123)
+- [ ] 5 PDF raporını generate et (Record ID'leri: 11, 6, 14, 3, vb.)
+- [ ] HSE Radar 27 işlev checklist
+- [ ] Acceptance test protocol çalıştır
+- **Sonuç:** HSE Radar %100 sertifikasyon ✅
 
 ---
 
-## ⏳ SONRASI (Seans 7+)
+## 🔒 BLOKLU (KVKK Danışman Onayı)
 
-### isg_tests — Test Framework (1-2 gün)
-- [ ] TransactionCase tests cleanup
-- [ ] All 7 modules validation
-- [ ] CI/CD preparation
+### isg_health_basic — F1-002 (5-7 AD)
+**Status:** ⏳ Danışman onayı bekliyor
 
-### E2/E3 Integration (optional, 2-4 hafta)
-- [ ] SGK API
-- [ ] EKİPNET
-- [ ] KVKK masking
+**Gerekli:**
+- [ ] KVKK danışman incelemesi
+- [ ] Sağlık verisi maskeleme mimarisi
+- [ ] Erişim denetim log'u
+- [ ] Rıza yönetimi
 
----
-
-## ✅ BLOKLU
-- isg_health_basic (KVKK consultant approval)
+**Bağımlılık:** Hukuki onay (projenin kontrolü dışında)
 
 ---
 
-## PROGRESS
-| Phase | Complete | % |
-|-------|----------|---|
-| FAZ 0-4 | 26/30 | 87 |
-| FAZ 5 | 2/3 | 67 |
-| **TOTAL** | **28/33** | **85** |
+## 📚 BACKLOG (Sonrası)
 
-**Next Session:** F5-003 implementation (1-2 days to completion)
+### E2/E3 Entegrasyon (2-4 hafta)
+- [ ] SGK API bağlantısı (isg_sgk modülü)
+- [ ] EKİPNET bildirimi (isg_equipment entegrasyon)
+- [ ] E-imza desteği (5070 s.K., isg_document)
+- [ ] KVKK maskeleme (isg_health_basic dependent)
 
-**Date:** 05 September 2026, 20:15 UTC
+### İsteğe Bağlı Geliştirmeler
+- [ ] Flutter mobil app (denetim, PTW, offline)
+- [ ] ML-based risk prediction
+- [ ] Anomali tespiti (ölçüm outliers)
+- [ ] Superset advanced analytics
+
+---
+
+## 📊 İlerleme Özeti
+
+| Item | Status | % | AD |
+|------|--------|---|-----|
+| FAZ 0-5 (Tüm modüller) | ✅ | 100 | ~60 |
+| HSE Radar Eşdeğerliği | ✅ | 100 | - |
+| F5-003 Validation | 🔄 | 80 | 1-2 |
+| isg_health_basic (bloklu) | ⏳ | 0 | 5-7 |
+| E2/E3 Entegrasyon | 📋 | 0 | 10-15 |
+
+**TOPLAM PROJE:** ~60-90 gün (32 görevde)
+**SON DURUMU:** ~88% seçim (HSE Radar %100 + validate pending)
+
+---
+
+## 🎬 SEANS 7 PLAN
+
+**Hedef: F5-003 Final Validation + HSE Radar Sertifikasyon**
+
+1. Web UI login (15 min)
+2. PDF raporları test (20 min)
+3. 27 işlev checklist (30 min)
+4. Sonuç: HSE Radar %100 sertifikasyonu
+
+**Sonrası:** isg_health_basic (danışman onayı) veya E2/E3 start
+
+---
+**BACKLOG.md — Seans 7 Güncel ✅**
