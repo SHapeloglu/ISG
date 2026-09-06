@@ -123,3 +123,16 @@ class IsgPartyRoleHistory(models.Model):
     date_start = fields.Date(string='Başlangıç Tarihi', required=True)
     date_end = fields.Date(string='Bitiş Tarihi')
     note = fields.Char(string='Not')
+
+    # ── Yetkili Muayene Kuruluşu ────────────────────────────
+    is_authorized_body = fields.Boolean(
+        string='Yetkili Muayene Kuruluşu',
+        compute='_compute_is_authorized_body',
+        store=True,
+        index=True,
+    )
+
+    @api.depends('isg_party_type')
+    def _compute_is_authorized_body(self):
+        for rec in self:
+            rec.is_authorized_body = rec.isg_party_type == 'inspection'
