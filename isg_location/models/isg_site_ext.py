@@ -46,7 +46,6 @@ class IsgSiteExt(models.Model):
         ('other',       'Diğer'),
     ],
         string='Tehlike Türü',
-        invisible=True,
     )
     hazard_description = fields.Text(
         string='Tehlike Açıklaması',
