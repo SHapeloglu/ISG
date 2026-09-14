@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- List View -->
+    <record id="isg_employee_health_list" model="ir.ui.view">
+        <field name="name">Çalışan Sağlık Muayeneleri</field>
+        <field name="model">isg.employee.health</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="employee_id"/>
+                <field name="workplace_id"/>
+                <field name="examination_date"/>
+                <field name="examiner_id"/>
+                <field name="result"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="isg_employee_health_form" model="ir.ui.view">
+        <field name="name">Çalışan Sağlık Muayenesi - Form</field>
+        <field name="model">isg.employee.health</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <h1><field name="employee_id"/></h1>
+                    <group>
+                        <group string="Muayene Bilgileri">
+                            <field name="examination_date"/>
+                            <field name="examiner_id"/>
+                            <field name="workplace_id"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Fiziksel Ölçümler">
+                            <group>
+                                <group>
+                                    <field name="systolic_bp"/>
+                                    <field name="diastolic_bp"/>
+                                    <field name="heart_rate"/>
+                                </group>
+                                <group>
+                                    <field name="weight_kg"/>
+                                    <field name="height_cm"/>
+                                    <field name="bmi"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <page string="Muayene Sonucu">
+                            <group>
+                                <field name="result" widget="radio"/>
+                                <field name="restrictions"/>
+                            </group>
+                        </page>
+
+                        <page string="Hekim Notları">
+                            <field name="physician_notes" placeholder="Hekim tarafından doldurulacak..."/>
+                        </page>
+
+                        <page string="Sistem Bilgileri">
+                            <field name="created_by_id" readonly="1"/>
+                            <field name="created_date" readonly="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="isg_employee_health_action" model="ir.actions.act_window">
+        <field name="name">Çalışan Sağlık Muayeneleri</field>
+        <field name="res_model">isg.employee.health</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Global record rules for isg.employee.health -->
+    <!-- TODO: Implement workplace-based filtering after KVKK compliance review -->
+</odoo>
