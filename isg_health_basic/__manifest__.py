@@ -9,10 +9,14 @@
         'isg_base',
         'isg_hr',
     ],
+    'external_dependencies': {
+        'python': ['cryptography>=41.0.0'],
+    },
     'data': [
         'security/ir.model.access.csv',
         'security/isg_health_security.xml',
         'views/isg_employee_health_views.xml',
+        'views/isg_employee_health_audit_views.xml',
     ],
     'installable': True,
     'auto_install': False,
