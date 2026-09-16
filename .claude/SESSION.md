@@ -1,167 +1,84 @@
-# SESSION.md — Seans 6 TAMAMLANDI (06 Eylül 2026)
+# SEANS 12 — isg_health_basic Encryption & Audit Log Sistemi (16 Eylül 2026)
 
-## ✅ Seans 6 Başarı Kriterleri
+## Hedef & Tamamlanan İş
+**Amaç:** isg_health_basic modülüne KVKK-uyumlu şifreleme ve audit log sistemi eklemek.
 
-### 1. VPS Verification ✅
-- 31/32 modül kurulu (isg_health_basic bloklu)
-- Servis running, log temiz (ERROR: 0 güncel)
-- Git: main branch, clean
+### ✅ Tamamlanan (3/3)
 
-### 2. F5-003 Test Data Creation ✅
-Tüm 7 kritik modül için sample data oluşturuldu:
+#### 1. Encryption Helper Class
+- `encryption_helper.py`: Fernet symmetric encryption implementation
+- Key management: ISG_ENCRYPTION_KEY env var → ~/.isg_encryption_key → fallback Fernet.generate_key()
+- `_encrypt(plaintext)` / `decrypt(ciphertext)` methods
+- Singleton pattern: `get_encryption_helper()`
+- Base64 encoding for storage
 
-| Modül | ID | Status |
-|-------|----|----|
-| Workplace | 39 | ✓ |
-| Site | 10 | ✓ |
-| Employee | 33 | ✓ |
-| Authorized Body | 76 | ✓ |
-| Risk Assessment | 11 | ✓ |
-| Incident | 6 | ✓ |
-| Audit | 14 | ✓ |
-| Equipment | 5 | ✓ |
-| Equipment Inspection | 3 | ✓ |
-| PTW | 4 | ✓ |
-| LOTO | 2 | ✓ |
+#### 2. Field-Level Encryption (physician_notes)
+- Storage split: `physician_notes_encrypted` (Char, hidden) ← real storage
+- Display: `physician_notes` (Text, compute + inverse)
+- Role-based masking:
+  - Manager/Expert: Decrypted value görürler
+  - Readonly/Others: "[ENCRYPTED - Yetkiniz yok]"
+- Create/write hooks: Otomatik encrypt before save
+- Fixed: `invisible=True` parametresi Python field'dan kaldırıldı (XML-only)
 
-### 3. Key Fix Applied ✅
-- **isg_party.is_authorized_body** computed field added
-  - Domain constraint fix for isg_equipment_inspection.authorized_body_id
-  - Computed from isg_party_type == 'inspection'
+#### 3. Audit Log Sistemi
+- Model: `isg.employee.health.audit` (13 column, fully created)
+  - `employee_health_id` (Many2one)
+  - `action` (read/write/delete selection)
+  - `accessed_by_id` (res.users, auto-populated)
+  - `accessed_date` (Datetime, auto-populated)
+  - `sensitive_field` (physician_notes / all)
+  - `before_value`, `after_value` (truncated to 255 chars, encrypted masked)
+  - `notes` (freeform)
+- Create/write/unlink hooks: Full tracking
+  - Create: Logs "write" action + "(encrypted)" placeholder
+  - Write: Logs before/after values (or "(encrypted)")
+  - Unlink: Logs delete action before removal
+- `log_access()` helper method for manual logging
+- ACL: Manager (1,1,1,1), Expert (1,1,1,0), Readonly (1,0,0,0)
+- Views: List (5 field), Form (tabbed), Search (3 filters: Okuma/Yazma/Silme)
 
-### 4. Mevzuat Güncellemeleri ✅
-- isg_party: is_authorized_body field (computed)
+### 📊 Durum
+- **Modül:** isg_health_basic (still counted in 31/32 total)
+- **Tablo:** isg_employee_health_audit başarıyla oluşturuldu
+- **Dependencies:** cryptography>=41.0.0, packaging (both installed)
+- **Git commits:** 35fdc77 (feat), 39a27e4 (fix)
 
-## İlerleme Özeti
+## Teknik Notlar
 
-| Faz | Status | % |
-|-----|--------|---|
-| FAZ 0-4 | ✅ TAMAMLANDI | 100 |
-| FAZ 5-002 | ✅ TAMAMLANDI | 100 |
-| FAZ 5-003 | ✅ TAMAMLANDI | 100 |
-| **TOPLAM HSE RADAR EŞDEĞERLİĞİ** | **✅ %100** | **100** |
+### Odoo 18 Kuralları (Yenilenenler)
+- `invisible=True` sadece XML view'lerde geçerli; Python field definition'da invalid parameter error
+- XML ref'lerde full module path kullan: `ref="module.record_id"` (module omit edilirse scope error)
+- Record order matters: search/filter views action'dan önce tanımlanmalı (ref resolution için)
 
-## Commit
-- 13ec546: F5-003: is_authorized_body computed field added to isg_party
+### Açık Konular
+- `res.users.workplace_ids` attribute henüz tanımlanmadı → record rule'lar TODO
+- Encryption key format: Base64 Fernet key; fallback dev-only (üretimde env var required)
+- Audit log'lar şifreli değil, sadece erişim kaydı (ayrı security policy gerekli KVKK compliance için)
 
-## Sonraki Seans (Seans 7)
-→ F5-003 kabul testi final validation
-→ Git push (eğer pending varsa)
-→ HSE Radar %100 eşdeğerlik sertifikasyonu
+### Dosya Değişiklikleri
+isg_health_basic/
+├── models/
+│ ├── encryption_helper.py (NEW)
+│ ├── isg_employee_health_audit.py (NEW)
+│ ├── isg_employee_health.py (MODIFIED: compute/inverse/hooks)
+│ └── init.py (MODIFIED: added audit import)
+├── views/
+│ └── isg_employee_health_audit_views.xml (NEW)
+├── security/
+│ └── ir.model.access.csv (MODIFIED: added 3 audit ACL rows)
+└── manifest.py (MODIFIED: cryptography dep, audit views)
 
----
-**SEANS 6 KAPANDI ✅**
+## Seans 11→12 Delta
+- Seans 11: Scaffold hazır (model, 2 view, ACL)
+- Seans 12: Encryption + audit log tüm implantasyonu tamamlandı
+- Total dev time: ~3 saat (estimate 3-3.5, başında hata çözümleri ile)
 
----
+## Sonraki Seans (13)
+- **Başlangıç:** isg_training B-10 (April 2, 2026 Regulation Compliance)
+  - Estimated: 2-3 days
+  - Scope: Full training module + incident→return training trigger
+- **Ya da:** isg_health_basic enhancements (encryption key rotation, audit retention policy)
+  - Estimated: 1-1.5 days
 
-## SEANS 6 RESMİ KAPANİŞ RAPORU
-
-### ✅ Başarı Kriterleri (Tümü Tamamlandı)
-1. ✅ VPS Verification (31/32 modül, servis running, log temiz)
-2. ✅ F5-003 Test Data Creation (7 modül, 11 record)
-3. ✅ is_authorized_body Field Fix (isg_party computed field)
-4. ✅ .claude/ Dokumentasyon (6 dosya + START_NEW_SESSION.md)
-5. ✅ Git Commit & Push
-
-### 📊 Proje Durumu
-- **HSE Radar Eşdeğerliği:** %100 ✅
-- **Modül Kurulumu:** 30/31 (%97)
-- **Test Data:** Ready for F5-003 validation
-- **Kod Kalitesi:** Production ready
-
-### 📝 Son Commit'ler
-- a44d7af: START_NEW_SESSION.md eklendi
-- c10cc69: ARCHITECTURE.md ve BACKLOG.md güncellemesi
-- acbc4e5: Durum dosyaları güncellendi
-- 13ec546: is_authorized_body computed field
-
-### 🚀 Seans 7 Başlama Rehberi
-**Bkz:** `.claude/START_NEW_SESSION.md` (7 adım, 15 min)
-
----
-
-**SEANS 6 RESMI OLARAK KAPANDI**
-**Tarih:** 06 Eylül 2026, 15:30 UTC
-**Durum:** ✅ TAMAMLANDI
-
----
-
-## SEANS 7 — ÖN TEMİZLİK (06 Eylül 2026)
-
-### 🔧 isg_tests Hayalet Kaydı Temizlendi
-**Sorun:** `ir_module_module` tablosunda `isg_tests` adlı bir kayıt `to upgrade` durumunda duruyordu, ancak diskte (`/opt/odoo/isg_addons/`) böyle bir modül klasörü yoktu. Önceki seanslarda "loglarda görünen stale referans" olarak not edilmişti.
-
-**Çözüm:**
-- Disk taraması (`find / -iname isg_tests`) → sonuç: yok
-- Bağımlılık kontrolü (`ir_module_module_dependency`) → hiçbir modül bağımlı değil
-- `UPDATE ir_module_module SET state='uninstalled' WHERE name='isg_tests'` uygulandı
-- Servis restart edildi, doğrulandı
-
-**Sonuç:** Gerçek kurulu modül sayısı **30/30** (isg_tests hiçbir zaman gerçek bir modül değildi, sayıma dahil edilmemeli). `isg_health_basic` hâlâ bloklu (31. modül, KVKK onayı bekliyor).
-
-**Not:** Gelecekte `-u all` gibi toplu güncelleme komutları artık bu hayalet kayıt yüzünden hataya düşmeyecek.
-
----
-
-## SEANS 7 — F5-003 FINAL VALIDATION (07 Eylül 2026)
-
-### ✅ Tamamlanan İşler
-
-#### 1. İlk Temizlik: isg_tests Hayalet Kaydı
-- DB kaydında `to upgrade` durumunda bir modül var ama disk'te yok
-- `UPDATE ir_module_module SET state='uninstalled' WHERE name='isg_tests'`
-- Sonuç: Gerçek kurulu modül sayısı **30/30** (isg_health_basic bloklu)
-
-#### 2. F5-003 Test Data Oluşturma
-Script: `/tmp/test_data_fixed.py` başarılı:
-- Risk Assessment: **18** ✓
-- Incident: **12** ✓
-- Audit: **20** ✓
-- Equipment: **10** ✓
-- Equipment Inspection: **6** ✓
-- PTW: **6** ✓
-- LOTO: **3** ✓
-
-#### 3. Admin Şifre Reset
-- Komut: `UPDATE res_users SET password='admin123' WHERE login='admin'`
-- Sonuç: admin / admin123 ile login başarılı ✓
-
-#### 4. Web UI Validation
-- URL: `https://isg.powerbi.com.tr`
-- Login: ✓
-- Risk Assessment ID:18 form açıldı: ✓
-- Alanlar görülebiliyor: Olasılık, Şiddet, Risk Puanı, Risk Seviyesi ✓
-
-#### 5. Report Action Doğrulandı
-- Report name: "Risk Değerlendirmesi Raporu"
-- Model: isg.risk.assessment
-- Type: qweb-pdf
-- Template dosyası: `/opt/odoo/isg_addons/isg_reporting/reports/isg_risk_assessment_report.xml` (100 satır)
-- Durum: **Kurulu ve aktif** ✓
-
-### 📊 F5-003 Durum Özeti
-| Bileşen | Durum |
-|---------|-------|
-| Test Data (8 modül) | ✅ Oluşturuldu (7 record) |
-| Web UI Login | ✅ Çalışıyor |
-| Form Render | ✅ Alanlar görünüyor |
-| Report Action | ✅ Kurulu |
-| PDF Template | ✅ Disk'te (100 satır) |
-| HSE Radar Eşdeğerliği | ✅ %100 DOĞRULANDI |
-
-### ⚠️ Bilinen Ufak Problem
-- PDF URL routing Odoo 18 base'de teknik bir detay
-- Template dosyalar kurulu ama URL'den doğrudan açılmıyor (404)
-- Çözüm: Seans 8'de Odoo report registry tekniği ile çözülebilir
-
-### 🎯 Sıradaki (Seans 8)
-- PDF routing fix (Odoo 18 base report kuralı)
-- Kalan 4 PDF rapor doğrulaması
-- 27 işlev final acceptance checklist
-- Release ve sertifikasyon
-
----
-
-**SEANS 7 BAŞARILI KAPANDI ✅**
-**Tarih:** 07 Eylül 2026
-**Durum:** HSE Radar %100 eşdeğerliği doğrulanmış, production-ready
+Bütçe bloke: Faz 1 ₺300K onayı bekleniyor.

@@ -1,203 +1,161 @@
-# 🚀 YENİ SESSION BAŞLATMA — Adım Adım
+# START_NEW_SESSION.md — Yeni Seans Onboarding (5 Adım)
 
-**Bu dosya her yeni session'da ilk yapılacak şeydir.**
-
----
-
-## ADIM 1: Bu Dosyayı Oku (1 dakika)
-```bash
-cat .claude/START_NEW_SESSION.md
-```
+**Bu dosyayı her seans başında oku (Seans 1, 2, 3, ... sonsuza kadar)**
 
 ---
 
-## ADIM 2: Proje Durumuyla Tanış (2 dakika)
-
-### Projenin Amacı
-Odoo 18 tabanlı **Türkiye İSG Platformu** (HSE Radar eşdeğerliği).
-
-### Son Durum
-- **HSE Radar Eşdeğerliği:** ✅ %100 TAMAMLANDI
-- **Seans:** 6 tamamlandı, Seans 7'den başlıyorsun
-- **Modül:** 30/31 kurulu (isg_health_basic bloklu)
-- **Test Data:** 11 record oluşturuldu
-
-### Şu Anda Ne Gerekli?
-- F5-003 Final Validation (PDF raporları + checklist)
-- HSE Radar sertifikasyon
-- Ürün release'e hazırlanma
-
----
-
-## ADIM 3: Gerçek Durumu Doğrula (3 dakika)
-
-### 🔍 Kontrol Komutları (Hepsini Çalıştır)
-
-**1️⃣ Git Durumu:**
-```bash
-git log --oneline -1 && echo "---" && git status
-```
-**Beklenen:** 
-- HEAD: 13ec546 (F5-003 commit)
-- Status: clean veya .claude/ modified
-
----
-
-**2️⃣ Modül Sayısı:**
-```bash
-sudo -u postgres psql -d isg -c "select count(*) from ir_module_module where name like 'isg_%' and state='installed';"
-```
-**Beklenen:** 30 (veya 31 eğer isg_health_basic kuruldu)
-
----
-
-**3️⃣ Servis Durumu:**
-```bash
-sudo systemctl status odoo18-isg.service | grep active
-```
-**Beklenen:** `active (running)`
-
----
-
-**4️⃣ Log Temizliği (Güncel Errorlar):**
-```bash
-grep "ERROR" /var/log/odoo/odoo18-isg.log | grep -v "2026-09-06 05:" | tail -3 || echo "✅ Güncel error yok"
-```
-**Beklenen:** Sadece eski hatalar (05:28) veya hiçbir şey
-
----
-
-## ADIM 4: Test Data ID'lerini Hatırla
-
-Seans 6'da oluşturulan records:
-Workplace: 39
-Site: 10
-Employee: 33
-Authorized Body: 76
-Risk Assessment: 11
-Incident: 6
-Audit: 14
-Equipment: 5
-Equipment Inspect: 3
-PTW: 4
-LOTO: 2
-
-Bu ID'leri PDF raporlama ve checklist'te kullanacaksın.
-
----
-
-## ADIM 5: .claude/ Dosya Yapısı
+## ✅ ADIM 1: VPS Bağlantısı Doğrula (1 min)
 
 ```bash
+cd /opt/odoo/isg_addons
+pwd
 ls -la .claude/
 ```
 
-**Şunları oku (sırasıyla):**
-1. `SESSION.md` — Son seans özeti
-2. `TASKS.md` — Yapılacaklar
-3. `CLAUDE.md` — Proje felsefesi
-4. `F5-003_TEST_PROTOCOL.md` — Test protokolü (27 işlev)
-5. `ARCHITECTURE.md` — Teknik mimari
-6. `BACKLOG.md` — Gelecek görevler
+**Beklenen:** `/opt/odoo/isg_addons` ve `.claude/` klasörü var
 
 ---
 
-## ADIM 6: Bugünün Seçimi
+## ✅ ADIM 2: Git & Modül Durumu Kontrol Et (2 min)
 
-**Şu 4 seçenekten birini seç:**
+```bash
+git log --oneline -5
+git status
+sudo -u postgres psql -d isg -c "SELECT COUNT(*) FROM ir_module_module WHERE state='installed';"
+```
 
-### A️⃣ **Web UI Test** (15-20 min) ⭐ ÖNERİLİ
-- Admin panel login
-- Modülleri gez (navigasyon)
-- Test data records'ü açtır (ID: 11, 6, 14)
-- UI tam çalışıyor mu?
-- **Sonuç:** Web interface validation ✅
-
-### B️⃣ **PDF Raporlama** (20-30 min)
-- 5 PDF şablonunu test
-- Record ID'leri kullanarak PDF generate
-- Raporlar düzgün render mi?
-- **Sonuç:** PDF validation ✅
-
-### C️⃣ **Acceptance Checklist** (45-60 min)
-- F5-003_TEST_PROTOCOL.md oku
-- 27 işlev tamamlandı mı doğrula
-- HSE Radar %100 sertifikasyon
-- **Sonuç:** Official acceptance test ✅
-
-### D️⃣ **isg_health_basic Kurma** (2-3 gün)
-- KVKK mimarisini kur
-- Sağlık verisi maskeleme
-- Alan bazlı ACL
-- **Sonuç:** Bloklu modül aktif
-- **Not:** KVKK danışman onayı gerekli
+**Beklenen:**
+- HEAD: latest commit (bakalım hangi seans?)
+- Working tree: clean
+- Module count: 31 (Seans 12), 32 (final)
 
 ---
 
-## ADIM 7: Claude'a Bağlam Ver
+## ✅ ADIM 3: Odoo Service Check (1 min)
 
-Kontrol komutlarının çıktısını + seçimi kopyala-yapıştır:
-Kontrol Komutları Sonuçları:
-[git durumu çıktısı]
-[modül sayısı]
-[servis durumu]
-[log sonucu]
+```bash
+sudo systemctl status odoo18-isg.service | head -10
+tail -50 /var/log/odoo/odoo18-isg.log | grep -E "ERROR|WARNING" | tail -5
+```
 
-Seçim: A (veya B/C/D)
-
-Bunu ver, Claude başlayacak.
+**Beklenen:** Active (running), no ERROR lines
 
 ---
 
-## 📝 ÖZET ÇIZELGE
+## ✅ ADIM 4: Context Dosyalarını Oku (3 min)
 
-| Adım | İşlem | Süre |
-|------|-------|------|
-| 1 | Bu dosyayı oku | 1 min |
-| 2 | Proje durumuyla tanış | 2 min |
-| 3 | 4 kontrol komutu çalıştır | 3 min |
-| 4 | Test data ID'lerini hatırla | 1 min |
-| 5 | .claude/ dosyalarını oku | 5 min |
-| 6 | Seçim yap (A/B/C/D) | 2 min |
-| 7 | Claude'a context ver | - |
-| **TOPLAM** | **Hazır!** | **15 min** |
+**Sırada:**
+1. `.claude/SESSION.md` — Son seans neler yaptı?
+2. `.claude/TASKS.md` — Sonraki task ne?
+3. `.claude/CLAUDE.md` — Kuralları hatırla
+4. `.claude/BACKLOG.md` — Blokajlar var mı?
+5. `.claude/CONTEXT_FOR_CLAUDE.md` — Hızlı snapshot
+
+**Tavsiye:** Claude'un aşağıda sorduğu soruyu yanıtlamak için dosyaları kapat ve kendi başında özetle.
 
 ---
 
-## 🎯 CLAUDE'A VERİLECEK EXACT PROMPT
+## ✅ ADIM 5: Claude'a Seans Başlatma Mesajı Gönder
 
-Yukarıdaki 7 adımı yaptıktan sonra, bu prompt'u kopyala-yapıştır:
-Seans 7 başlatılıyor. Şu kontroller tamamlandı:
+**Yapı:**
+Seans [N]: [İş Başlığı]
 
-✓ Git: [git status output]
-✓ Modül: [psql output]
-✓ Servis: [systemctl output]
-✓ Log: [log check result]
+Durum: [X]/32 modül kurulu, HEAD: [commit hash]
+VPS: vmi3389964, isg.powerbi.com.tr
+Son seans (Seans N-1): [Ne yaptı? Tamamlanan vs. Açık konular]
 
-Seçim: [A/B/C/D]
+Devam etmek için:
 
-Lütfen başla.
+[Doğrulanacak ilk şey]
+[Yazılacak ilk dosya]
+[Açılacak ilk modül]
+
+
+**Örnek (Seans 13):**
+Seans 13: isg_training B-10 — April 2, 2026 Regulation Training Module
+
+Durum: 31/32 modül kurulu, HEAD: 39a27e4
+VPS: vmi3389964, isg.powerbi.com.tr
+Son seans (Seans 12): Encryption + audit log sistem eklendi (isg_health_basic)
+
+Devam etmek için:
+
+VPS'i doğrula (git log, modül sayısı)
+isg_training scaffold başla (model, views, ACL)
+April 2, 2026 regulation RG 33212 maddelerini mapla
 
 ---
 
-## ⚠️ SORUN ÇÖZÜM
+## 🚨 Hata Durumunda
 
-**Eğer kontrol komutlarında hata varsa:**
-- Git status dirty? → `git restore .claude/`
-- Servis down? → `sudo systemctl restart odoo18-isg.service`
-- Log ERROR'lar güncel? → Haber ver
-- Modül sayısı ≠ 30? → Haber ver
+### Git status dirty
+```bash
+git diff                  # Ne değişti?
+git checkout -- .        # Revert (DIKKAT: unsaved work kaybolur)
+# veya
+git add -A && git commit -m "WIP: ..." && git push
+```
+
+### Module count wrong
+```bash
+sudo -u postgres psql -d isg -c "SELECT name, state FROM ir_module_module WHERE state != 'installed' LIMIT 10;"
+```
+
+### Service down
+```bash
+sudo systemctl restart odoo18-isg.service
+sleep 5
+sudo systemctl status odoo18-isg.service
+```
+
+### Log'da ERROR
+```bash
+tail -200 /var/log/odoo/odoo18-isg.log | grep -A30 "ERROR"
+# Ya da
+sudo systemctl stop odoo18-isg.service
+# Upgrade et, bak hata mesajına
+```
 
 ---
 
-**🚀 Artık yeni session'a hazırsın!**
+## 📝 Seans Sonunda
 
-Şu metodu her seferinde kullan:
-1. Bu dosyayı oku
-2. 4 kontrol komutu çalıştır
-3. Seçim yap
-4. Claude'a context ver
-5. Başla
+**Zorunlu:**
+1. `.claude/SESSION.md` güncelle (ne yaptın?)
+2. `.claude/TASKS.md` güncelle (sonraki ne?)
+3. `.claude/CONTEXT_FOR_CLAUDE.md` güncelle (snapshot)
+4. Git add/commit:
+```bash
+   git add .claude/
+   git commit -m "SEANS [N]: [İşin Özeti]"
+   git push origin main
+```
 
-**Hiçbir bilgi kaybı olmaz.**
+**Başarısız olursan:**
+- Push başarısız (egress)? Bekle veya `-f` ile retry
+- Commit başarısız? `git status` bak
+- Dosya yazma başarısız? sudo kontrol et, permission kontrol et
+
+---
+
+## 🎓 Sık Hatalar (Kaçınılması Gereken)
+
+| Hata | Çözüm |
+|------|-------|
+| "VPS bağlantısı yok" | ssh credentials kontrol et |
+| "git push rejected" | `git pull --rebase`, sonra `git push` |
+| "Modül upgrade başarısız" | Log'ı oku, dependency/syntax hatası ara |
+| ".claude/ dosyaları bayat" | Her seans sonunda update et |
+| "Python script hata" | Venv path kontrol et: `/opt/odoo/venv18-isg/bin/python3` |
+| "Config dosyası bulunamadı" | `/etc/odoo/odoo18-isg.conf` path kontrol et |
+
+---
+
+## 🎯 Seans Zamanlaması
+
+- **Orta:** 2-3 saat (feature, model scaffold, test)
+- **Uzun:** 4-6 saat (complex feature, debugging, refactor)
+- **Kısa:** 30-60 dakika (bug fix, patch, doc update)
+
+Tahmin et ve başla!
 
