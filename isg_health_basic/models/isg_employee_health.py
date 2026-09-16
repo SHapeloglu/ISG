@@ -50,7 +50,7 @@ class IsgEmployeeHealth(models.Model):
     # ─── Hekim Notları (KVKK: Şifrelenmiş) ───────────────────
     # Storage: encrypted (hidden, readonly)
     physician_notes_encrypted = fields.Char(
-        string='Hekim Notları (Encrypted)', readonly=True, invisible=True,
+        string='Hekim Notları (Encrypted)', readonly=True,
     )
     
     # Display: compute + role-based masking

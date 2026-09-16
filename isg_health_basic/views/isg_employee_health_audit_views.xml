@@ -1,5 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <!-- Search View: Audit Log Filters (MUST come before Action) -->
+    <record id="view_isg_employee_health_audit_search" model="ir.ui.view">
+        <field name="name">isg.employee.health.audit.search</field>
+        <field name="model">isg.employee.health.audit</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="employee_health_id"/>
+                <field name="accessed_by_id"/>
+                <field name="action"/>
+                <separator/>
+                <filter name="filter_reads" string="Okuma" domain="[('action', '=', 'read')]"/>
+                <filter name="filter_writes" string="Yazma" domain="[('action', '=', 'write')]"/>
+                <filter name="filter_deletes" string="Silme" domain="[('action', '=', 'delete')]"/>
+            </search>
+        </field>
+    </record>
+
     <!-- List View: Audit Log -->
     <record id="view_isg_employee_health_audit_list" model="ir.ui.view">
         <field name="name">isg.employee.health.audit.list</field>
@@ -32,8 +49,8 @@
                         <field name="sensitive_field"/>
                     </group>
                     <group string="Değişim Kaydı">
-                        <field name="before_value" nolabel="1"/>
-                        <field name="after_value" nolabel="1"/>
+                        <field name="before_value"/>
+                        <field name="after_value"/>
                     </group>
                     <field name="notes"/>
                 </sheet>
@@ -46,23 +63,6 @@
         <field name="name">Sağlık Muayenesi Denetim Günlüğü</field>
         <field name="res_model">isg.employee.health.audit</field>
         <field name="view_mode">list,form</field>
-        <field name="search_view_id" ref="view_isg_employee_health_audit_search"/>
-    </record>
-
-    <!-- Search View: Audit Log Filters -->
-    <record id="view_isg_employee_health_audit_search" model="ir.ui.view">
-        <field name="name">isg.employee.health.audit.search</field>
-        <field name="model">isg.employee.health.audit</field>
-        <field name="arch" type="xml">
-            <search>
-                <field name="employee_health_id"/>
-                <field name="accessed_by_id"/>
-                <field name="action"/>
-                <separator/>
-                <filter name="filter_reads" string="Okuma" domain="[('action', '=', 'read')]"/>
-                <filter name="filter_writes" string="Yazma" domain="[('action', '=', 'write')]"/>
-                <filter name="filter_deletes" string="Silme" domain="[('action', '=', 'delete')]"/>
-            </search>
-        </field>
+        <field name="search_view_id" ref="isg_health_basic.view_isg_employee_health_audit_search"/>
     </record>
 </odoo>
