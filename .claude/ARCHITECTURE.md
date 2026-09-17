@@ -1,176 +1,68 @@
-# ARCHITECTURE.md — ISG Platform 31 Modülü Mimari Özeti
+# ARCHITECTURE.md — ISG Platform Modül Mimarisi (Doğrulanmış: 17 Eylül 2026)
 
-## 🏗️ Modül Layerları
+**Kaynak:** VPS `git log` + `ls isg_addons/` + `psql ir_module_module` çıktısı (17 Eylül 2026)
+**Durum:** 31/31 üretim modülü kurulu (%100). `isg_tests` ayrı, uninstalled, sayıma dahil değil.
 
-### Layer 1: Foundation
-- **isg_base** (1/31): Security groups, mixin (uuid), IR extensions
-- **isg_hr** (2/31): hr.employee extensions (workplace_id, sağlık history)
-- **isg_security** (embedded in isg_base): ACL framework
+## FAZ 0 — Temel Mimari
+- **isg_core**: isg.workplace, isg.site — İSG işyeri, NACE, tehlike sınıfı, SGK sicil no
+- **isg_security**: 5 rol grubu (readonly/expert/physician/manager/superadmin), category
+- **isg_party**: res.partner _inherit — OSGB/Lab/Muayene/AltİşverenTedarikçi rolleri
+- **isg_location**: isg.site genişletme — GPS, kapasite, tehlikeli alan, toplanma noktası
+- **isg_document**: ir.attachment _inherit — SHA-256 hash, sürüm/kilit/e-imza
+- **isg_hr**: hr.employee _inherit — isg_workplace_id, danger_class, KKD ölçüleri, isg.seg
+- **isg_base**: isg.uuid.mixin, isg.outbox (E3 entegrasyon kuyruğu)
 
-### Layer 2: Configuration & Location
-- **isg_site_ext** (3/31): isg.workplace model, org hierarchy
-- **isg_location** (4/31): Work locations, tehlike sınıfları, hazard matrix
-- **isg_machinery** (5/31): Equipment/machinery registry (PTW domain)
+## FAZ 1 — Kurumsal Yönetişim
+- **isg_contractor**: Alt işveren zinciri, 14 belge matrisi
+- **isg_training**: Eğitim türleri, 2 Nisan 2026 yönetmelik periyotları, dönüş eğitimi cron
+- **isg_board**: İSG kurulu, toplantı, karar takibi
+- **isg_correspondence**: Gelen/giden yazışma, 30 gün süre takibi
+- **isg_visitor**: Ziyaretçi giriş/çıkış, KKD bildirimi
+- **isg_health_basic**: KVKK uyumlu sağlık gözetimi — Fernet encryption, audit log (Seans 12)
 
-### Layer 3: Core Health & Safety
-- **isg_health_basic** (6/31): Employee health exams, physician notes (encrypted), audit logs [NEW in S12]
-- **isg_chemical** (7/31): Chemical/substance inventory, OEL/STEL tracking
-- **isg_incident** (8/31): Incident registry, DÖF/CAPA workflows
-- **isg_occupational_disease** (9/31): Disease tracking, risk matrix
+## FAZ 2 — Çekirdek İSG Operasyonları
+- **isg_capa**: DÖF/CAPA, 5 Neden + 6M kök neden analizi
+- **isg_risk**: Risk değerlendirmesi, olasılık×şiddet matrisi
+- **isg_incident**: İş kazası/ramak kala, SGK 3 gün bildirim hazırlığı
+- **isg_audit**: Denetim planı, kontrol listesi, bulgu puanlama
+- **isg_ppe**: KKD envanter, zimmet, yenileme takvimi
+- **isg_emergency**: Acil durum planı, tatbikat, tahliye
+- **isg_chemical**: Kimyasal envanter, OEL/STEL, GHS sınıflama
+- **isg_equipment**: EK-II ekipman kataloğu, periyodik kontrol, EKİPNET hazırlık
+- **isg_ptw**: İş izni + LOTO, çok aşamalı onay
 
-### Layer 4: Training & Compliance
-- **isg_training** (10/31, TODO): Regulation-driven training, incident→return trigger
-- **isg_legislation** (11/31): Mevzuat registry, obligation applicability matrix
+## FAZ 3 — Ölçüm ve Çevre
+- **isg_measurement_core** + **isg_measurement_hygiene**: Ölçüm kampanyası, kalibrasyon snapshot
+- **isg_environment**: Atık kodu, depolama, bertaraf
 
-### Layer 5+: Reporting & Admin (12-31/31)
-- PDF reports (F5-002, F5-003)
-- Dashboard/analytics
-- Misc integration & helper modules
+## FAZ 4 — Sanal Müfettiş
+- **isg_legislation**: Mevzuat kaydı, yükümlülük tanımlama
+- **isg_compliance**: Uygulanabilirlik motoru, uygunluk değerlendirme
+- **isg_penalty**: 2026 ceza tarifeleri (%49 artış), valid_from versiyonlama
+- **isg_simulator**: Senaryo testi, geçmiş tarihli değerlendirme
 
-**Total:** 31 production + 1 pending legal review = 32 planned
+## FAZ 5 — Raporlama
+- **isg_reporting**: TRIR/LWDR KPI, Superset hazırlık
+
+## Özel
+- **isg_osgb**: OSGB planlama/görevlendirme motoru, uzman/hekim süre hesaplama
 
 ## 🔐 Security Model (isg_security)
+group_isg_readonly (15) — Salt okuma
+group_isg_expert (16) — İSG Uzmanı
+group_isg_physician (17) — İşyeri Hekimi
+group_isg_manager (18) — İSG Yöneticisi
+group_isg_superadmin (19) — İSG Süper Yönetici
+category (91)
 
-### Groups
-group_isg_manager — Full access (create/write/unlink)
-group_isg_expert — Read+write, no delete (except audit)
-group_isg_readonly — Read-only, field-level encryption masking
+## ⚠️ TODO: res.users.workplace_ids
+Henüz tanımlanmadı. Holding→şirket→işyeri→site record rule zinciri bu attribute'a bağımlı; tanımlanana kadar workplace bazlı erişim kontrolü placeholder durumda.
 
-### ACL Pattern
-CSV: `ir.model.access.csv`
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_MODEL_manager,MODEL_manager,model_MODEL,isg_security.group_isg_manager,1,1,1,1
-access_MODEL_expert,MODEL_expert,model_MODEL,isg_security.group_isg_expert,1,1,1,0
-access_MODEL_readonly,MODEL_readonly,model_MODEL,isg_security.group_isg_readonly,1,0,0,0
-
-### Record Rules (Workplace-Based, TODO)
-Planned: `res.users.workplace_ids` attribute → domain filtering
-
-## 🔄 Data Flow (Seans 12 Snapshot)
-
-### Employee Health Exam Lifecycle
-
-Create exam (manager/expert)
-→ physician_notes auto-encrypt (create hook)
-→ audit log: "write" action, "(encrypted)" value
-→ compute field shows decrypted (if authorized) OR "[ENCRYPTED - ...]"
-Read exam
-→ Compute field checks user role
-→ Manager/Expert: decrypted text
-→ Readonly: masked text
-→ Audit logging: Not automatic for reads (can add)
-Write/update exam
-→ physician_notes re-encrypt (write hook)
-→ audit log: before_value "(encrypted)", after_value "(encrypted)"
-Delete exam
-→ unlink hook logs deletion
-→ audit log: action='delete', before_value has ID+employee info
-
-### Encryption Storage
-DB Table: isg_employee_health
-physician_notes_encrypted (Char): Base64(Fernet(plaintext))
-
-ORM Level: isg_employee_health
-physician_notes (Text, compute): Decrypted value OR mask
-_compute_physician_notes(): Read & decrypt
-_inverse_physician_notes(): Encrypt & write to _encrypted
-
-## 📊 Field Type Standards
-
-| Type | Usage | Example |
-|------|-------|---------|
-| Many2one | Linked record | employee_id → hr.employee |
-| Char | Short text, indexed | tehlike_kodu, uuid_code |
-| Text | Long text, not searchable | physician_notes (compute) |
-| Selection | Fixed choices | result (fit/unfit/conditional) |
-| Integer | Whole numbers | heart_rate (bpm) |
-| Float | Decimals | weight_kg, bmi |
-| Date | Date only | examination_date |
-| Datetime | Timestamp | accessed_date |
-| One2many | Reverse link | Not used yet (prefer Many2one + domain) |
-| Binary | Encrypted storage | Not used; use Base64 Char instead |
-
-## 🔗 Dependency Graph (Seans 12)
-odoo/addons/base
-↓
-isg_base ←─────────────────────────────────┐
-↓ │
-isg_hr ← isg_site_ext │
-↓ ↓ │
-isg_health_basic (encrypt+audit) ← all others
-↑
-isg_training (B-10, TODO)
-
-Circular dependencies: None (unidirectional enforced)
-
-## 🛠️ Common Patterns
-
-### Compute + Inverse (Field Encryption)
+## Encryption Pattern (isg_health_basic, Seans 12)
 ```python
-@api.depends('field_encrypted')
-def _compute_field(self):
-    for rec in self:
-        rec.field = decrypt(rec.field_encrypted) if authorized(rec) else "[ENCRYPTED]"
-
-def _inverse_field(self):
-    for rec in self:
-        if rec.field and rec.field != "[ENCRYPTED]":
-            rec.field_encrypted = encrypt(rec.field)
+# Storage (hidden)
+physician_notes_encrypted = fields.Char(readonly=True)
+# Display (compute + inverse, role-based masking)
+physician_notes = fields.Text(compute='_compute_physician_notes', inverse='_inverse_physician_notes')
 ```
-
-### Create/Write Hooks (Audit Logging)
-```python
-@api.model_create_multi
-def create(self, vals_list):
-    # Pre-process: encrypt sensitive fields
-    records = super().create(vals_list)
-    # Post-process: log audit
-    for rec in records:
-        AuditModel.log_access(rec.id, 'write', ...)
-    return records
-
-def write(self, vals):
-    # Pre-process: capture before values
-    before = {rec.id: rec.sensitive_field for rec in self}
-    result = super().write(vals)
-    # Post-process: log diffs
-    for rec in self:
-        AuditModel.log_access(rec.id, 'write', 
-            before_value=before[rec.id], 
-            after_value=rec.sensitive_field)
-    return result
-```
-
-### Audit Model
-```python
-class AuditModel(models.Model):
-    employee_health_id = Many2one(...)
-    action = Selection([('read','Read'),('write','Write'),('delete','Delete')])
-    accessed_by_id = Many2one('res.users')
-    sensitive_field = Char()
-    before_value = Char(truncated)
-    after_value = Char(truncated)
-    
-    def log_access(self, emp_health_id, action, **kwargs):
-        return self.create({
-            'employee_health_id': emp_health_id,
-            'action': action,
-            'accessed_by_id': self.env.user.id,
-            **kwargs
-        })
-```
-
-## 📈 Performance Considerations
-
-- **Compute fields stored?** Yes (`store=True`) if searchable
-- **Encryption overhead?** ~5-10ms per field (Fernet)
-- **Audit logging?** Async optional (currently sync, not problematic for 100s exams)
-- **DB indexes?** Standard on many2one/selection fields; consider on workplace_id for filtering
-
-## 🚀 Scaling (Future)
-
-1. Audit log archival: Move old records to separate table/index (1yr+ retention)
-2. Encryption key rotation: Re-encrypt all fields on key change (scheduled job)
-3. Multi-workspace: Record rules on `workplace_id` (res.users.workplace_ids attribute pending)
-4. API: REST endpoints for external HSE Radar sync
-
+Audit: `isg.employee.health.audit` modeli — create/write/unlink hook'larla otomatik loglama.

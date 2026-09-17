@@ -1,61 +1,53 @@
-# TASKS.md — Seans 12 Sonrası Aktif Backlog
+# TASKS.md — Aktif Backlog (Doğrulanmış: 17 Eylül 2026)
 
-## 🎯 Kısa Vadeli (Bu Hafta)
+**Durum:** 31/31 üretim modülü kurulu (%100). Proje modül bazında TAMAMLANDI.
+**Not:** Danışmanlık gerektiren tüm işler `DANISMANLIK_ISLERI_BEKLEMEDE.md` dosyasına taşındı. Bütçe onayı gelene kadar bu listeye dokunulmuyor.
 
-### Seans 13 Başlangıcı
-- [ ] VPS verify: git log, modül count (psql), .claude/ files
-- [ ] isg_training B-10 başla (April 2, 2026 regulation)
+## 🎯 Öncelik Sırası (Bizim Yapabileceklerimiz — danışman gerekmiyor)
 
-## 📋 Orta Vadeli Backlog (Sıraya Göre)
+### 1. Dokümantasyon Düzeltmesi ✅ (17 Eylül 2026, bugün)
+- [x] ARCHITECTURE.md — VPS gerçeğine göre yeniden yazıldı
+- [ ] TASKS.md — devam ediyor (bu dosya)
+- [ ] SESSION.md — güncellenecek
+- [ ] BACKLOG.md — güncellenecek
+- [ ] CONTEXT_FOR_CLAUDE.md — güncellenecek
 
-### B-10: isg_training (Seans 13+)
-- Scope: Full training module + incident→return trigger
-- Estimate: 2-3 days
-- Dependency: None (isg_health_basic done)
-- Status: Planning
+### 2. res.users.workplace_ids + Record Rule'lar (Tahmini: 1 gün)
+- [ ] hr.employee / res.users üzerinde workplace_ids (Many2many → isg.workplace) tanımla
+- [ ] Record rule domain fonksiyonları yaz (holding→şirket→işyeri→site zinciri)
+- [ ] isg_core, isg_hr, isg_health_basic üzerinde test et
+- **Neden öncelikli:** Birçok modülün record rule'u bu attribute'a bağımlı, güvenlik modelinin eksik son parçası
 
-### isg_health_basic Enhancements (Optional Seans 14)
-- Field-level encryption key rotation
-- Audit log retention policy (30/90/365 day archive)
-- Batch audit log cleanup script
-- Estimate: 1-1.5 days
+### 3. Bilinen Bug Temizliği (Tahmini: 0.5 gün)
+- [ ] isg_contractor.contractor_level → recursive=True eklenmeli
+- [ ] isg_location.hazard_type → invisible parametresi WARNING (işlevsel değil ama temizlenmeli)
+- [ ] isg_visitor.ppe_notes → model seviyesinde invisible parametresi WARNING
+- [ ] isg_security.isg_group_ids → geçici çözüm, temiz implementasyon yapılabilir
 
-### B-4/B-8/B-9: Mevzuat Retrofit
-- Scope: 3 modül, regulation update synch
-- Estimate: 2-3 days
-- Status: Backlog
+### 4. F5-002/F5-003 Doğrulama (Tahmini: 0.5 gün)
+- [ ] QWeb PDF şablonları mevcut mu kontrol et (risk, kaza, audit raporları)
+- [ ] HSE Radar kabul test senaryoları (27 işlev × 5 senaryo = 135 test case) hazır mı doğrula
+- [ ] Eksik varsa tamamla
 
-### F5-002/F5-003: PDF Report Templates
-- Scope: isg_legislation / isg_occupational_disease reports
-- HSE Radar parity check
-- Estimate: 1 day
-- Status: Backlog
+### 5. MEV-008: Risk Bilgilendirmesi Alanı (Tahmini: 0.5 gün)
+- [ ] isg_visitor'a risk_briefing_given (boolean, date) ekle
+- [ ] isg_contractor'a aynı alan uygulanabilir
+- [ ] İşyerine özgü risk bilgilendirmesi şablonu (workplace_id'ye göre oto-doldur)
 
-## 🔒 Blokalı Konular
+### 6. isg_health_basic İyileştirmeleri — Opsiyonel (Tahmini: 1-1.5 gün)
+- [ ] Encryption key rotation script (ir.cron ile)
+- [ ] Audit log retention policy (30/90/365 gün arşivleme)
+- [ ] Batch audit log cleanup script
 
-### ₺300K Faz 1 Bütçe Onayı
-- Etkisi: Developer days, consultant RFP
-- Tahmini yanıt: End of September 2026
+### 7. OEL/STEL Karşılaştırma Script Hazırlığı (Tahmini: 1 gün)
+- [ ] ÇSGB resmi verisiyle otomatik karşılaştırma script'i yaz (kod hazır, resmi imza danışmanlık listesinde kalır)
+- [ ] Mismatch raporu formatı (delta document)
 
-### Danışmanlık RFP (₺139-164K)
-- 5 firma listesi hazır
-- RFP dokümanter: A_DANISMANLIK_VE_ONAYLA_R_PAKETI.md
-- Action: Bütçe onayı sonrası gönder
-
-### res.users.workplace_ids Attribute
-- Gerekçe: Record rule domains için
-- Scope: isg_hr modülü extension
-- Status: TODO (Seans 13 plans)
-
-## 🚀 Tamamlanan (Seans 12)
-- [x] Encryption helper class
-- [x] Field-level encryption (physician_notes)
-- [x] Audit log model + views + ACL
-- [x] Create/write/unlink hooks
-- [x] DB table creation + verification
+## 🔒 Danışmanlık Gerektiren İşler
+→ Bkz. `DANISMANLIK_ISLERI_BEKLEMEDE.md` (bütçe onayı bekliyor, ayrı takip)
 
 ## 📊 Genel Proje Durumu
-- **31/32 modül** kurulu (%97)
-  - Kalan: isg_health_basic legal review (blokalı)
-- **Git:** main branch, 39a27e4 HEAD
+- **31/31 modül** kurulu (%100) — isg_tests hariç (ayrı, uninstalled)
+- **Git:** main branch, HEAD: f74a5e7
 - **VPS:** vmi3389964, isg.powerbi.com.tr
+- **Son doğrulama:** 17 Eylül 2026 (git log + ls + psql çıktısı)
