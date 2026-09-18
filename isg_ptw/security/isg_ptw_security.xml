@@ -1,40 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Record Rules for PTW -->
+    <!-- isg.ptw Record Rules (workplace_id var) -->
     <record id="isg_ptw_rule_readonly" model="ir.rule">
-        <field name="name">isg.ptw: Read-only</field>
+        <field name="name">isg.ptw: Read-only (workplace/company)</field>
         <field name="model_id" ref="isg_ptw.model_isg_ptw"/>
         <field name="groups" eval="[(4, ref('isg_security.group_isg_readonly'))]"/>
         <field name="perm_read">1</field>
         <field name="perm_write">0</field>
         <field name="perm_create">0</field>
         <field name="perm_unlink">0</field>
-        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="domain_force">[('workplace_id', 'in', user.isg_workplace_ids.ids)] if user.isg_workplace_ids else [('company_id', 'in', company_ids)]</field>
     </record>
 
     <record id="isg_ptw_rule_expert" model="ir.rule">
-        <field name="name">isg.ptw: Expert</field>
+        <field name="name">isg.ptw: Expert (workplace/company)</field>
         <field name="model_id" ref="isg_ptw.model_isg_ptw"/>
         <field name="groups" eval="[(4, ref('isg_security.group_isg_expert'))]"/>
         <field name="perm_read">1</field>
         <field name="perm_write">1</field>
         <field name="perm_create">1</field>
         <field name="perm_unlink">0</field>
-        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="domain_force">[('workplace_id', 'in', user.isg_workplace_ids.ids)] if user.isg_workplace_ids else [('company_id', 'in', company_ids)]</field>
     </record>
 
     <record id="isg_ptw_rule_manager" model="ir.rule">
-        <field name="name">isg.ptw: Manager</field>
+        <field name="name">isg.ptw: Manager (workplace/company)</field>
         <field name="model_id" ref="isg_ptw.model_isg_ptw"/>
         <field name="groups" eval="[(4, ref('isg_security.group_isg_manager'))]"/>
         <field name="perm_read">1</field>
         <field name="perm_write">1</field>
         <field name="perm_create">1</field>
         <field name="perm_unlink">1</field>
-        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="domain_force">[('workplace_id', 'in', user.isg_workplace_ids.ids)] if user.isg_workplace_ids else [('company_id', 'in', company_ids)]</field>
     </record>
 
-    <!-- Record Rules for Precondition -->
+    <!-- isg.ptw.precondition Record Rules (izin türü şablonu, işyerine bağlı değil — katalog) -->
     <record id="isg_ptw_precondition_rule_readonly" model="ir.rule">
         <field name="name">isg.ptw.precondition: Read-only</field>
         <field name="model_id" ref="isg_ptw.model_isg_ptw_precondition"/>
@@ -68,37 +68,37 @@
         <field name="domain_force">[(1, '=', 1)]</field>
     </record>
 
-    <!-- Record Rules for LOTO -->
+    <!-- isg.loto Record Rules (ptw_id üzerinden workplace'e bağlı) -->
     <record id="isg_loto_rule_readonly" model="ir.rule">
-        <field name="name">isg.loto: Read-only</field>
+        <field name="name">isg.loto: Read-only (workplace/company via ptw)</field>
         <field name="model_id" ref="isg_ptw.model_isg_loto"/>
         <field name="groups" eval="[(4, ref('isg_security.group_isg_readonly'))]"/>
         <field name="perm_read">1</field>
         <field name="perm_write">0</field>
         <field name="perm_create">0</field>
         <field name="perm_unlink">0</field>
-        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="domain_force">[('ptw_id.workplace_id', 'in', user.isg_workplace_ids.ids)] if user.isg_workplace_ids else [('ptw_id.company_id', 'in', company_ids)]</field>
     </record>
 
     <record id="isg_loto_rule_expert" model="ir.rule">
-        <field name="name">isg.loto: Expert</field>
+        <field name="name">isg.loto: Expert (workplace/company via ptw)</field>
         <field name="model_id" ref="isg_ptw.model_isg_loto"/>
         <field name="groups" eval="[(4, ref('isg_security.group_isg_expert'))]"/>
         <field name="perm_read">1</field>
         <field name="perm_write">1</field>
         <field name="perm_create">1</field>
         <field name="perm_unlink">0</field>
-        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="domain_force">[('ptw_id.workplace_id', 'in', user.isg_workplace_ids.ids)] if user.isg_workplace_ids else [('ptw_id.company_id', 'in', company_ids)]</field>
     </record>
 
     <record id="isg_loto_rule_manager" model="ir.rule">
-        <field name="name">isg.loto: Manager</field>
+        <field name="name">isg.loto: Manager (workplace/company via ptw)</field>
         <field name="model_id" ref="isg_ptw.model_isg_loto"/>
         <field name="groups" eval="[(4, ref('isg_security.group_isg_manager'))]"/>
         <field name="perm_read">1</field>
         <field name="perm_write">1</field>
         <field name="perm_create">1</field>
         <field name="perm_unlink">1</field>
-        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="domain_force">[('ptw_id.workplace_id', 'in', user.isg_workplace_ids.ids)] if user.isg_workplace_ids else [('ptw_id.company_id', 'in', company_ids)]</field>
     </record>
 </odoo>
