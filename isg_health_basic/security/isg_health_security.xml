@@ -1,5 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Global record rules for isg.employee.health -->
-    <!-- TODO: Implement workplace-based filtering after KVKK compliance review -->
+    <!-- isg.employee.health Record Rules (workplace/company, KVKK) -->
+    <record id="isg_health_rule_readonly" model="ir.rule">
+        <field name="name">isg.employee.health: Read-only (workplace/company)</field>
+        <field name="model_id" ref="model_isg_employee_health"/>
+        <field name="groups" eval="[(4, ref('isg_security.group_isg_readonly'))]"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+        <field name="domain_force">[('workplace_id', 'in', user.isg_workplace_ids.ids)] if user.isg_workplace_ids else [('employee_id.company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="isg_health_rule_expert" model="ir.rule">
+        <field name="name">isg.employee.health: Expert (workplace/company)</field>
+        <field name="model_id" ref="model_isg_employee_health"/>
+        <field name="groups" eval="[(4, ref('isg_security.group_isg_expert'))]"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+        <field name="domain_force">[('workplace_id', 'in', user.isg_workplace_ids.ids)] if user.isg_workplace_ids else [('employee_id.company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="isg_health_rule_manager" model="ir.rule">
+        <field name="name">isg.employee.health: Manager (workplace/company)</field>
+        <field name="model_id" ref="model_isg_employee_health"/>
+        <field name="groups" eval="[(4, ref('isg_security.group_isg_manager'))]"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+        <field name="domain_force">[('workplace_id', 'in', user.isg_workplace_ids.ids)] if user.isg_workplace_ids else [('employee_id.company_id', 'in', company_ids)]</field>
+    </record>
+
+    <!-- isg.employee.health.audit Record Rules (via linked health record's workplace/company) -->
+    <record id="isg_health_audit_rule_readonly" model="ir.rule">
+        <field name="name">isg.employee.health.audit: Read-only (workplace/company via health)</field>
+        <field name="model_id" ref="model_isg_employee_health_audit"/>
+        <field name="groups" eval="[(4, ref('isg_security.group_isg_readonly'))]"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+        <field name="domain_force">[('employee_health_id.workplace_id', 'in', user.isg_workplace_ids.ids)] if user.isg_workplace_ids else [('employee_health_id.employee_id.company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="isg_health_audit_rule_expert" model="ir.rule">
+        <field name="name">isg.employee.health.audit: Expert (workplace/company via health)</field>
+        <field name="model_id" ref="model_isg_employee_health_audit"/>
+        <field name="groups" eval="[(4, ref('isg_security.group_isg_expert'))]"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+        <field name="domain_force">[('employee_health_id.workplace_id', 'in', user.isg_workplace_ids.ids)] if user.isg_workplace_ids else [('employee_health_id.employee_id.company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="isg_health_audit_rule_manager" model="ir.rule">
+        <field name="name">isg.employee.health.audit: Manager (workplace/company via health)</field>
+        <field name="model_id" ref="model_isg_employee_health_audit"/>
+        <field name="groups" eval="[(4, ref('isg_security.group_isg_manager'))]"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+        <field name="domain_force">[('employee_health_id.workplace_id', 'in', user.isg_workplace_ids.ids)] if user.isg_workplace_ids else [('employee_health_id.employee_id.company_id', 'in', company_ids)]</field>
+    </record>
 </odoo>

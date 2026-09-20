@@ -15,7 +15,8 @@ class IsgEmployeeHealth(models.Model):
         'hr.employee', string='Çalışan', required=True, ondelete='restrict', tracking=True,
     )
     workplace_id = fields.Many2one(
-        'isg.workplace', string='Çalışma Yeri', compute='_compute_workplace_id', readonly=True,
+        'isg.workplace', string='Çalışma Yeri', compute='_compute_workplace_id',
+        store=True, readonly=True,
     )
 
     # ─── Muayene Bilgileri ───────────────────────────────────
