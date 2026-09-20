@@ -1,11 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <data>
-        <record id="isg_risk_assessment_rule_company" model="ir.rule">
-            <field name="name">Risk Değerlendirmesi — Şirket Erişim Kuralı</field>
-            <field name="model_id" ref="isg_risk.model_isg_risk_assessment"/>
-            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
-            <field name="groups" eval="[(4, ref('isg_security.group_isg_readonly'))]"/>
-        </record>
-    </data>
+    <!-- isg.risk.assessment Record Rules (workplace_id var) -->
+    <record id="isg_risk_assessment_rule_readonly" model="ir.rule">
+        <field name="name">Risk Değerlendirmesi: Readonly (workplace/company)</field>
+        <field name="model_id" ref="isg_risk.model_isg_risk_assessment"/>
+        <field name="groups" eval="[(4, ref('isg_security.group_isg_readonly'))]"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+        <field name="domain_force">[('workplace_id', 'in', user.isg_workplace_ids.ids)] if user.isg_workplace_ids else [('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="isg_risk_assessment_rule_expert" model="ir.rule">
+        <field name="name">Risk Değerlendirmesi: Expert (workplace/company)</field>
+        <field name="model_id" ref="isg_risk.model_isg_risk_assessment"/>
+        <field name="groups" eval="[(4, ref('isg_security.group_isg_expert'))]"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+        <field name="domain_force">[('workplace_id', 'in', user.isg_workplace_ids.ids)] if user.isg_workplace_ids else [('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="isg_risk_assessment_rule_manager" model="ir.rule">
+        <field name="name">Risk Değerlendirmesi: Manager (workplace/company)</field>
+        <field name="model_id" ref="isg_risk.model_isg_risk_assessment"/>
+        <field name="groups" eval="[(4, ref('isg_security.group_isg_manager'))]"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+        <field name="domain_force">[('workplace_id', 'in', user.isg_workplace_ids.ids)] if user.isg_workplace_ids else [('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <!-- isg.risk.line Record Rules (sadece company_id var, related) -->
+    <record id="isg_risk_line_rule_readonly" model="ir.rule">
+        <field name="name">Risk Satırı: Readonly (company)</field>
+        <field name="model_id" ref="isg_risk.model_isg_risk_line"/>
+        <field name="groups" eval="[(4, ref('isg_security.group_isg_readonly'))]"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="isg_risk_line_rule_expert" model="ir.rule">
+        <field name="name">Risk Satırı: Expert (company)</field>
+        <field name="model_id" ref="isg_risk.model_isg_risk_line"/>
+        <field name="groups" eval="[(4, ref('isg_security.group_isg_expert'))]"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="isg_risk_line_rule_manager" model="ir.rule">
+        <field name="name">Risk Satırı: Manager (company)</field>
+        <field name="model_id" ref="isg_risk.model_isg_risk_line"/>
+        <field name="groups" eval="[(4, ref('isg_security.group_isg_manager'))]"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
 </odoo>

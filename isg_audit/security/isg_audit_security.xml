@@ -1,11 +1,104 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <data>
-        <record id="isg_audit_rule_company" model="ir.rule">
-            <field name="name">Denetim — Şirket Erişim Kuralı</field>
-            <field name="model_id" ref="isg_audit.model_isg_audit"/>
-            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
-            <field name="groups" eval="[(4, ref('isg_security.group_isg_readonly'))]"/>
-        </record>
-    </data>
+    <!-- isg.audit Record Rules (workplace_id var) -->
+    <record id="isg_audit_rule_readonly" model="ir.rule">
+        <field name="name">Denetim: Readonly (workplace/company)</field>
+        <field name="model_id" ref="isg_audit.model_isg_audit"/>
+        <field name="groups" eval="[(4, ref('isg_security.group_isg_readonly'))]"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+        <field name="domain_force">[('workplace_id', 'in', user.isg_workplace_ids.ids)] if user.isg_workplace_ids else [('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="isg_audit_rule_expert" model="ir.rule">
+        <field name="name">Denetim: Expert (workplace/company)</field>
+        <field name="model_id" ref="isg_audit.model_isg_audit"/>
+        <field name="groups" eval="[(4, ref('isg_security.group_isg_expert'))]"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+        <field name="domain_force">[('workplace_id', 'in', user.isg_workplace_ids.ids)] if user.isg_workplace_ids else [('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="isg_audit_rule_manager" model="ir.rule">
+        <field name="name">Denetim: Manager (workplace/company)</field>
+        <field name="model_id" ref="isg_audit.model_isg_audit"/>
+        <field name="groups" eval="[(4, ref('isg_security.group_isg_manager'))]"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+        <field name="domain_force">[('workplace_id', 'in', user.isg_workplace_ids.ids)] if user.isg_workplace_ids else [('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <!-- isg.audit.finding Record Rules (workplace_id var, related+store) -->
+    <record id="isg_audit_finding_rule_readonly" model="ir.rule">
+        <field name="name">Denetim Bulgusu: Readonly (workplace/company)</field>
+        <field name="model_id" ref="isg_audit.model_isg_audit_finding"/>
+        <field name="groups" eval="[(4, ref('isg_security.group_isg_readonly'))]"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+        <field name="domain_force">[('workplace_id', 'in', user.isg_workplace_ids.ids)] if user.isg_workplace_ids else [('audit_id.company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="isg_audit_finding_rule_expert" model="ir.rule">
+        <field name="name">Denetim Bulgusu: Expert (workplace/company)</field>
+        <field name="model_id" ref="isg_audit.model_isg_audit_finding"/>
+        <field name="groups" eval="[(4, ref('isg_security.group_isg_expert'))]"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+        <field name="domain_force">[('workplace_id', 'in', user.isg_workplace_ids.ids)] if user.isg_workplace_ids else [('audit_id.company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="isg_audit_finding_rule_manager" model="ir.rule">
+        <field name="name">Denetim Bulgusu: Manager (workplace/company)</field>
+        <field name="model_id" ref="isg_audit.model_isg_audit_finding"/>
+        <field name="groups" eval="[(4, ref('isg_security.group_isg_manager'))]"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+        <field name="domain_force">[('workplace_id', 'in', user.isg_workplace_ids.ids)] if user.isg_workplace_ids else [('audit_id.company_id', 'in', company_ids)]</field>
+    </record>
+
+    <!-- isg.audit.template Record Rules (katalog, sadece company_id) -->
+    <record id="isg_audit_template_rule_readonly" model="ir.rule">
+        <field name="name">Denetim Şablonu: Readonly</field>
+        <field name="model_id" ref="isg_audit.model_isg_audit_template"/>
+        <field name="groups" eval="[(4, ref('isg_security.group_isg_readonly'))]"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+
+    <record id="isg_audit_template_rule_expert" model="ir.rule">
+        <field name="name">Denetim Şablonu: Expert</field>
+        <field name="model_id" ref="isg_audit.model_isg_audit_template"/>
+        <field name="groups" eval="[(4, ref('isg_security.group_isg_expert'))]"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+
+    <record id="isg_audit_template_rule_manager" model="ir.rule">
+        <field name="name">Denetim Şablonu: Manager</field>
+        <field name="model_id" ref="isg_audit.model_isg_audit_template"/>
+        <field name="groups" eval="[(4, ref('isg_security.group_isg_manager'))]"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
 </odoo>
