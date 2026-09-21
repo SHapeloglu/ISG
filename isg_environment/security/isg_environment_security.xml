@@ -1,28 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data noupdate="0">
-        
-        <!-- isg.waste.storage: Sadece kendi işyerinin verileri görülsün -->
-        <record model="ir.rule" id="waste_storage_workplace_rule">
-            <field name="name">Atık Depolama - İşyeri Erişim</field>
+
+        <!-- isg.waste.storage Record Rules (workplace_id var) -->
+        <record model="ir.rule" id="waste_storage_rule_readonly">
+            <field name="name">Atık Depolama: Readonly (workplace/company)</field>
             <field name="model_id" ref="isg_environment.model_isg_waste_storage"/>
-            <field name="domain_force">[('workplace_id.company_id', 'in', user.company_ids.ids)]</field>
-            <field name="perm_create" eval="True"/>
-            <field name="perm_write" eval="True"/>
-            <field name="perm_read" eval="True"/>
-            <field name="perm_unlink" eval="False"/>
+            <field name="groups" eval="[(4, ref('isg_security.group_isg_readonly'))]"/>
+            <field name="perm_read">1</field>
+            <field name="perm_write">0</field>
+            <field name="perm_create">0</field>
+            <field name="perm_unlink">0</field>
+            <field name="domain_force">[('workplace_id', 'in', user.isg_workplace_ids.ids)] if user.isg_workplace_ids else [('workplace_id.company_id', 'in', company_ids)]</field>
         </record>
-        
-        <!-- isg.waste.disposal: Sadece kendi işyerinin verileri -->
-        <record model="ir.rule" id="waste_disposal_workplace_rule">
-            <field name="name">Atık Bertaraf - İşyeri Erişim</field>
+
+        <record model="ir.rule" id="waste_storage_rule_expert">
+            <field name="name">Atık Depolama: Expert (workplace/company)</field>
+            <field name="model_id" ref="isg_environment.model_isg_waste_storage"/>
+            <field name="groups" eval="[(4, ref('isg_security.group_isg_expert'))]"/>
+            <field name="perm_read">1</field>
+            <field name="perm_write">1</field>
+            <field name="perm_create">1</field>
+            <field name="perm_unlink">0</field>
+            <field name="domain_force">[('workplace_id', 'in', user.isg_workplace_ids.ids)] if user.isg_workplace_ids else [('workplace_id.company_id', 'in', company_ids)]</field>
+        </record>
+
+        <record model="ir.rule" id="waste_storage_rule_manager">
+            <field name="name">Atık Depolama: Manager (workplace/company)</field>
+            <field name="model_id" ref="isg_environment.model_isg_waste_storage"/>
+            <field name="groups" eval="[(4, ref('isg_security.group_isg_manager'))]"/>
+            <field name="perm_read">1</field>
+            <field name="perm_write">1</field>
+            <field name="perm_create">1</field>
+            <field name="perm_unlink">1</field>
+            <field name="domain_force">[('workplace_id', 'in', user.isg_workplace_ids.ids)] if user.isg_workplace_ids else [('workplace_id.company_id', 'in', company_ids)]</field>
+        </record>
+
+        <!-- isg.waste.disposal Record Rules (workplace_id var) -->
+        <record model="ir.rule" id="waste_disposal_rule_readonly">
+            <field name="name">Atık Bertaraf: Readonly (workplace/company)</field>
             <field name="model_id" ref="isg_environment.model_isg_waste_disposal"/>
-            <field name="domain_force">[('workplace_id.company_id', 'in', user.company_ids.ids)]</field>
-            <field name="perm_create" eval="True"/>
-            <field name="perm_write" eval="True"/>
-            <field name="perm_read" eval="True"/>
-            <field name="perm_unlink" eval="False"/>
+            <field name="groups" eval="[(4, ref('isg_security.group_isg_readonly'))]"/>
+            <field name="perm_read">1</field>
+            <field name="perm_write">0</field>
+            <field name="perm_create">0</field>
+            <field name="perm_unlink">0</field>
+            <field name="domain_force">[('workplace_id', 'in', user.isg_workplace_ids.ids)] if user.isg_workplace_ids else [('workplace_id.company_id', 'in', company_ids)]</field>
         </record>
-        
+
+        <record model="ir.rule" id="waste_disposal_rule_expert">
+            <field name="name">Atık Bertaraf: Expert (workplace/company)</field>
+            <field name="model_id" ref="isg_environment.model_isg_waste_disposal"/>
+            <field name="groups" eval="[(4, ref('isg_security.group_isg_expert'))]"/>
+            <field name="perm_read">1</field>
+            <field name="perm_write">1</field>
+            <field name="perm_create">1</field>
+            <field name="perm_unlink">0</field>
+            <field name="domain_force">[('workplace_id', 'in', user.isg_workplace_ids.ids)] if user.isg_workplace_ids else [('workplace_id.company_id', 'in', company_ids)]</field>
+        </record>
+
+        <record model="ir.rule" id="waste_disposal_rule_manager">
+            <field name="name">Atık Bertaraf: Manager (workplace/company)</field>
+            <field name="model_id" ref="isg_environment.model_isg_waste_disposal"/>
+            <field name="groups" eval="[(4, ref('isg_security.group_isg_manager'))]"/>
+            <field name="perm_read">1</field>
+            <field name="perm_write">1</field>
+            <field name="perm_create">1</field>
+            <field name="perm_unlink">1</field>
+            <field name="domain_force">[('workplace_id', 'in', user.isg_workplace_ids.ids)] if user.isg_workplace_ids else [('workplace_id.company_id', 'in', company_ids)]</field>
+        </record>
+
     </data>
 </odoo>

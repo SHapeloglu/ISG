@@ -10,6 +10,7 @@
         'isg_legislation',
         'isg_capa',
         'isg_document',
+        'isg_security',
     ],
     'data': [
         'security/ir.model.access.csv',
