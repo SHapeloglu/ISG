@@ -7,6 +7,7 @@
     'depends': ['hr', 'isg_core', 'isg_security', 'isg_document'],
     'data': [
         'security/ir.model.access.csv',
+        'security/record_rules.xml',
         'views/isg_hr_employee_views.xml',
     ],
     'installable': True,

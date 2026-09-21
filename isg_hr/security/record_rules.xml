@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- isg.seg Record Rules (workplace_id var) -->
+    <record id="isg_seg_rule_readonly" model="ir.rule">
+        <field name="name">SEG: Readonly (workplace/company)</field>
+        <field name="model_id" ref="isg_hr.model_isg_seg"/>
+        <field name="groups" eval="[(4, ref('isg_security.group_isg_readonly'))]"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+        <field name="domain_force">[('workplace_id', 'in', user.isg_workplace_ids.ids)] if user.isg_workplace_ids else [('workplace_id.company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="isg_seg_rule_expert" model="ir.rule">
+        <field name="name">SEG: Expert (workplace/company)</field>
+        <field name="model_id" ref="isg_hr.model_isg_seg"/>
+        <field name="groups" eval="[(4, ref('isg_security.group_isg_expert'))]"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+        <field name="domain_force">[('workplace_id', 'in', user.isg_workplace_ids.ids)] if user.isg_workplace_ids else [('workplace_id.company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="isg_seg_rule_manager" model="ir.rule">
+        <field name="name">SEG: Manager (workplace/company)</field>
+        <field name="model_id" ref="isg_hr.model_isg_seg"/>
+        <field name="groups" eval="[(4, ref('isg_security.group_isg_manager'))]"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+        <field name="domain_force">[('workplace_id', 'in', user.isg_workplace_ids.ids)] if user.isg_workplace_ids else [('workplace_id.company_id', 'in', company_ids)]</field>
+    </record>
+
+    <!-- hr.employee Record Rules (isg_workplace_id var, sadece isg_security gruplarını etkiler) -->
+    <record id="isg_hr_employee_rule_readonly" model="ir.rule">
+        <field name="name">Çalışan (İSG): Readonly (workplace/company)</field>
+        <field name="model_id" ref="hr.model_hr_employee"/>
+        <field name="groups" eval="[(4, ref('isg_security.group_isg_readonly'))]"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+        <field name="domain_force">[('isg_workplace_id', 'in', user.isg_workplace_ids.ids)] if user.isg_workplace_ids else [('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="isg_hr_employee_rule_expert" model="ir.rule">
+        <field name="name">Çalışan (İSG): Expert (workplace/company)</field>
+        <field name="model_id" ref="hr.model_hr_employee"/>
+        <field name="groups" eval="[(4, ref('isg_security.group_isg_expert'))]"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+        <field name="domain_force">[('isg_workplace_id', 'in', user.isg_workplace_ids.ids)] if user.isg_workplace_ids else [('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="isg_hr_employee_rule_manager" model="ir.rule">
+        <field name="name">Çalışan (İSG): Manager (workplace/company)</field>
+        <field name="model_id" ref="hr.model_hr_employee"/>
+        <field name="groups" eval="[(4, ref('isg_security.group_isg_manager'))]"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+        <field name="domain_force">[('isg_workplace_id', 'in', user.isg_workplace_ids.ids)] if user.isg_workplace_ids else [('company_id', 'in', company_ids)]</field>
+    </record>
+</odoo>
