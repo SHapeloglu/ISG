@@ -14,9 +14,10 @@ isg_compliance modülündeki uygunsuzluklara bağlı olası ceza hesaplaması.
 * isg.penalty — Fiili/olası ceza kaydı (compliance kaydına bağlı)
     """,
     'author': 'ISG Platform',
-    'depends': ['base', 'isg_core', 'isg_compliance'],
+    'depends': ['base', 'isg_core', 'isg_compliance', 'isg_security'],
     'data': [
         'security/ir.model.access.csv',
+        'security/record_rules.xml',
         'data/isg_penalty_sequence.xml',
         'data/isg_penalty_tariff_data.xml',
         'views/isg_penalty_tariff_views.xml',
