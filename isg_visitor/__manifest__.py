@@ -8,6 +8,7 @@
     'depends': ['isg_core', 'isg_security', 'mail'],
     'data': [
         'security/ir.model.access.csv',
+        'security/record_rules.xml',
         'data/isg_visitor_data.xml',
         'views/isg_visitor_views.xml',
         'views/menu.xml',
