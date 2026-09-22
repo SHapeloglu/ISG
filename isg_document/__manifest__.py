@@ -15,6 +15,7 @@
     'depends': ['base', 'mail', 'isg_core', 'isg_security'],
     'data': [
         'security/ir.model.access.csv',
+        'security/record_rules.xml',
         'views/isg_document_views.xml',
     ],
     'installable': True,
