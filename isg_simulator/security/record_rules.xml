@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- isg.simulator.run Record Rules (workplace_id + stored related company_id var) -->
+    <record id="isg_simulator_run_rule_readonly" model="ir.rule">
+        <field name="name">Simülasyon: Readonly (workplace/company)</field>
+        <field name="model_id" ref="isg_simulator.model_isg_simulator_run"/>
+        <field name="groups" eval="[(4, ref('isg_security.group_isg_readonly'))]"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+        <field name="domain_force">[('workplace_id', 'in', user.isg_workplace_ids.ids)] if user.isg_workplace_ids else [('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="isg_simulator_run_rule_expert" model="ir.rule">
+        <field name="name">Simülasyon: Expert (workplace/company)</field>
+        <field name="model_id" ref="isg_simulator.model_isg_simulator_run"/>
+        <field name="groups" eval="[(4, ref('isg_security.group_isg_expert'))]"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+        <field name="domain_force">[('workplace_id', 'in', user.isg_workplace_ids.ids)] if user.isg_workplace_ids else [('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="isg_simulator_run_rule_manager" model="ir.rule">
+        <field name="name">Simülasyon: Manager (workplace/company)</field>
+        <field name="model_id" ref="isg_simulator.model_isg_simulator_run"/>
+        <field name="groups" eval="[(4, ref('isg_security.group_isg_manager'))]"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+        <field name="domain_force">[('workplace_id', 'in', user.isg_workplace_ids.ids)] if user.isg_workplace_ids else [('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <!-- isg.simulator.finding Record Rules (run_id.workplace_id üzerinden) -->
+    <record id="isg_simulator_finding_rule_readonly" model="ir.rule">
+        <field name="name">Simülasyon Bulgusu: Readonly (workplace/company)</field>
+        <field name="model_id" ref="isg_simulator.model_isg_simulator_finding"/>
+        <field name="groups" eval="[(4, ref('isg_security.group_isg_readonly'))]"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+        <field name="domain_force">[('run_id.workplace_id', 'in', user.isg_workplace_ids.ids)] if user.isg_workplace_ids else [('run_id.company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="isg_simulator_finding_rule_expert" model="ir.rule">
+        <field name="name">Simülasyon Bulgusu: Expert (workplace/company)</field>
+        <field name="model_id" ref="isg_simulator.model_isg_simulator_finding"/>
+        <field name="groups" eval="[(4, ref('isg_security.group_isg_expert'))]"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+        <field name="domain_force">[('run_id.workplace_id', 'in', user.isg_workplace_ids.ids)] if user.isg_workplace_ids else [('run_id.company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="isg_simulator_finding_rule_manager" model="ir.rule">
+        <field name="name">Simülasyon Bulgusu: Manager (workplace/company)</field>
+        <field name="model_id" ref="isg_simulator.model_isg_simulator_finding"/>
+        <field name="groups" eval="[(4, ref('isg_security.group_isg_manager'))]"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+        <field name="domain_force">[('run_id.workplace_id', 'in', user.isg_workplace_ids.ids)] if user.isg_workplace_ids else [('run_id.company_id', 'in', company_ids)]</field>
+    </record>
+</odoo>

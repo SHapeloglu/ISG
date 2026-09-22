@@ -12,9 +12,11 @@
         'isg_legislation',
         'isg_compliance',
         'isg_penalty',
+        'isg_security',
     ],
     'data': [
         'security/ir.model.access.csv',
+        'security/record_rules.xml',
         'views/isg_simulator_run_views.xml',
         'data/isg_simulator_data.xml',
     ],
