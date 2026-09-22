@@ -7,6 +7,7 @@
     'depends': ['hr', 'isg_core', 'isg_security', 'isg_document', 'isg_hr', 'isg_base'],
     'data': [
         'security/ir.model.access.csv',
+        'security/record_rules.xml',
         'data/isg_training_type_data.xml',
         'data/isg_training_cron.xml',
         'views/isg_training_type_views.xml',

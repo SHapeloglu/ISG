@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- isg.training.type kasıtlı olarak hariç: mevzuat referans katalog (eğitim türleri), workplace'e bağlı değil -->
+
+    <!-- isg.training.plan Record Rules (workplace_id + company_id var) -->
+    <record id="isg_training_plan_rule_readonly" model="ir.rule">
+        <field name="name">Eğitim Planı: Readonly (workplace/company)</field>
+        <field name="model_id" ref="isg_training.model_isg_training_plan"/>
+        <field name="groups" eval="[(4, ref('isg_security.group_isg_readonly'))]"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+        <field name="domain_force">[('workplace_id', 'in', user.isg_workplace_ids.ids)] if user.isg_workplace_ids else [('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="isg_training_plan_rule_expert" model="ir.rule">
+        <field name="name">Eğitim Planı: Expert (workplace/company)</field>
+        <field name="model_id" ref="isg_training.model_isg_training_plan"/>
+        <field name="groups" eval="[(4, ref('isg_security.group_isg_expert'))]"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+        <field name="domain_force">[('workplace_id', 'in', user.isg_workplace_ids.ids)] if user.isg_workplace_ids else [('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="isg_training_plan_rule_manager" model="ir.rule">
+        <field name="name">Eğitim Planı: Manager (workplace/company)</field>
+        <field name="model_id" ref="isg_training.model_isg_training_plan"/>
+        <field name="groups" eval="[(4, ref('isg_security.group_isg_manager'))]"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+        <field name="domain_force">[('workplace_id', 'in', user.isg_workplace_ids.ids)] if user.isg_workplace_ids else [('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <!-- isg.training.plan.line Record Rules (plan_id.workplace_id üzerinden) -->
+    <record id="isg_training_plan_line_rule_readonly" model="ir.rule">
+        <field name="name">Eğitim Planı Kalemi: Readonly (workplace/company)</field>
+        <field name="model_id" ref="isg_training.model_isg_training_plan_line"/>
+        <field name="groups" eval="[(4, ref('isg_security.group_isg_readonly'))]"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+        <field name="domain_force">[('plan_id.workplace_id', 'in', user.isg_workplace_ids.ids)] if user.isg_workplace_ids else [('plan_id.company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="isg_training_plan_line_rule_expert" model="ir.rule">
+        <field name="name">Eğitim Planı Kalemi: Expert (workplace/company)</field>
+        <field name="model_id" ref="isg_training.model_isg_training_plan_line"/>
+        <field name="groups" eval="[(4, ref('isg_security.group_isg_expert'))]"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+        <field name="domain_force">[('plan_id.workplace_id', 'in', user.isg_workplace_ids.ids)] if user.isg_workplace_ids else [('plan_id.company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="isg_training_plan_line_rule_manager" model="ir.rule">
+        <field name="name">Eğitim Planı Kalemi: Manager (workplace/company)</field>
+        <field name="model_id" ref="isg_training.model_isg_training_plan_line"/>
+        <field name="groups" eval="[(4, ref('isg_security.group_isg_manager'))]"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+        <field name="domain_force">[('plan_id.workplace_id', 'in', user.isg_workplace_ids.ids)] if user.isg_workplace_ids else [('plan_id.company_id', 'in', company_ids)]</field>
+    </record>
+
+    <!-- isg.training.record Record Rules (workplace_id + company_id var) -->
+    <record id="isg_training_record_rule_readonly" model="ir.rule">
+        <field name="name">Eğitim Kaydı: Readonly (workplace/company)</field>
+        <field name="model_id" ref="isg_training.model_isg_training_record"/>
+        <field name="groups" eval="[(4, ref('isg_security.group_isg_readonly'))]"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+        <field name="domain_force">[('workplace_id', 'in', user.isg_workplace_ids.ids)] if user.isg_workplace_ids else [('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="isg_training_record_rule_expert" model="ir.rule">
+        <field name="name">Eğitim Kaydı: Expert (workplace/company)</field>
+        <field name="model_id" ref="isg_training.model_isg_training_record"/>
+        <field name="groups" eval="[(4, ref('isg_security.group_isg_expert'))]"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+        <field name="domain_force">[('workplace_id', 'in', user.isg_workplace_ids.ids)] if user.isg_workplace_ids else [('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="isg_training_record_rule_manager" model="ir.rule">
+        <field name="name">Eğitim Kaydı: Manager (workplace/company)</field>
+        <field name="model_id" ref="isg_training.model_isg_training_record"/>
+        <field name="groups" eval="[(4, ref('isg_security.group_isg_manager'))]"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+        <field name="domain_force">[('workplace_id', 'in', user.isg_workplace_ids.ids)] if user.isg_workplace_ids else [('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <!-- isg.training.attendee Record Rules (stored related workplace_id var, company_id yok) -->
+    <record id="isg_training_attendee_rule_readonly" model="ir.rule">
+        <field name="name">Eğitim Katılımcısı: Readonly (workplace/company)</field>
+        <field name="model_id" ref="isg_training.model_isg_training_attendee"/>
+        <field name="groups" eval="[(4, ref('isg_security.group_isg_readonly'))]"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+        <field name="domain_force">[('workplace_id', 'in', user.isg_workplace_ids.ids)] if user.isg_workplace_ids else [('workplace_id.company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="isg_training_attendee_rule_expert" model="ir.rule">
+        <field name="name">Eğitim Katılımcısı: Expert (workplace/company)</field>
+        <field name="model_id" ref="isg_training.model_isg_training_attendee"/>
+        <field name="groups" eval="[(4, ref('isg_security.group_isg_expert'))]"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+        <field name="domain_force">[('workplace_id', 'in', user.isg_workplace_ids.ids)] if user.isg_workplace_ids else [('workplace_id.company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="isg_training_attendee_rule_manager" model="ir.rule">
+        <field name="name">Eğitim Katılımcısı: Manager (workplace/company)</field>
+        <field name="model_id" ref="isg_training.model_isg_training_attendee"/>
+        <field name="groups" eval="[(4, ref('isg_security.group_isg_manager'))]"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+        <field name="domain_force">[('workplace_id', 'in', user.isg_workplace_ids.ids)] if user.isg_workplace_ids else [('workplace_id.company_id', 'in', company_ids)]</field>
+    </record>
+</odoo>
