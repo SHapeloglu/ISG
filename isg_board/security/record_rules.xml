@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- isg.board.member Record Rules (workplace_id var) -->
+    <record id="isg_board_member_rule_readonly" model="ir.rule">
+        <field name="name">Kurul Üyesi: Readonly (workplace/company)</field>
+        <field name="model_id" ref="isg_board.model_isg_board_member"/>
+        <field name="groups" eval="[(4, ref('isg_security.group_isg_readonly'))]"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+        <field name="domain_force">[('workplace_id', 'in', user.isg_workplace_ids.ids)] if user.isg_workplace_ids else [('workplace_id.company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="isg_board_member_rule_expert" model="ir.rule">
+        <field name="name">Kurul Üyesi: Expert (workplace/company)</field>
+        <field name="model_id" ref="isg_board.model_isg_board_member"/>
+        <field name="groups" eval="[(4, ref('isg_security.group_isg_expert'))]"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+        <field name="domain_force">[('workplace_id', 'in', user.isg_workplace_ids.ids)] if user.isg_workplace_ids else [('workplace_id.company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="isg_board_member_rule_manager" model="ir.rule">
+        <field name="name">Kurul Üyesi: Manager (workplace/company)</field>
+        <field name="model_id" ref="isg_board.model_isg_board_member"/>
+        <field name="groups" eval="[(4, ref('isg_security.group_isg_manager'))]"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+        <field name="domain_force">[('workplace_id', 'in', user.isg_workplace_ids.ids)] if user.isg_workplace_ids else [('workplace_id.company_id', 'in', company_ids)]</field>
+    </record>
+
+    <!-- isg.board.meeting Record Rules (workplace_id var) -->
+    <record id="isg_board_meeting_rule_readonly" model="ir.rule">
+        <field name="name">Kurul Toplantısı: Readonly (workplace/company)</field>
+        <field name="model_id" ref="isg_board.model_isg_board_meeting"/>
+        <field name="groups" eval="[(4, ref('isg_security.group_isg_readonly'))]"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+        <field name="domain_force">[('workplace_id', 'in', user.isg_workplace_ids.ids)] if user.isg_workplace_ids else [('workplace_id.company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="isg_board_meeting_rule_expert" model="ir.rule">
+        <field name="name">Kurul Toplantısı: Expert (workplace/company)</field>
+        <field name="model_id" ref="isg_board.model_isg_board_meeting"/>
+        <field name="groups" eval="[(4, ref('isg_security.group_isg_expert'))]"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+        <field name="domain_force">[('workplace_id', 'in', user.isg_workplace_ids.ids)] if user.isg_workplace_ids else [('workplace_id.company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="isg_board_meeting_rule_manager" model="ir.rule">
+        <field name="name">Kurul Toplantısı: Manager (workplace/company)</field>
+        <field name="model_id" ref="isg_board.model_isg_board_meeting"/>
+        <field name="groups" eval="[(4, ref('isg_security.group_isg_manager'))]"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+        <field name="domain_force">[('workplace_id', 'in', user.isg_workplace_ids.ids)] if user.isg_workplace_ids else [('workplace_id.company_id', 'in', company_ids)]</field>
+    </record>
+
+    <!-- isg.board.decision Record Rules (stored related meeting_id.workplace_id var) -->
+    <record id="isg_board_decision_rule_readonly" model="ir.rule">
+        <field name="name">Kurul Kararı: Readonly (workplace/company)</field>
+        <field name="model_id" ref="isg_board.model_isg_board_decision"/>
+        <field name="groups" eval="[(4, ref('isg_security.group_isg_readonly'))]"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+        <field name="domain_force">[('workplace_id', 'in', user.isg_workplace_ids.ids)] if user.isg_workplace_ids else [('workplace_id.company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="isg_board_decision_rule_expert" model="ir.rule">
+        <field name="name">Kurul Kararı: Expert (workplace/company)</field>
+        <field name="model_id" ref="isg_board.model_isg_board_decision"/>
+        <field name="groups" eval="[(4, ref('isg_security.group_isg_expert'))]"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+        <field name="domain_force">[('workplace_id', 'in', user.isg_workplace_ids.ids)] if user.isg_workplace_ids else [('workplace_id.company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="isg_board_decision_rule_manager" model="ir.rule">
+        <field name="name">Kurul Kararı: Manager (workplace/company)</field>
+        <field name="model_id" ref="isg_board.model_isg_board_decision"/>
+        <field name="groups" eval="[(4, ref('isg_security.group_isg_manager'))]"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+        <field name="domain_force">[('workplace_id', 'in', user.isg_workplace_ids.ids)] if user.isg_workplace_ids else [('workplace_id.company_id', 'in', company_ids)]</field>
+    </record>
+</odoo>
