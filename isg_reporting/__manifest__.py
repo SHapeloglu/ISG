@@ -28,9 +28,11 @@ ISG Raporlama Modülü
         'isg_ppe',
         'isg_equipment',
         'isg_measurement_hygiene',
+        'isg_security',
     ],
     'data': [
         'security/ir.model.access.csv',
+        'security/record_rules.xml',
         'views/isg_reporting_views.xml',
         'views/isg_reporting_menus.xml',
         'reports/isg_risk_assessment_report.xml',
