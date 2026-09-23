@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- isg.osgb, isg.osgb.expert, isg.osgb.physician: OSGB'nin kendi master verisi
+         (workplace kavramına bağlı değil, sadece company_id izolasyonu) -->
+    <record id="isg_osgb_rule_readonly" model="ir.rule">
+        <field name="name">OSGB: Readonly (company)</field>
+        <field name="model_id" ref="isg_osgb.model_isg_osgb"/>
+        <field name="groups" eval="[(4, ref('isg_security.group_isg_readonly'))]"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="isg_osgb_rule_expert" model="ir.rule">
+        <field name="name">OSGB: Expert (company)</field>
+        <field name="model_id" ref="isg_osgb.model_isg_osgb"/>
+        <field name="groups" eval="[(4, ref('isg_security.group_isg_expert'))]"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="isg_osgb_rule_manager" model="ir.rule">
+        <field name="name">OSGB: Manager (company)</field>
+        <field name="model_id" ref="isg_osgb.model_isg_osgb"/>
+        <field name="groups" eval="[(4, ref('isg_security.group_isg_manager'))]"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="isg_osgb_expert_rule_readonly" model="ir.rule">
+        <field name="name">OSGB Uzmanı: Readonly (company)</field>
+        <field name="model_id" ref="isg_osgb.model_isg_osgb_expert"/>
+        <field name="groups" eval="[(4, ref('isg_security.group_isg_readonly'))]"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="isg_osgb_expert_rule_expert" model="ir.rule">
+        <field name="name">OSGB Uzmanı: Expert (company)</field>
+        <field name="model_id" ref="isg_osgb.model_isg_osgb_expert"/>
+        <field name="groups" eval="[(4, ref('isg_security.group_isg_expert'))]"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="isg_osgb_expert_rule_manager" model="ir.rule">
+        <field name="name">OSGB Uzmanı: Manager (company)</field>
+        <field name="model_id" ref="isg_osgb.model_isg_osgb_expert"/>
+        <field name="groups" eval="[(4, ref('isg_security.group_isg_manager'))]"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="isg_osgb_physician_rule_readonly" model="ir.rule">
+        <field name="name">OSGB Hekimi: Readonly (company)</field>
+        <field name="model_id" ref="isg_osgb.model_isg_osgb_physician"/>
+        <field name="groups" eval="[(4, ref('isg_security.group_isg_readonly'))]"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="isg_osgb_physician_rule_expert" model="ir.rule">
+        <field name="name">OSGB Hekimi: Expert (company)</field>
+        <field name="model_id" ref="isg_osgb.model_isg_osgb_physician"/>
+        <field name="groups" eval="[(4, ref('isg_security.group_isg_expert'))]"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="isg_osgb_physician_rule_manager" model="ir.rule">
+        <field name="name">OSGB Hekimi: Manager (company)</field>
+        <field name="model_id" ref="isg_osgb.model_isg_osgb_physician"/>
+        <field name="groups" eval="[(4, ref('isg_security.group_isg_manager'))]"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <!-- isg.osgb.assignment: köprü model — hem workplace_id (müşteri işyeri) hem company_id (OSGB) var -->
+    <record id="isg_osgb_assignment_rule_readonly" model="ir.rule">
+        <field name="name">OSGB Atama: Readonly (workplace/company)</field>
+        <field name="model_id" ref="isg_osgb.model_isg_osgb_assignment"/>
+        <field name="groups" eval="[(4, ref('isg_security.group_isg_readonly'))]"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+        <field name="domain_force">[('workplace_id', 'in', user.isg_workplace_ids.ids)] if user.isg_workplace_ids else [('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="isg_osgb_assignment_rule_expert" model="ir.rule">
+        <field name="name">OSGB Atama: Expert (workplace/company)</field>
+        <field name="model_id" ref="isg_osgb.model_isg_osgb_assignment"/>
+        <field name="groups" eval="[(4, ref('isg_security.group_isg_expert'))]"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+        <field name="domain_force">[('workplace_id', 'in', user.isg_workplace_ids.ids)] if user.isg_workplace_ids else [('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="isg_osgb_assignment_rule_manager" model="ir.rule">
+        <field name="name">OSGB Atama: Manager (workplace/company)</field>
+        <field name="model_id" ref="isg_osgb.model_isg_osgb_assignment"/>
+        <field name="groups" eval="[(4, ref('isg_security.group_isg_manager'))]"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+        <field name="domain_force">[('workplace_id', 'in', user.isg_workplace_ids.ids)] if user.isg_workplace_ids else [('company_id', 'in', company_ids)]</field>
+    </record>
+</odoo>
