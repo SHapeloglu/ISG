@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- isg_core'un boş group_id bırakılmış (herkese açık) ACL kayıtlarını
+         isg_security.group_isg_readonly'ye kısıtlıyoruz. isg_core, isg_security'e
+         bağımlı OLAMAZ (döngü oluşur), bu yüzden düzeltme burada, doğru bağımlılık
+         yönünde yapılıyor. -->
+    <record id="isg_core.access_isg_workplace_user" model="ir.model.access">
+        <field name="group_id" ref="group_isg_readonly"/>
+    </record>
+    <record id="isg_core.access_isg_site_user" model="ir.model.access">
+        <field name="group_id" ref="group_isg_readonly"/>
+    </record>
+    <record id="isg_core.access_isg_rate_table_user" model="ir.model.access">
+        <field name="group_id" ref="group_isg_readonly"/>
+    </record>
+    <record id="isg_core.access_isg_danger_class_history_user" model="ir.model.access">
+        <field name="group_id" ref="group_isg_readonly"/>
+    </record>
+
+    <!-- isg.workplace.danger_class.history: workplace_id üzerinden, salt okunur log -->
+    <record id="rule_isg_danger_class_history_readonly" model="ir.rule">
+        <field name="name">Tehlike Sınıfı Geçmişi: Readonly (workplace/company)</field>
+        <field name="model_id" ref="isg_core.model_isg_workplace_danger_class_history"/>
+        <field name="groups" eval="[(4, ref('group_isg_readonly'))]"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+        <field name="domain_force">[('workplace_id', 'in', user.isg_workplace_ids.ids)] if user.isg_workplace_ids else [('workplace_id.company_id', 'in', company_ids)]</field>
+    </record>
+</odoo>

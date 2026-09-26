@@ -10,6 +10,7 @@
         'security/isg_groups.xml',
         'security/ir.model.access.csv',
         'security/record_rules.xml',
+        'security/isg_core_access_override.xml',
         'views/res_users_views.xml',
     ],
     'installable': True,

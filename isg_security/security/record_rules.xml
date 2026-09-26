@@ -11,12 +11,7 @@
         <field name="name">İSG İşyeri: Şirket Bazlı Erişim</field>
         <field name="model_id" ref="isg_core.model_isg_workplace"/>
         <field name="groups" eval="[(4, ref('group_isg_readonly'))]"/>
-        <field name="domain_force">
-            ['|',
-                ('company_id', 'in', company_ids),
-                ('id', 'in', user.isg_workplace_ids.ids)
-            ]
-        </field>
+        <field name="domain_force">[('id', 'in', user.isg_workplace_ids.ids)] if user.isg_workplace_ids else [('company_id', 'in', company_ids)]</field>
         <field name="perm_read" eval="True"/>
         <field name="perm_write" eval="False"/>
         <field name="perm_create" eval="False"/>
@@ -45,12 +40,7 @@
         <field name="name">İSG Site: Şirket Bazlı Erişim</field>
         <field name="model_id" ref="isg_core.model_isg_site"/>
         <field name="groups" eval="[(4, ref('group_isg_readonly'))]"/>
-        <field name="domain_force">
-            ['|',
-                ('company_id', 'in', company_ids),
-                ('workplace_id', 'in', user.isg_workplace_ids.ids)
-            ]
-        </field>
+        <field name="domain_force">[('workplace_id', 'in', user.isg_workplace_ids.ids)] if user.isg_workplace_ids else [('company_id', 'in', company_ids)]</field>
         <field name="perm_read" eval="True"/>
         <field name="perm_write" eval="False"/>
         <field name="perm_create" eval="False"/>
